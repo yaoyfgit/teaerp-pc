@@ -1,5 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import type { RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHistory, RouteRecordRaw, NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -74,9 +73,9 @@ const router = createRouter({
 })
 
 // 路由守卫
-router.beforeEach((to, from, next) => {
+router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
   // 设置标题
-  document.title = `${to.meta.title} - TeaERP`
+  document.title = `${to.meta.title as string} - TeaERP`
   next()
 })
 
