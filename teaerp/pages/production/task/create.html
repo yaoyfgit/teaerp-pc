@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>创建任务 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/modules/production.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 左侧菜单 -->
+        <aside class="main-sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <img src="../../../assets/images/logo.png" alt="TeaERP Logo">
+                    <span>TeaERP</span>
+                </div>
+            </div>
+            <div class="sidebar-menu">
+                <ul class="menu-list">
+                    <li class="menu-item">
+                        <a href="../../../index.html">
+                            <i class="fas fa-home"></i>
+                            <span>首页</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="../../stock/stock-warning.html">
+                            <i class="fas fa-boxes"></i>
+                            <span>库存管理</span>
+                        </a>
+                    </li>
+                    <li class="menu-item active">
+                        <a href="../report/daily.html">
+                            <i class="fas fa-industry"></i>
+                            <span>生产管理</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="../../purchase/order.html">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>采购管理</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="../../sales/order.html">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span>销售管理</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="../../finance/expense.html">
+                            <i class="fas fa-money-bill"></i>
+                            <span>财务管理</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="../../hr/employee.html">
+                            <i class="fas fa-users"></i>
+                            <span>人事管理</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="../../settings/company.html">
+                            <i class="fas fa-cog"></i>
+                            <span>系统设置</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <div class="main-content">
+            <!-- 顶部导航栏 -->
+            <header class="main-header">
+                <div class="nav-left">
+                    <button class="menu-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+                <div class="nav-right">
+                    <div class="user-info">
+                        <img src="../../../assets/images/avatar.jpg" alt="User Avatar" class="avatar">
+                        <span class="username">管理员</span>
+                    </div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-bell"></i>
+                            <span class="badge">3</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </a>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-industry"></i>
+                    <span>生产管理</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-tasks"></i>
+                    <span>生产任务</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-plus"></i>
+                    <span>创建任务</span>
+                </div>
+
+                <!-- 保持原有内容不变 -->
+                <div class="section">
+                    <!-- ... 原有内容 ... -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript 引用 -->
+    <script src="../../../js/app.js"></script>
+    <script>
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', () => {
+            // 初始化菜单
+            Menu.renderMenu();
+            // 初始化菜单切换功能
+            initMenuToggle();
+        });
+    </script>
+</body>
+</html> 

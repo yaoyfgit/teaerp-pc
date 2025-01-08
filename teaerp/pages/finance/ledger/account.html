@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>科目设置 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/modules/finance.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-money-check-alt"></i>
+                    <span>财务管理</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-book"></i>
+                    <span>科目设置</span>
+                </div>
+
+                <!-- Tab切换 -->
+                <div class="tab-container">
+                    <div class="tab-header">
+                        <div class="tab-item active" data-tab="setting">科目设置</div>
+                        <div class="tab-item" data-tab="relation">科目关系</div>
+                        <div class="tab-item" data-tab="balance">科目余额</div>
+                    </div>
+
+                    <!-- 科目设置 -->
+                    <div class="tab-content active" id="setting">
+                        <div class="standard-toolbar">
+                            <div class="toolbar-left">
+                                <input type="text" class="standard-input" placeholder="科目编码">
+                                <input type="text" class="standard-input" placeholder="科目名称">
+                                <select class="standard-select">
+                                    <option value="">科目级别</option>
+                                    <option value="1">一级科目</option>
+                                    <option value="2">二级科目</option>
+                                    <option value="3">三级科目</option>
+                                </select>
+                                <select class="standard-select">
+                                    <option value="">科目类别</option>
+                                    <option value="assets">资产类</option>
+                                    <option value="liabilities">负债类</option>
+                                    <option value="equity">权益类</option>
+                                    <option value="cost">成本类</option>
+                                    <option value="profit">损益类</option>
+                                </select>
+                                <button class="standard-button primary">
+                                    <i class="fas fa-search"></i>
+                                    查询
+                                </button>
+                                <div class="toolbar-divider"></div>
+                                <button class="standard-button primary" onclick="showModal('accountModal')">
+                                    <i class="fas fa-plus"></i>
+                                    新增科目
+                                </button>
+                                <button class="standard-button">
+                                    <i class="fas fa-file-import"></i>
+                                    导入
+                                </button>
+                                <button class="standard-button">
+                                    <i class="fas fa-file-export"></i>
+                                    导出
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="table-container">
+                            <table class="standard-table">
+                                <thead>
+                                    <tr>
+                                        <th>科目编码</th>
+                                        <th>科目名称</th>
+                                        <th>科目级别</th>
+                                        <th>科目类别</th>
+                                        <th>计量单位</th>
+                                        <th>外币核算</th>
+                                        <th>辅助核算</th>
+                                        <th>状态</th>
+                                        <th width="120">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1001</td>
+                                        <td>库存现金</td>
+                                        <td>一级</td>
+                                        <td>资产类</td>
+                                        <td>元</td>
+                                        <td>是</td>
+                                        <td>部门</td>
+                                        <td><span class="status-badge success">启用</span></td>
+                                        <td>
+                                            <div class="button-group">
+                                                <button class="standard-button small">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="standard-button small danger">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="standard-pagination">
+                            <button class="standard-button" disabled>
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="standard-button primary">1</button>
+                            <button class="standard-button">2</button>
+                            <button class="standard-button">3</button>
+                            <button class="standard-button">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 科目关系 -->
+                    <div class="tab-content" id="relation">
+                        <div class="standard-toolbar">
+                            <div class="toolbar-left">
+                                <button class="standard-button primary" onclick="expandAll()">
+                                    <i class="fas fa-expand-alt"></i>
+                                    全部展开
+                                </button>
+                                <button class="standard-button" onclick="collapseAll()">
+                                    <i class="fas fa-compress-alt"></i>
+                                    全部收起
+                                </button>
+                                <div class="toolbar-divider"></div>
+                                <button class="standard-button" onclick="showModal('accountModal')">
+                                    <i class="fas fa-plus"></i>
+                                    新增科目
+                                </button>
+                                <button class="standard-button">
+                                    <i class="fas fa-edit"></i>
+                                    编辑
+                                </button>
+                                <button class="standard-button danger">
+                                    <i class="fas fa-trash"></i>
+                                    删除
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="tree-container">
+                            <ul class="tree">
+                                <li>
+                                    <div class="tree-node" onclick="toggleNode(this)">
+                                        <i class="fas fa-minus-square"></i>
+                                        <span>1000 资产</span>
+                                    </div>
+                                    <ul>
+                                        <li>
+                                            <div class="tree-node" onclick="toggleNode(this)">
+                                                <i class="fas fa-minus-square"></i>
+                                                <span>1001 流动资产</span>
+                                            </div>
+                                            <ul>
+                                                <li>
+                                                    <div class="tree-node" onclick="selectNode(this)">
+                                                        <i class="fas fa-file"></i>
+                                                        <span>1001001 库存现金</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="tree-node" onclick="selectNode(this)">
+                                                        <i class="fas fa-file"></i>
+                                                        <span>1001002 银行存款</span>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <div class="tree-node" onclick="toggleNode(this)">
+                                                <i class="fas fa-plus-square"></i>
+                                                <span>1002 非流动资产</span>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <div class="tree-node" onclick="toggleNode(this)">
+                                        <i class="fas fa-plus-square"></i>
+                                        <span>2000 负债</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="tree-node" onclick="toggleNode(this)">
+                                        <i class="fas fa-plus-square"></i>
+                                        <span>3000 权益</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 科目余额 -->
+                    <div class="tab-content" id="balance">
+                        <div class="standard-toolbar">
+                            <div class="toolbar-left">
+                                <select class="standard-select">
+                                    <option value="">选择科目</option>
+                                    <option value="1001">1001 库存现金</option>
+                                    <option value="1002">1002 银行存款</option>
+                                </select>
+                                <input type="month" class="standard-input" placeholder="会计期间">
+                                <button class="standard-button primary">
+                                    <i class="fas fa-search"></i>
+                                    查询
+                                </button>
+                                <div class="toolbar-divider"></div>
+                                <button class="standard-button">
+                                    <i class="fas fa-print"></i>
+                                    打印
+                                </button>
+                                <button class="standard-button">
+                                    <i class="fas fa-file-export"></i>
+                                    导出
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="table-container">
+                            <table class="standard-table">
+                                <thead>
+                                    <tr>
+                                        <th>科目编码</th>
+                                        <th>科目名称</th>
+                                        <th>期初余额</th>
+                                        <th>本期借方</th>
+                                        <th>本期贷方</th>
+                                        <th>期末余额</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1001</td>
+                                        <td>库存现金</td>
+                                        <td>10,000.00</td>
+                                        <td>5,000.00</td>
+                                        <td>3,000.00</td>
+                                        <td>12,000.00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="standard-pagination">
+                            <button class="standard-button" disabled>
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="standard-button primary">1</button>
+                            <button class="standard-button">2</button>
+                            <button class="standard-button">3</button>
+                            <button class="standard-button">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增科目弹窗 -->
+    <div class="modal" id="accountModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>新增科目</h3>
+                <button class="close-btn" onclick="hideModal('accountModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="accountForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>科目编码</label>
+                            <input type="text" class="standard-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label>科目名称</label>
+                            <input type="text" class="standard-input" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>科目级别</label>
+                            <select class="standard-select" required>
+                                <option value="1">一级科目</option>
+                                <option value="2">二级科目</option>
+                                <option value="3">三级科目</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>科目类别</label>
+                            <select class="standard-select" required>
+                                <option value="assets">资产类</option>
+                                <option value="liabilities">负债类</option>
+                                <option value="equity">权益类</option>
+                                <option value="cost">成本类</option>
+                                <option value="profit">损益类</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>计量单位</label>
+                            <input type="text" class="standard-input">
+                        </div>
+                        <div class="form-group">
+                            <label>外币核算</label>
+                            <select class="standard-select">
+                                <option value="1">是</option>
+                                <option value="0">否</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>辅助核算</label>
+                            <select class="standard-select">
+                                <option value="department">部门</option>
+                                <option value="project">项目</option>
+                                <option value="none">无</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>状态</label>
+                            <select class="standard-select">
+                                <option value="1">启用</option>
+                                <option value="0">禁用</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="standard-button" onclick="hideModal('accountModal')">取消</button>
+                <button class="standard-button primary" onclick="saveAccount()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 右键菜单 -->
+    <div class="context-menu" id="treeContextMenu">
+        <ul>
+            <li onclick="showModal('accountModal')">
+                <i class="fas fa-plus"></i>
+                新增子科目
+            </li>
+            <li onclick="editAccount()">
+                <i class="fas fa-edit"></i>
+                编辑科目
+            </li>
+            <li onclick="deleteAccount()">
+                <i class="fas fa-trash"></i>
+                删除科目
+            </li>
+        </ul>
+    </div>
+
+    <script src="../../../js/app.js"></script>
+    <script src="../../../js/modules/finance/account.js"></script>
+</body>
+</html> 

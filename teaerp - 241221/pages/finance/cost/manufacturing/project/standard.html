@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>费用项目标准 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../../../css/common.css">
+    <link rel="stylesheet" href="../../../../../css/layout.css">
+    <link rel="stylesheet" href="../../../../../css/modules/finance.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb">
+                <span>财务管理</span>
+                <span class="separator">/</span>
+                <span>成本管理</span>
+                <span class="separator">/</span>
+                <span>制造费用</span>
+                <span class="separator">/</span>
+                <span>项目标准</span>
+            </div>
+
+            <!-- 标准列表 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>费用标准</h3>
+                    <div class="card-tools">
+                        <button class="button" onclick="showModal('standardModal')">
+                            <i class="fas fa-plus"></i> 新增标准
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="standardTable"></div>
+                    <div id="pagination"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 标准编辑弹窗 -->
+    <div class="modal" id="standardModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>费用标准</h3>
+                <button class="close-btn" onclick="hideModal('standardModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="standardForm">
+                    <div class="form-group">
+                        <label>费用项目</label>
+                        <select class="form-control" name="projectId" required>
+                            <option value="">请选择</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>标准类型</label>
+                        <select class="form-control" name="type" required>
+                            <option value="fixed">固定标准</option>
+                            <option value="range">范围标准</option>
+                            <option value="formula">计算公式</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>标准值</label>
+                        <input type="text" class="form-control" name="value" required>
+                    </div>
+                    <div class="form-group">
+                        <label>计量单位</label>
+                        <input type="text" class="form-control" name="unit" required>
+                    </div>
+                    <div class="form-group">
+                        <label>备注说明</label>
+                        <textarea class="form-control" name="remark" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideModal('standardModal')">取消</button>
+                <button class="button" onclick="saveStandard()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../../../js/common.js"></script>
+    <script src="../../../../../js/modules/finance/cost/manufacturing/project-standard.js"></script>
+</body>
+</html> 

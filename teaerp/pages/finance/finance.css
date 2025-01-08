@@ -1,0 +1,176 @@
+/* 标准卡片样式 */
+.standard-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 16px;
+}
+
+/* 工具栏样式 */
+.standard-toolbar {
+    padding: 16px;
+    border-bottom: 1px solid #eee;
+}
+
+.toolbar-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.toolbar-divider {
+    width: 1px;
+    height: 24px;
+    background-color: #eee;
+    margin: 0 16px;
+}
+
+/* 表格样式 */
+.standard-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.standard-table th,
+.standard-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.standard-table th {
+    background-color: #f5f5f5;
+    font-weight: 500;
+    color: #333;
+}
+
+.standard-table td {
+    color: #666;
+}
+
+.standard-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* 状态标签样式 */
+.status-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.status-badge.info {
+    background-color: #e3f2fd;
+    color: #2196f3;
+}
+
+.status-badge.success {
+    background-color: #e8f5e9;
+    color: #4caf50;
+}
+
+.status-badge.warning {
+    background-color: #fff8e1;
+    color: #ff9800;
+}
+
+.status-badge.danger {
+    background-color: #ffebee;
+    color: #f44336;
+}
+
+/* 按钮样式 */
+.standard-button {
+    height: 32px;
+    padding: 0 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    border: 1px solid #d9d9d9;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.standard-button:hover {
+    border-color: #8fd4d2;
+    color: #8fd4d2;
+}
+
+.standard-button.primary {
+    background: #8fd4d2;
+    border-color: #8fd4d2;
+    color: #fff;
+}
+
+.standard-button.primary:hover {
+    background: #a8e0de;
+    border-color: #a8e0de;
+}
+
+.standard-button.danger {
+    background: #f44336;
+    border-color: #f44336;
+    color: #fff;
+}
+
+.standard-button.danger:hover {
+    background: #ef5350;
+    border-color: #ef5350;
+}
+
+.standard-button.small {
+    height: 24px;
+    padding: 0 8px;
+    font-size: 12px;
+}
+
+/* 分页样式 */
+.standard-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 16px;
+    border-top: 1px solid #eee;
+}
+
+.standard-pagination .standard-button {
+    min-width: 32px;
+    padding: 0 8px;
+}
+
+.standard-pagination .standard-button[disabled] {
+    background-color: #f5f5f5;
+    border-color: #d9d9d9;
+    color: #999;
+    cursor: not-allowed;
+}
+
+/* 表单控件样式 */
+.standard-input,
+.standard-select {
+    height: 32px;
+    padding: 4px 8px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #333;
+    width: 180px;
+}
+
+.standard-input:hover,
+.standard-select:hover {
+    border-color: #8fd4d2;
+}
+
+.standard-input:focus,
+.standard-select:focus {
+    border-color: #8fd4d2;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(143, 212, 210, 0.2);
+} 

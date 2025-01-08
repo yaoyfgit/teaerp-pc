@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOM结构管理 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/modules/production.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-industry"></i>
+                    <span>生产管理</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-sitemap"></i>
+                    <span>BOM管理</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-project-diagram"></i>
+                    <span>BOM结构</span>
+                </div>
+
+                <div class="standard-card">
+                    <div class="standard-toolbar">
+                        <div class="search-group">
+                            <input type="text" class="standard-input" placeholder="输入产品编码/名称搜索">
+                            <select class="standard-select">
+                                <option value="">BOM版本</option>
+                                <option value="1">V1.0</option>
+                                <option value="2">V2.0</option>
+                                <option value="3">V3.0</option>
+                            </select>
+                            <select class="standard-select">
+                                <option value="">BOM状态</option>
+                                <option value="1">启用</option>
+                                <option value="2">待审核</option>
+                                <option value="0">停用</option>
+                            </select>
+                            <button class="standard-button primary" onclick="searchBOM()">
+                                <i class="fas fa-search"></i> 查询
+                            </button>
+                        </div>
+                        <div class="button-group">
+                            <button class="standard-button primary" onclick="showAddBOMModal()">
+                                <i class="fas fa-plus"></i> 新增BOM
+                            </button>
+                            <button class="standard-button" onclick="exportBOM()">
+                                <i class="fas fa-file-export"></i> 导出
+                            </button>
+                        </div>
+                    </div>
+
+                    <table class="standard-table">
+                        <thead>
+                            <tr>
+                                <th>产品编码</th>
+                                <th>产品名称</th>
+                                <th>BOM版本</th>
+                                <th>生效日期</th>
+                                <th>创建人</th>
+                                <th>创建时间</th>
+                                <th>状态</th>
+                                <th class="operation-column">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>P202403200001</td>
+                                <td>特级红茶</td>
+                                <td>V1.0</td>
+                                <td>2024-03-20</td>
+                                <td>张三</td>
+                                <td>2024-03-20 10:00:00</td>
+                                <td><span class="badge success">启用</span></td>
+                                <td>
+                                    <button class="standard-button" onclick="viewBOM('P202403200001')">
+                                        <i class="fas fa-eye"></i> 查看
+                                    </button>
+                                    <button class="standard-button" onclick="editBOM('P202403200001')">
+                                        <i class="fas fa-edit"></i> 编辑
+                                    </button>
+                                    <button class="standard-button danger" onclick="toggleBOM('P202403200001')">
+                                        <i class="fas fa-ban"></i> 停用
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>P202403200002</td>
+                                <td>精品绿茶</td>
+                                <td>V2.0</td>
+                                <td>2024-03-20</td>
+                                <td>李四</td>
+                                <td>2024-03-20 11:00:00</td>
+                                <td><span class="badge warning">待审核</span></td>
+                                <td>
+                                    <button class="standard-button" onclick="viewBOM('P202403200002')">
+                                        <i class="fas fa-eye"></i> 查看
+                                    </button>
+                                    <button class="standard-button" onclick="editBOM('P202403200002')">
+                                        <i class="fas fa-edit"></i> 编辑
+                                    </button>
+                                    <button class="standard-button info" onclick="reviewBOM('P202403200002')">
+                                        <i class="fas fa-check-double"></i> 审核
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>P202403200003</td>
+                                <td>普洱茶</td>
+                                <td>V1.0</td>
+                                <td>2024-03-20</td>
+                                <td>王五</td>
+                                <td>2024-03-20 12:00:00</td>
+                                <td><span class="badge danger">停用</span></td>
+                                <td>
+                                    <button class="standard-button" onclick="viewBOM('P202403200003')">
+                                        <i class="fas fa-eye"></i> 查看
+                                    </button>
+                                    <button class="standard-button" onclick="editBOM('P202403200003')">
+                                        <i class="fas fa-edit"></i> 编辑
+                                    </button>
+                                    <button class="standard-button success" onclick="toggleBOM('P202403200003')">
+                                        <i class="fas fa-check"></i> 启用
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="standard-pagination">
+                        <button><i class="fas fa-chevron-left"></i></button>
+                        <button class="active">1</button>
+                        <button>2</button>
+                        <button>3</button>
+                        <button><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOM编辑弹窗 -->
+    <div id="bomModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-plus-circle"></i> 新增BOM</h3>
+                <button class="close-btn" onclick="hideModal('bomModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- 基本信息部分 -->
+                <div class="basic-info">
+                    <form class="standard-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>产品编码<span class="required">*</span></label>
+                                <div class="input-group">
+                                    <input type="text" class="standard-input" readonly>
+                                    <button class="standard-button" onclick="selectProduct()">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>产品名称</label>
+                                <input type="text" class="standard-input" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label>BOM版本<span class="required">*</span></label>
+                                <input type="text" class="standard-input" placeholder="请输入BOM版本">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>生效日期<span class="required">*</span></label>
+                                <input type="date" class="standard-input">
+                            </div>
+                            <div class="form-group">
+                                <label>状态</label>
+                                <select class="standard-select">
+                                    <option value="1">启用</option>
+                                    <option value="2">待审核</option>
+                                    <option value="0">停用</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>备注</label>
+                                <input type="text" class="standard-input" placeholder="请输入备注">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- 结构维护标签页 -->
+                <div class="structure-tabs">
+                    <div class="tab-header">
+                        <div class="tab-item active" onclick="switchStructureTab('table')">
+                            <i class="fas fa-table"></i>
+                            表格模式
+                        </div>
+                        <div class="tab-item" onclick="switchStructureTab('mindmap')">
+                            <i class="fas fa-sitemap"></i>
+                            思维导图模式
+                        </div>
+                    </div>
+
+                    <!-- 表格模式 -->
+                    <div id="tableTab" class="tab-content active">
+                        <table class="standard-table">
+                            <thead>
+                                <tr>
+                                    <th>层级</th>
+                                    <th>物料编码</th>
+                                    <th>物料名称</th>
+                                    <th>规格型号</th>
+                                    <th>用量</th>
+                                    <th>单位</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bomTableBody">
+                                <tr data-level="1" data-id="1">
+                                    <td>
+                                        <span class="level-indicator">├</span>
+                                        1
+                                    </td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="text" class="standard-input" readonly>
+                                            <button class="standard-button" onclick="selectMaterial(1)">
+                                                <i class="fas fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td>茶叶原料</td>
+                                    <td>特级</td>
+                                    <td>
+                                        <input type="number" class="standard-input" value="1" min="0.01" step="0.01">
+                                    </td>
+                                    <td>kg</td>
+                                    <td>
+                                        <button class="standard-button" onclick="addSubLevel(1)">
+                                            <i class="fas fa-level-down-alt"></i> 添加下级
+                                        </button>
+                                        <button class="standard-button danger" onclick="removeRow(1)">
+                                            <i class="fas fa-trash"></i> 删除
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 思维导图模式 -->
+                    <div id="mindmapTab" class="tab-content">
+                        <div class="mindmap-toolbar">
+                            <button class="standard-button" onclick="zoomIn()">
+                                <i class="fas fa-search-plus"></i>
+                            </button>
+                            <button class="standard-button" onclick="zoomOut()">
+                                <i class="fas fa-search-minus"></i>
+                            </button>
+                            <button class="standard-button" onclick="resetZoom()">
+                                <i class="fas fa-compress-arrows-alt"></i>
+                            </button>
+                            <div class="toolbar-divider"></div>
+                            <button class="standard-button" onclick="expandAll()">
+                                <i class="fas fa-expand-arrows-alt"></i> 展开全部
+                            </button>
+                            <button class="standard-button" onclick="collapseAll()">
+                                <i class="fas fa-compress-arrows-alt"></i> 收起全部
+                            </button>
+                        </div>
+                        <div class="mindmap-container">
+                            <div class="material-panel">
+                                <div class="panel-header">
+                                    <div class="search-box">
+                                        <input type="text" class="standard-input" placeholder="搜索物料" 
+                                               id="materialSearch" oninput="searchMaterials(this.value)">
+                                        <i class="fas fa-search"></i>
+                                    </div>
+                                </div>
+                                <div class="material-list" id="materialList">
+                                    <!-- 示例物料 -->
+                                    <div class="material-item" draggable="true" data-id="M001" data-code="M001" data-name="茶叶原料" data-spec="特级" data-unit="kg">
+                                        <div class="material-info">
+                                            <div class="material-name">茶叶原料</div>
+                                            <div class="material-code">M001</div>
+                                            <div class="material-spec">规格：特级</div>
+                                        </div>
+                                    </div>
+                                    <div class="material-item" draggable="true" data-id="M002" data-code="M002" data-name="包装盒" data-spec="250g" data-unit="个">
+                                        <div class="material-info">
+                                            <div class="material-name">包装盒</div>
+                                            <div class="material-code">M002</div>
+                                            <div class="material-spec">规格：250g</div>
+                                        </div>
+                                    </div>
+                                    <div class="material-item" draggable="true" data-id="M003" data-code="M003" data-name="内包装袋" data-spec="PE" data-unit="个">
+                                        <div class="material-info">
+                                            <div class="material-name">内包装袋</div>
+                                            <div class="material-code">M003</div>
+                                            <div class="material-spec">规格：PE</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mindmap-area" id="mindmapArea">
+                                <div class="mindmap-content" id="mindmapContent">
+                                    <div class="mindmap-node root-node">
+                                        <div class="node-content">
+                                            <div class="node-info">
+                                                <span class="node-name">特级红茶</span>
+                                                <span class="node-code">P202403200001</span>
+                                            </div>
+                                            <div class="node-actions">
+                                                <button class="node-btn" onclick="toggleNode(this)">
+                                                    <i class="fas fa-chevron-right"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="node-children">
+                                            <!-- 示例子节点 -->
+                                            <div class="mindmap-node">
+                                                <div class="node-content">
+                                                    <div class="node-info">
+                                                        <span class="node-name">茶叶原料</span>
+                                                        <span class="node-code">M001</span>
+                                                        <span class="node-quantity">1kg</span>
+                                                    </div>
+                                                    <div class="node-actions">
+                                                        <button class="node-btn" onclick="toggleNode(this)">
+                                                            <i class="fas fa-chevron-right"></i>
+                                                        </button>
+                                                        <button class="node-btn" onclick="removeNode(this)">
+                                                            <i class="fas fa-times"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="node-children"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="standard-button" onclick="hideModal('bomModal')">
+                    <i class="fas fa-times"></i> 取消
+                </button>
+                <button class="standard-button primary" onclick="saveBOM()">
+                    <i class="fas fa-save"></i> 保存
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* 基础样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            width: 90%;
+            max-width: 1400px;
+            height: 85vh;
+            margin: 5vh auto;
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            padding: 16px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+        }
+
+        .modal-footer {
+            padding: 16px;
+            border-top: 1px solid #eee;
+            text-align: right;
+        }
+
+        /* 标签页样式 */
+        .tab-header {
+            display: flex;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 16px;
+        }
+
+        .tab-item {
+            padding: 12px 24px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-item.active {
+            border-bottom-color: #8fd4d2;
+            color: #8fd4d2;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 16px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* 思维导图容器样式 */
+        .mindmap-container {
+            display: flex;
+            height: calc(100vh - 400px);
+            min-height: 500px;
+            gap: 16px;
+        }
+
+        /* 物料面板样式 */
+        .material-panel {
+            width: 280px;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+        }
+
+        .search-box {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            position: relative;
+        }
+
+        .search-box .fas {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        .material-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+        }
+
+        .material-item {
+            padding: 12px;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            cursor: grab;
+            background: #fff;
+            transition: all 0.3s;
+        }
+
+        .material-item:hover {
+            border-color: #8fd4d2;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .material-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .material-name {
+            font-weight: 500;
+        }
+
+        .material-code, .material-spec {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* 思维导图区域样式 */
+        .mindmap-area {
+            flex: 1;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            overflow: auto;
+            background: #fff;
+            position: relative;
+        }
+
+        .mindmap-content {
+            padding: 40px;
+            min-width: 100%;
+            min-height: 100%;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        /* 节点样式 */
+        .mindmap-node {
+            position: relative;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .node-content {
+            background: #fff;
+            border: 1px solid #8fd4d2;
+            border-radius: 4px;
+            padding: 8px 12px;
+            width: 220px;
+            cursor: move;
+            position: relative;
+            z-index: 2;
+            margin-right: 40px;
+            margin-left: 0;
+            transition: all 0.3s;
+        }
+
+        .node-content.drag-over {
+            background: rgba(143, 212, 210, 0.1);
+            border: 2px dashed #8fd4d2;
+            transform: scale(1.02);
+        }
+
+        .node-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .node-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .node-btn {
+            padding: 2px 6px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            color: #8fd4d2;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .node-btn:hover {
+            background: #f0f9f9;
+            border-radius: 2px;
+        }
+
+        .node-children {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            min-height: 30px;
+            padding: 10px;
+            margin-left: 40px;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .node-children.drag-over {
+            background: rgba(143, 212, 210, 0.1);
+            border: 2px dashed #8fd4d2;
+            min-width: 100px;
+            min-height: 50px;
+        }
+
+        /* 添加拖拽提示样式 */
+        .node-drop-indicator {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #8fd4d2;
+            display: none;
+        }
+
+        .node-drop-indicator.show {
+            display: block;
+        }
+
+        .mindmap-node.dragging {
+            opacity: 0.5;
+        }
+
+        .mindmap-node.dragging .node-children {
+            display: none;
+        }
+
+        /* 拖拽状态 */
+        .material-item.dragging {
+            opacity: 0.5;
+        }
+
+        .node-children.drag-over {
+            background: rgba(143, 212, 210, 0.1);
+            border: 2px dashed #8fd4d2;
+            border-radius: 4px;
+        }
+
+        /* 折叠状态 */
+        .mindmap-node.collapsed > .node-children {
+            display: none;
+        }
+
+        .mindmap-node.collapsed .fa-chevron-down {
+            transform: rotate(-90deg);
+        }
+
+        /* 编辑表单 */
+        .edit-form {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .edit-form input {
+            width: 80px;
+            height: 28px;
+            padding: 0 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        /* SVG连接线容器 */
+        .connections-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* 新增和修改的样式 */
+        .basic-info {
+            margin-bottom: 24px;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .form-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .structure-tabs {
+            border: 1px solid #eee;
+            border-radius: 4px;
+        }
+
+        .level-indicator {
+            color: #999;
+            margin-right: 8px;
+        }
+
+        .mindmap-toolbar {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            gap: 8px;
+        }
+
+        .mindmap-content {
+            transform-origin: center;
+            transition: transform 0.3s;
+            min-width: 100%;
+            min-height: 100%;
+            padding: 40px;
+        }
+
+        .node-content {
+            cursor: move;
+            user-select: none;
+        }
+
+        .node-children {
+            position: relative;
+        }
+
+        .node-children::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            width: 2px;
+            height: 20px;
+            background: #8fd4d2;
+        }
+
+        .material-item {
+            cursor: grab;
+        }
+
+        .material-item:active {
+            cursor: grabbing;
+        }
+
+        .dragging {
+            opacity: 0.5;
+        }
+
+        .drag-over {
+            border: 2px dashed #8fd4d2;
+        }
+
+        /* 连接线样式 */
+        .node-connection {
+            position: absolute;
+            left: -40px;
+            width: 40px;
+            border-top: 2px solid #8fd4d2;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* 添加新的样式 */
+        .mindmap-node.root-node {
+            margin-left: 20px;
+        }
+
+        .mindmap-node.root-node > .node-content {
+            background: #f0f9f9;
+        }
+    </style>
+
+    <script src="../../../js/app.js"></script>
+    <script>
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            Menu.renderMenu();
+            initMenuToggle();
+            initDragAndDrop();
+            
+            // 初始化所有现有节点的拖拽功能
+            document.querySelectorAll('.mindmap-node').forEach(node => {
+                initNodeDragAndDrop(node);
+            });
+        });
+
+        // 显示BOM弹窗
+        function showAddBOMModal() {
+            document.getElementById('bomModal').style.display = 'block';
+        }
+
+        // 隐藏弹窗
+        function hideModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // 切换标签页
+        function switchStructureTab(tabName) {
+            // 移除所有标签页的active类
+            document.querySelectorAll('.structure-tabs .tab-item').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.structure-tabs .tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // 添加active类到选中的标签页
+            document.querySelector(`.structure-tabs .tab-item[onclick*="${tabName}"]`).classList.add('active');
+            document.getElementById(`${tabName}Tab`).classList.add('active');
+        }
+
+        // 其他功能函数...
+        function searchBOM() {
+            // 实现BOM搜索功能
+        }
+
+        function exportBOM() {
+            // 实现BOM导出功能
+        }
+
+        function viewBOM(code) {
+            // 实现BOM查看功能
+        }
+
+        function editBOM(code) {
+            // 实现BOM编辑功能
+        }
+
+        function toggleBOM(code) {
+            // 实现BOM启用/停用功能
+        }
+
+        function reviewBOM(code) {
+            // 实现BOM审核功能
+        }
+
+        function selectProduct() {
+            // 实现产品选择功能
+        }
+
+        function addMaterial() {
+            // 实现添加物料功能
+        }
+
+        function addSubMaterial(parentId) {
+            // 实现添加子物料功能
+        }
+
+        function removeMaterial(id) {
+            // 实现删除物料功能
+        }
+
+        function saveBOM() {
+            // 实现保存BOM功能
+        }
+
+        // 表格模式相关函数
+        function addSubLevel(parentId) {
+            const parentRow = document.querySelector(`tr[data-id="${parentId}"]`);
+            const parentLevel = parseInt(parentRow.getAttribute('data-level'));
+            const newRow = document.createElement('tr');
+            const newId = Date.now(); // 简单的ID生成
+            
+            newRow.setAttribute('data-level', parentLevel + 1);
+            newRow.setAttribute('data-id', newId);
+            newRow.innerHTML = `
+                <td>
+                    <span class="level-indicator">${'&nbsp;'.repeat(parentLevel * 2)}├</span>
+                    ${parentLevel + 1}
+                </td>
+                <td>
+                            <div class="input-group">
+                        <input type="text" class="standard-input" readonly>
+                        <button class="standard-button" onclick="selectMaterial(${newId})">
+                            <i class="fas fa-search"></i>
+                        </button>
+                            </div>
+                </td>
+                <td></td>
+                <td></td>
+                <td>
+                    <input type="number" class="standard-input" value="1" min="0.01" step="0.01">
+                </td>
+                <td></td>
+                <td>
+                    <button class="standard-button" onclick="addSubLevel(${newId})">
+                        <i class="fas fa-level-down-alt"></i> 添加下级
+                    </button>
+                    <button class="standard-button danger" onclick="removeRow(${newId})">
+                        <i class="fas fa-trash"></i> 删除
+                    </button>
+                </td>
+            `;
+            
+            // 插入到父节点后面的适当位置
+            let insertAfter = parentRow;
+            const siblings = document.querySelectorAll(`tr[data-level="${parentLevel + 1}"]`);
+            siblings.forEach(sibling => {
+                if (sibling.compareDocumentPosition(parentRow) & Node.DOCUMENT_POSITION_PRECEDING) {
+                    insertAfter = sibling;
+                }
+            });
+            
+            insertAfter.parentNode.insertBefore(newRow, insertAfter.nextSibling);
+        }
+
+        function removeRow(id) {
+            const row = document.querySelector(`tr[data-id="${id}"]`);
+            const level = parseInt(row.getAttribute('data-level'));
+            
+            // 删除所有子节点
+            const children = document.querySelectorAll(`tr[data-level="${level + 1}"]`);
+            children.forEach(child => {
+                if (child.compareDocumentPosition(row) & Node.DOCUMENT_POSITION_PRECEDING) {
+                    child.remove();
+                }
+            });
+            
+            row.remove();
+        }
+
+        class MindMap {
+            constructor(container) {
+                this.container = container;
+                this.scale = 1;
+                this.init();
+            }
+
+            init() {
+                this.createSvgContainer();
+                this.initEvents();
+                
+                // 初始化所有现有节点
+                const nodes = this.container.querySelectorAll('.mindmap-node');
+                nodes.forEach(node => {
+                    this.initNodeDraggable(node);
+                });
+
+                // 初始化物料拖拽
+                const materials = document.querySelectorAll('.material-item');
+                materials.forEach(material => {
+                    material.draggable = true;
+                    material.addEventListener('dragstart', (e) => {
+                        e.stopPropagation();
+                        const data = {
+                            id: material.dataset.id,
+                            name: material.dataset.name,
+                            code: material.dataset.code,
+                            spec: material.dataset.spec,
+                            unit: material.dataset.unit,
+                            isNode: false
+                        };
+                        e.dataTransfer.setData('application/json', JSON.stringify(data));
+                        material.classList.add('dragging');
+                    });
+
+                    material.addEventListener('dragend', (e) => {
+                        material.classList.remove('dragging');
+                        document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+                    });
+                });
+
+                this.updateConnections();
+            }
+
+            createSvgContainer() {
+                // 创建SVG容器
+                const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                svg.classList.add('connections-svg');
+                this.container.appendChild(svg);
+                this.svg = svg;
+            }
+
+            initEvents() {
+                // 折叠展开事件
+                this.container.addEventListener('click', (e) => {
+                    const toggleBtn = e.target.closest('.toggle-btn');
+                    if (toggleBtn) {
+                        const node = toggleBtn.closest('.mindmap-node');
+                        this.toggleNode(node);
+                    }
+                });
+
+                // 编辑事件
+                this.container.addEventListener('click', (e) => {
+                    const editBtn = e.target.closest('.edit-btn');
+                    if (editBtn) {
+                        const node = editBtn.closest('.mindmap-node');
+                        this.editNode(node);
+                    }
+                });
+
+                // 删除事件
+                this.container.addEventListener('click', (e) => {
+                    const deleteBtn = e.target.closest('.delete-btn');
+                    if (deleteBtn) {
+                        const node = deleteBtn.closest('.mindmap-node');
+                        node.remove();
+                        this.updateConnections();
+                    }
+                });
+            }
+
+            initNodeDraggable(node) {
+                const content = node.querySelector('.node-content');
+                if (!content) return;
+
+                // 使节点可拖拽
+                content.draggable = true;
+                
+                content.addEventListener('dragstart', (e) => {
+                    e.stopPropagation();
+                    const data = {
+                        id: node.dataset.id,
+                        name: node.querySelector('.node-name').textContent,
+                        code: node.querySelector('.node-code').textContent,
+                        unit: node.querySelector('.node-quantity')?.textContent.match(/[^0-9.]+$/)?.[0].trim() || '个',
+                        isNode: true
+                    };
+                    e.dataTransfer.setData('application/json', JSON.stringify(data));
+                    node.classList.add('dragging');
+                });
+
+                content.addEventListener('dragend', (e) => {
+                    e.stopPropagation();
+                    node.classList.remove('dragging');
+                    document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+                });
+
+                // 使节点可以接收拖拽
+                content.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (!node.classList.contains('dragging')) {
+                        content.classList.add('drag-over');
+                    }
+                });
+
+                content.addEventListener('dragleave', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (!content.contains(e.relatedTarget)) {
+                        content.classList.remove('drag-over');
+                    }
+                });
+
+                content.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    content.classList.remove('drag-over');
+
+                    try {
+                        const data = JSON.parse(e.dataTransfer.getData('application/json'));
+                        const sourceNode = data.isNode ? 
+                            this.container.querySelector(`.mindmap-node[data-id="${data.id}"]`) : null;
+                        
+                        // 检查是否可以放置
+                        if (sourceNode === node || (sourceNode && sourceNode.contains(node))) {
+                            return; // 防止拖拽到自身或子节点
+                        }
+
+                        // 获取目标节点的子容器
+                        const targetChildren = node.querySelector('.node-children');
+                        if (!targetChildren) return;
+
+                        if (data.isNode) {
+                            // 移动现有节点
+                            targetChildren.appendChild(sourceNode);
+                        } else {
+                            // 创建新节点
+                            const newNode = this.createNode(data);
+                            targetChildren.appendChild(newNode);
+                        }
+
+                        this.updateConnections();
+                    } catch (err) {
+                        console.error('Drop failed:', err);
+                    }
+                });
+            }
+
+            createNode(data) {
+                const node = document.createElement('div');
+                node.className = 'mindmap-node';
+                node.dataset.id = Date.now().toString();
+                node.innerHTML = `
+                    <div class="node-content" draggable="true">
+                                <div class="node-info">
+                            <div class="node-name">${data.name}</div>
+                            <div class="node-code">${data.code}</div>
+                            <div class="node-quantity">
+                                数量：<span class="quantity-value">1</span>${data.unit}
+                                </div>
+                                        </div>
+                                        <div class="node-actions">
+                            <button class="node-btn toggle-btn" onclick="window.mindmap.toggleNode(this.closest('.mindmap-node'))">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <button class="node-btn edit-btn" onclick="window.mindmap.editNode(this.closest('.mindmap-node'))">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="node-btn delete-btn" onclick="window.mindmap.deleteNode(this.closest('.mindmap-node'))">
+                                <i class="fas fa-times"></i>
+                            </button>
+                    </div>
+                </div>
+                    <div class="node-children"></div>
+                `;
+
+                // 初始化新节点的拖拽功能
+                this.initNodeDraggable(node);
+
+                return node;
+            }
+
+            toggleNode(node) {
+                if (!node) return;
+                node.classList.toggle('collapsed');
+                const icon = node.querySelector('.toggle-btn i');
+                if (icon) {
+                    icon.classList.toggle('fa-chevron-down');
+                    icon.classList.toggle('fa-chevron-right');
+                }
+                this.updateConnections();
+            }
+
+            editNode(node) {
+                if (!node) return;
+                const quantityEl = node.querySelector('.node-quantity');
+                const currentValue = node.querySelector('.quantity-value').textContent;
+                const unit = quantityEl.textContent.match(/[^0-9.]+$/)[0].trim();
+
+                const form = document.createElement('div');
+                form.className = 'edit-form';
+                form.innerHTML = `
+                    <input type="number" value="${currentValue}" min="0.01" step="0.01">
+                    <span>${unit}</span>
+                    <button class="node-btn" onclick="window.mindmap.saveEdit(this)">
+                        <i class="fas fa-check"></i>
+                    </button>
+                    <button class="node-btn" onclick="window.mindmap.cancelEdit(this)">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+
+                quantityEl.dataset.originalContent = quantityEl.innerHTML;
+                quantityEl.innerHTML = '';
+                quantityEl.appendChild(form);
+
+                const input = form.querySelector('input');
+                input.focus();
+                input.select();
+            }
+
+            saveEdit(btn) {
+                const form = btn.closest('.edit-form');
+                const container = form.closest('.node-quantity');
+                const value = form.querySelector('input').value;
+                const unit = form.querySelector('span').textContent;
+
+                container.innerHTML = `数量：<span class="quantity-value">${value}</span>${unit}`;
+            }
+
+            cancelEdit(btn) {
+                const container = btn.closest('.node-quantity');
+                container.innerHTML = container.dataset.originalContent;
+            }
+
+            deleteNode(node) {
+                if (!node) return;
+                node.remove();
+                this.updateConnections();
+            }
+
+            updateConnections() {
+                if (!this.svg) return;
+                this.svg.innerHTML = '';
+                
+                const drawConnection = (parent, child) => {
+                    const parentRect = parent.getBoundingClientRect();
+                    const childRect = child.getBoundingClientRect();
+                    const svgRect = this.svg.getBoundingClientRect();
+
+                    // 计算连接线的起点和终点
+                    const startX = (parentRect.right - svgRect.left) / this.scale;
+                    const startY = (parentRect.top + parentRect.height/2 - svgRect.top) / this.scale;
+                    const endX = (childRect.left - svgRect.left) / this.scale;
+                    const endY = (childRect.top + childRect.height/2 - svgRect.top) / this.scale;
+
+                    // 创建贝塞尔曲线
+                    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    const controlPointX = startX + (endX - startX) * 0.5;
+
+                    path.setAttribute('d', `
+                        M ${startX},${startY} 
+                        C ${controlPointX},${startY} 
+                          ${controlPointX},${endY} 
+                          ${endX},${endY}
+                    `);
+                    path.setAttribute('stroke', '#8fd4d2');
+                    path.setAttribute('stroke-width', '2');
+                    path.setAttribute('fill', 'none');
+
+                    this.svg.appendChild(path);
+                };
+
+                // 递归处理所有节点
+                const processNode = (node) => {
+                    if (node.classList.contains('collapsed')) return;
+                    
+                    const nodeContent = node.querySelector('.node-content');
+                    const children = node.querySelectorAll(':scope > .node-children > .mindmap-node');
+                    
+                    children.forEach(child => {
+                        const childContent = child.querySelector('.node-content');
+                        drawConnection(nodeContent, childContent);
+                        processNode(child);  // 递归处理子节点
+                    });
+                };
+
+                const rootNode = this.container.querySelector('.mindmap-node');
+                if (rootNode) {
+                    processNode(rootNode);
+                }
+            }
+
+            setScale(scale) {
+                this.scale = scale;
+                this.container.style.transform = `scale(${scale})`;
+                this.updateConnections();
+            }
+        }
+
+        // 初始化思维导图
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.querySelector('.mindmap-content');
+            if (!container) return;
+
+            window.mindmap = new MindMap(container);
+
+            // 绑定缩放按钮
+            const zoomIn = document.getElementById('zoomIn');
+            const zoomOut = document.getElementById('zoomOut');
+            const resetZoom = document.getElementById('resetZoom');
+
+            if (zoomIn) {
+                zoomIn.addEventListener('click', () => {
+                    window.mindmap.setScale(Math.min(window.mindmap.scale + 0.1, 2));
+                });
+            }
+
+            if (zoomOut) {
+                zoomOut.addEventListener('click', () => {
+                    window.mindmap.setScale(Math.max(window.mindmap.scale - 0.1, 0.5));
+                });
+            }
+
+            if (resetZoom) {
+                resetZoom.addEventListener('click', () => {
+                    window.mindmap.setScale(1);
+                });
+            }
+        });
+    </script>
+</body>
+</html> 

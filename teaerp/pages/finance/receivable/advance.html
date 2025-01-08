@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>预收账款管理 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/modules/finance.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="header-brand">TeaERP</div>
+            <div class="header-nav">
+                <!-- ... header navigation items ... -->
+            </div>
+            <div class="header-tools">
+                <!-- ... header tools items ... -->
+            </div>
+        </header>
+
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb">
+                <span>财务管理</span>
+                <span class="separator">/</span>
+                <span>应收管理</span>
+                <span class="separator">/</span>
+                <span>预收账款管理</span>
+            </div>
+
+            <!-- 预收账款登记 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>预收账款登记</h3>
+                    <div class="card-tools">
+                        <button class="button" onclick="showAdvanceModal()">预收登记</button>
+                        <button class="button" onclick="batchConfirm()">批量确认</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="search-bar">
+                        <div class="form-group">
+                            <label>客户</label>
+                            <select class="form-control">
+                                <option value="">请选择客户</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>收款方式</label>
+                            <select class="form-control">
+                                <option value="">全部</option>
+                                <option value="cash">现金</option>
+                                <option value="bank">银行转账</option>
+                                <option value="check">支票</option>
+                                <option value="other">其他</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>日期范围</label>
+                            <input type="date" class="form-control">
+                            <span>至</span>
+                            <input type="date" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>状态</label>
+                            <select class="form-control">
+                                <option value="">全部</option>
+                                <option value="pending">待确认</option>
+                                <option value="confirmed">已确认</option>
+                                <option value="rejected">已驳回</option>
+                            </select>
+                        </div>
+                        <button class="button" onclick="searchAdvances()">搜索</button>
+                    </div>
+
+                    <div class="data-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" onclick="toggleSelectAll(this)"></th>
+                                    <th>预收单号</th>
+                                    <th>客户</th>
+                                    <th>预收金额</th>
+                                    <th>收款方式</th>
+                                    <th>收款日期</th>
+                                    <th>预收用途</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="advanceTable"></tbody>
+                        </table>
+                    </div>
+                    <div class="pagination" id="pagination"></div>
+                </div>
+            </div>
+
+            <!-- 预收核销 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>预收核销</h3>
+                </div>
+                <div class="card-body">
+                    <div class="data-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>预收单号</th>
+                                    <th>客户</th>
+                                    <th>预收金额</th>
+                                    <th>已核销金额</th>
+                                    <th>剩余金额</th>
+                                    <th>本次核销</th>
+                                    <th>核销状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="writeoffTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 预收登记弹窗 -->
+    <div class="modal" id="advanceModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>预收账款登记</h3>
+                <button class="close-btn" onclick="hideModal('advanceModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="advanceForm" class="form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>客户</label>
+                            <select class="form-control" name="customer" required>
+                                <option value="">请选择客户</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>预收金额</label>
+                            <input type="number" class="form-control" name="amount" required>
+                        </div>
+                        <div class="form-group">
+                            <label>收款方式</label>
+                            <select class="form-control" name="method" required>
+                                <option value="cash">现金</option>
+                                <option value="bank">银行转账</option>
+                                <option value="check">支票</option>
+                                <option value="other">其他</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>收款日期</label>
+                            <input type="date" class="form-control" name="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label>收款账户</label>
+                            <select class="form-control" name="account">
+                                <option value="">请选择账户</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>预收用途</label>
+                            <textarea class="form-control" name="purpose" rows="3" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>备注</label>
+                            <textarea class="form-control" name="remark" rows="3"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideModal('advanceModal')">取消</button>
+                <button class="button" onclick="saveAdvance()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 核销弹窗 -->
+    <div class="modal" id="writeoffModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>预收核销</h3>
+                <button class="close-btn" onclick="hideModal('writeoffModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="writeoffForm" class="form">
+                    <input type="hidden" name="advanceId">
+                    <div class="form-group">
+                        <label>预收单号</label>
+                        <input type="text" class="form-control" name="advanceNo" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>预收金额</label>
+                        <input type="number" class="form-control" name="advanceAmount" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>剩余金额</label>
+                        <input type="number" class="form-control" name="remainingAmount" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>核销金额</label>
+                        <input type="number" class="form-control" name="writeoffAmount" required>
+                    </div>
+                    <div class="form-group">
+                        <label>核销说明</label>
+                        <textarea class="form-control" name="remark" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideModal('writeoffModal')">取消</button>
+                <button class="button" onclick="saveWriteoff()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/common.js"></script>
+    <script src="../../../js/menu.js"></script>
+    <script src="../../../js/modules/finance/advance.js"></script>
+</body>
+</html> 

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>库存调拨 - TeaERP</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- 系统样式 -->
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <!-- 模块样式 -->
+    <link rel="stylesheet" href="../../css/modules/inventory.css">
+</head>
+</html> <body>
+    <div class="app-container">
+        <!-- 顶部导航 -->
+        <header class="app-header">
+            <div class="logo">TeaERP</div>
+            <nav class="top-nav">
+                <ul>
+                    <li><a href="../../index.html">首页</a></li>
+                    <li><a href="#">消息</a></li>
+                    <li><a href="#">帮助</a></li>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <span class="username">管理员</span>
+                <a href="#" class="logout">退出</a>
+            </div>
+        </header>
+
+        <!-- 主体内容 -->
+        <div class="app-main">
+            <!-- 左侧菜单 -->
+            <aside class="app-sidebar">
+                <ul class="menu-list">
+                    <li class="menu-item">
+                        <a href="#" class="menu-link">
+                            <span class="menu-icon">📊</span>
+                            <span class="menu-text">采购管理</span>
+                            <span class="arrow">›</span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="../purchase/demand.html">采购需求</a></li>
+                            <li><a href="../purchase/order.html">采购订单</a></li>
+                            <li><a href="../purchase/receive.html">通知收货</a></li>
+                            <li><a href="../purchase/inbound.html">采购入库</a></li>
+                            <li><a href="../purchase/return-notify.html">通知退货</a></li>
+                            <li><a href="../purchase/return.html">采购退货</a></li>
+                            <li><a href="../purchase/reconciliation.html">供应商对账</a></li>
+                            <li><a href="../purchase/analysis.html">统计分析</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" class="menu-link">
+                            <span class="menu-icon">🛒</span>
+                            <span class="menu-text">销售管理</span>
+                            <span class="arrow">›</span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="../sales/order.html">销售订单</a></li>
+                            <li><a href="../sales/delivery.html">通知发货</a></li>
+                            <li><a href="../sales/outbound.html">销售出库</a></li>
+                            <li><a href="../sales/return-notify.html">通知退货</a></li>
+                            <li><a href="../sales/return.html">销售退货</a></li>
+                            <li><a href="../sales/reconciliation.html">客户对账</a></li>
+                            <li><a href="../sales/analysis.html">统计分析</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item active">
+                        <a href="#" class="menu-link">
+                            <span class="menu-icon">📦</span>
+                            <span class="menu-text">库存管理</span>
+                            <span class="arrow">›</span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="stock-query.html">库存查询</a></li>
+                            <li><a href="#" class="active">库存调拨</a></li>
+                            <li><a href="stock-check.html">库存盘点</a></li>
+                            <li><a href="stock-warning.html">库存预警</a></li>
+                            <li><a href="stock-analysis.html">库存分析</a></li>
+                        </ul>
+                    </li>
+                    <!-- 其他菜单项... -->
+                </ul>
+            </aside>
+
+            <!-- 内容区域 -->
+            <main class="app-content">
+                <!-- 面包屑导航 -->
+                <div class="breadcrumb">
+                    <span>库存管理</span>
+                    <span class="separator">/</span>
+                    <span>库存调拨</span>
+                </div>
+
+                <!-- 工具栏 -->
+                <div class="toolbar">
+                    <div class="search-bar">
+                        <input type="text" placeholder="输入调拨单号搜索" class="form-control">
+                        <select class="form-control">
+                            <option value="">调拨状态</option>
+                            <option value="draft">草稿</option>
+                            <option value="pending">待审核</option>
+                            <option value="approved">已审核</option>
+                            <option value="completed">已完成</option>
+                        </select>
+                        <button class="button">搜索</button>
+                    </div>
+                    <div class="action-bar">
+                        <button type="button" class="button" onclick="showTransferModal()">新建调拨</button>
+                        <button type="button" class="button secondary">导出</button>
+                    </div>
+                </div>
+
+                <!-- 数据表格 -->
+                <div class="data-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>调拨单号</th>
+                                <th>调出仓库</th>
+                                <th>调入仓库</th>
+                                <th>调拨日期</th>
+                                <th>商品数量</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>ST202403010001</td>
+                                <td>主仓库</td>
+                                <td>次仓库</td>
+                                <td>2024-03-01</td>
+                                <td>10</td>
+                                <td><span class="status pending">待审核</span></td>
+                                <td>
+                                    <a href="#" class="action-link" onclick="showDetail(this)">查看</a>
+                                    <a href="#" class="action-link" onclick="editTransfer(this)">编辑</a>
+                                    <a href="#" class="action-link" onclick="approveTransfer(this)">审核</a>
+                                    <a href="#" class="action-link" onclick="deleteTransfer(this)">删除</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 分页器 -->
+                <div class="pagination">
+                    <a href="#" class="page-btn">&lt;</a>
+                    <a href="#" class="page-btn active">1</a>
+                    <a href="#" class="page-btn">2</a>
+                    <a href="#" class="page-btn">3</a>
+                    <span class="page-separator">...</span>
+                    <a href="#" class="page-btn">10</a>
+                    <a href="#" class="page-btn">&gt;</a>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- 调拨弹窗 -->
+    <div class="modal" id="transferModal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3>新建调拨</h3>
+                <button class="close-btn" onclick="hideModal('transferModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="transferForm">
+                    <!-- 基本信息 -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>调拨单号</label>
+                            <input type="text" class="form-control" name="transferNo" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>调出仓库</label>
+                            <select class="form-control" name="fromWarehouse" required>
+                                <option value="">请选择仓库</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>调入仓库</label>
+                            <select class="form-control" name="toWarehouse" required>
+                                <option value="">请选择仓库</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>调拨日期</label>
+                            <input type="date" class="form-control" name="transferDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>经办人</label>
+                            <input type="text" class="form-control" name="handler" required>
+                        </div>
+                        <div class="form-group">
+                            <label>状态</label>
+                            <select class="form-control" name="status" disabled>
+                                <option value="draft">草稿</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>备注说明</label>
+                        <textarea class="form-control" name="remark" rows="2"></textarea>
+                    </div>
+
+                    <!-- 调拨明细 -->
+                    <div class="detail-table">
+                        <div class="toolbar">
+                            <button type="button" class="button" onclick="addTransferItem()">添加商品</button>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>商品编码</th>
+                                    <th>商品名称</th>
+                                    <th>规格型号</th>
+                                    <th>单位</th>
+                                    <th>调拨数量</th>
+                                    <th>可用库存</th>
+                                    <th>批次号</th>
+                                    <th>备注</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="button secondary" onclick="hideModal('transferModal')">取消</button>
+                <button type="button" class="button" onclick="saveTransfer()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/common.js"></script>
+    <script src="../../js/modules/stock.js"></script>
+</body>
+</html> 

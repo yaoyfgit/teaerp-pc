@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>库存盘点 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/menu.css">
+    <link rel="stylesheet" href="../../css/modules/inventory.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb standard-breadcrumb">
+                <i class="fas fa-warehouse"></i>
+                <span>库存管理</span>
+                <i class="fas fa-angle-right separator"></i>
+                <span>库存盘点</span>
+            </div>
+
+            <!-- 盘点单管理 -->
+            <div class="standard-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-clipboard-check"></i> 盘点单管理</h3>
+                </div>
+                <div class="card-body">
+                    <div class="standard-toolbar">
+                        <div class="search-bar">
+                            <input type="text" class="standard-input" placeholder="盘点单号/商品">
+                            <select class="standard-select">
+                                <option value="">盘点仓库</option>
+                                <option value="1">原料仓</option>
+                                <option value="2">成品仓</option>
+                                <option value="3">半成品仓</option>
+                            </select>
+                            <select class="standard-select">
+                                <option value="">盘点状态</option>
+                                <option value="1">待盘点</option>
+                                <option value="2">盘点中</option>
+                                <option value="3">已完成</option>
+                                <option value="4">已取消</option>
+                            </select>
+                            <button class="standard-button primary" onclick="searchCheck()">
+                                <i class="fas fa-search"></i> 查询
+                            </button>
+                        </div>
+                        <div class="action-bar">
+                            <button class="standard-button primary" onclick="showAddCheckModal()">
+                                <i class="fas fa-plus"></i> 新增盘点
+                            </button>
+                            <button class="standard-button" onclick="exportCheck()">
+                                <i class="fas fa-file-export"></i> 导出
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="standard-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>盘点单号</th>
+                                    <th>盘点仓库</th>
+                                    <th>盘点范围</th>
+                                    <th>商品数量</th>
+                                    <th>盘点时间</th>
+                                    <th>盘点人</th>
+                                    <th>差异数</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="checkTable"></tbody>
+                        </table>
+                    </div>
+                    <div class="standard-pagination" id="pagination"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 新增盘点弹窗 -->
+    <div class="standard-modal" id="checkModal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3><i class="fas fa-plus-circle"></i> 新增盘点单</h3>
+                <button class="standard-close-btn" onclick="hideModal('checkModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="checkForm" class="standard-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>盘点仓库</label>
+                            <select class="form-control" name="warehouse" required>
+                                <option value="1">原料仓</option>
+                                <option value="2">成品仓</option>
+                                <option value="3">半成品仓</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>盘点范围</label>
+                            <select class="form-control" name="scope" required>
+                                <option value="all">全部商品</option>
+                                <option value="category">按分类</option>
+                                <option value="location">按库位</option>
+                                <option value="custom">自定义</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h4>盘点商品</h4>
+                        <div class="table-toolbar">
+                            <button type="button" class="standard-button" onclick="addProduct()">
+                                <i class="fas fa-plus"></i> 添加商品
+                            </button>
+                            <button type="button" class="standard-button" onclick="importProduct()">
+                                <i class="fas fa-file-import"></i> 导入商品
+                            </button>
+                        </div>
+                        <div class="standard-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>商品编码</th>
+                                        <th>商品名称</th>
+                                        <th>规格型号</th>
+                                        <th>单位</th>
+                                        <th>账面数量</th>
+                                        <th>实盘数量</th>
+                                        <th>差异数量</th>
+                                        <th>备注</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="productTable"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>盘点人</label>
+                            <input type="text" class="form-control" name="checker" required>
+                        </div>
+                        <div class="form-group">
+                            <label>盘点时间</label>
+                            <input type="datetime-local" class="form-control" name="checkTime" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>盘点说明</label>
+                        <textarea class="form-control" name="description" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="standard-button secondary" onclick="hideModal('checkModal')">
+                    <i class="fas fa-times"></i> 取消
+                </button>
+                <button class="standard-button" onclick="saveAsDraft()">
+                    <i class="fas fa-save"></i> 保存草稿
+                </button>
+                <button class="standard-button primary" onclick="startCheck()">
+                    <i class="fas fa-play"></i> 开始盘点
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 盘点差异处理弹窗 -->
+    <div class="standard-modal" id="differenceModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-exclamation-triangle"></i> 盘点差异处理</h3>
+                <button class="standard-close-btn" onclick="hideModal('differenceModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="differenceForm" class="standard-form">
+                    <div class="form-group">
+                        <label>差异原因</label>
+                        <select class="form-control" name="reason" required>
+                            <option value="1">实物丢失</option>
+                            <option value="2">系统错误</option>
+                            <option value="3">未及时入账</option>
+                            <option value="4">其他原因</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>处理方式</label>
+                        <select class="form-control" name="solution" required>
+                            <option value="1">系统调整</option>
+                            <option value="2">补单处理</option>
+                            <option value="3">损益处理</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>处理说明</label>
+                        <textarea class="form-control" name="remark" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="standard-button secondary" onclick="hideModal('differenceModal')">
+                    <i class="fas fa-times"></i> 取消
+                </button>
+                <button class="standard-button primary" onclick="saveDifference()">
+                    <i class="fas fa-save"></i> 确认处理
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/common.js"></script>
+    <script src="../../js/modules/inventory/check.js"></script>
+</body>
+</html> 

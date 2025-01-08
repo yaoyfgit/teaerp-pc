@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>采购分析 - TeaERP</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- 系统样式 -->
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <!-- 模块样式 -->
+    <link rel="stylesheet" href="../../css/modules/purchase.css">
+</head>
+</html> <body>
+    <div class="app-container">
+        <!-- 顶部导航 -->
+        <header class="app-header">
+            <div class="logo">TeaERP</div>
+            <nav class="top-nav">
+                <ul>
+                    <li><a href="../../index.html">首页</a></li>
+                    <li><a href="#">消息</a></li>
+                    <li><a href="#">帮助</a></li>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <span class="username">管理员</span>
+                <a href="#" class="logout">退出</a>
+            </div>
+        </header>
+
+        <!-- 主体内容 -->
+        <div class="app-main">
+            <!-- 左侧菜单 -->
+            <aside class="app-sidebar">
+                <ul class="menu-list">
+                    <li class="menu-item active">
+                        <a href="#" class="menu-link">
+                            <span class="menu-icon">📊</span>
+                            <span class="menu-text">采购管理</span>
+                            <span class="arrow">›</span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="demand.html">采购需求</a></li>
+                            <li><a href="order.html">采购订单</a></li>
+                            <li><a href="receive.html">通知收货</a></li>
+                            <li><a href="inbound.html">采购入库</a></li>
+                            <li><a href="return-notify.html">通知退货</a></li>
+                            <li><a href="return.html">采购退货</a></li>
+                            <li><a href="reconciliation.html">供应商对账</a></li>
+                            <li><a href="#" class="active">统计分析</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" class="menu-link">
+                            <span class="menu-icon">🛒</span>
+                            <span class="menu-text">销售管理</span>
+                            <span class="arrow">›</span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="../sales/order.html">销售订单</a></li>
+                            <li><a href="../sales/delivery.html">通知发货</a></li>
+                            <li><a href="../sales/outbound.html">销售出库</a></li>
+                            <li><a href="../sales/return-notify.html">通知退货</a></li>
+                            <li><a href="../sales/return.html">销售退货</a></li>
+                            <li><a href="../sales/reconciliation.html">客户对账</a></li>
+                            <li><a href="../sales/analysis.html">统计分析</a></li>
+                        </ul>
+                    </li>
+                    <!-- 其他菜单项... -->
+                </ul>
+            </aside>
+
+            <!-- 内容区域 -->
+            <main class="app-content">
+                <!-- 面包屑导航 -->
+                <div class="breadcrumb">
+                    <span>采购管理</span>
+                    <span class="separator">/</span>
+                    <span>统计分析</span>
+                </div>
+
+                <!-- 工具栏 -->
+                <div class="toolbar">
+                    <div class="search-bar">
+                        <select class="form-control" onchange="updateCharts()">
+                            <option value="month">月度分析</option>
+                            <option value="quarter">季度分析</option>
+                            <option value="year">年度分析</option>
+                        </select>
+                        <div class="date-range">
+                            <input type="date" class="form-control" onchange="updateCharts()">
+                            <span>至</span>
+                            <input type="date" class="form-control" onchange="updateCharts()">
+                        </div>
+                    </div>
+                    <div class="action-bar">
+                        <button class="button" onclick="exportReport()">导出报表</button>
+                    </div>
+                </div>
+
+                <!-- 分析图表区域 -->
+                <div class="analysis-charts">
+                    <!-- 采购趋势分析 -->
+                    <div class="chart-card">
+                        <h3>采购趋势分析</h3>
+                        <div class="chart" id="trendChart" style="height: 300px;"></div>
+                    </div>
+
+                    <!-- 供应商分析 -->
+                    <div class="chart-row">
+                        <div class="chart-card">
+                            <h3>供应商采购额占比</h3>
+                            <div class="chart" id="supplierPieChart" style="height: 300px;"></div>
+                        </div>
+                        <div class="chart-card">
+                            <h3>供应商采购排名</h3>
+                            <div class="chart" id="supplierRankChart" style="height: 300px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- 商品分析 -->
+                    <div class="chart-row">
+                        <div class="chart-card">
+                            <h3>商品采购额占比</h3>
+                            <div class="chart" id="productPieChart" style="height: 300px;"></div>
+                        </div>
+                        <div class="chart-card">
+                            <h3>商品采购排名</h3>
+                            <div class="chart" id="productRankChart" style="height: 300px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- 采购指标分析 -->
+                    <div class="chart-row">
+                        <div class="chart-card">
+                            <h3>采购退货率分析</h3>
+                            <div class="chart" id="returnRateChart" style="height: 300px;"></div>
+                        </div>
+                        <div class="chart-card">
+                            <h3>采购及时率分析</h3>
+                            <div class="chart" id="onTimeRateChart" style="height: 300px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="../../js/common.js"></script>
+    <script src="../../js/modules/purchase.js"></script>
+    <script src="../../js/modules/purchase-analysis.js"></script>
+</body>
+</html> 

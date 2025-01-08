@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>库存流水 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/modules/inventory.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 顶部导航 -->
+        <header class="app-header">
+            <!-- 同其他页面 -->
+        </header>
+
+        <div class="app-main">
+            <!-- 左侧菜单 -->
+            <aside class="app-sidebar">
+                <!-- 使用common.js中的菜单配置 -->
+            </aside>
+
+            <main class="app-content">
+                <div class="breadcrumb">
+                    <span>库存管理</span>
+                    <span class="separator">/</span>
+                    <span>库存流水</span>
+                </div>
+
+                <!-- 搜索工具栏 -->
+                <div class="toolbar">
+                    <div class="search-bar">
+                        <div class="form-group">
+                            <select class="form-control" name="flowType">
+                                <option value="">全部类型</option>
+                                <option value="in">入库</option>
+                                <option value="out">出库</option>
+                                <option value="transfer">调拨</option>
+                                <option value="check">盘点</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="商品编码/名称">
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control" name="warehouse">
+                                <option value="">全部仓库</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="date" class="form-control" name="startDate">
+                        </div>
+                        <div class="form-group">
+                            <input type="date" class="form-control" name="endDate">
+                        </div>
+                        <button class="button primary">搜索</button>
+                        <button class="button" onclick="resetSearch()">重置</button>
+                    </div>
+                </div>
+
+                <!-- 数据表格 -->
+                <div class="data-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>流水号</th>
+                                <th>日期时间</th>
+                                <th>类型</th>
+                                <th>关联单号</th>
+                                <th>商品编码</th>
+                                <th>商品名称</th>
+                                <th>规格型号</th>
+                                <th>仓库</th>
+                                <th>库位</th>
+                                <th>批次号</th>
+                                <th>变动数量</th>
+                                <th>变动后库存</th>
+                                <th>操作人</th>
+                                <th>备注</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>FL202403150001</td>
+                                <td>2024-03-15 09:30:15</td>
+                                <td><span class="status-tag success">入库</span></td>
+                                <td>IN202403150001</td>
+                                <td>SP001</td>
+                                <td>特级大红袍</td>
+                                <td>500g/盒</td>
+                                <td>主仓库</td>
+                                <td>A-01-01</td>
+                                <td>20240315-01</td>
+                                <td>+100</td>
+                                <td>500</td>
+                                <td>张三</td>
+                                <td>采购入库</td>
+                            </tr>
+                            <tr>
+                                <td>FL202403150002</td>
+                                <td>2024-03-15 14:20:30</td>
+                                <td><span class="status-tag danger">出库</span></td>
+                                <td>OUT202403150001</td>
+                                <td>SP001</td>
+                                <td>特级大红袍</td>
+                                <td>500g/盒</td>
+                                <td>主仓库</td>
+                                <td>A-01-01</td>
+                                <td>20240315-01</td>
+                                <td>-50</td>
+                                <td>450</td>
+                                <td>李四</td>
+                                <td>销售出库</td>
+                            </tr>
+                            <!-- 更多示例数据... -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 分页器 -->
+                <div class="pagination">
+                    <!-- 分页控件 -->
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="../../js/common.js"></script>
+    <script src="../../js/modules/stock/stock-flow.js"></script>
+</body>
+</html> 

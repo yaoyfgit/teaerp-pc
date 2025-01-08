@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>入库管理 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/menu.css">
+    <link rel="stylesheet" href="../../css/modules/inventory.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb standard-breadcrumb">
+                <i class="fas fa-warehouse"></i>
+                <span>库存管理</span>
+                <i class="fas fa-angle-right separator"></i>
+                <span>入库管理</span>
+            </div>
+
+            <!-- 入库单管理 -->
+            <div class="standard-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-file-import"></i> 入库单管理</h3>
+                </div>
+                <div class="card-body">
+                    <div class="standard-toolbar">
+                        <div class="search-bar">
+                            <input type="text" class="standard-input" placeholder="入库单号/商品">
+                            <select class="standard-select">
+                                <option value="">入库类型</option>
+                                <option value="1">采购入库</option>
+                                <option value="2">生产入库</option>
+                                <option value="3">退货入库</option>
+                                <option value="4">其他入库</option>
+                            </select>
+                            <select class="standard-select">
+                                <option value="">入库状态</option>
+                                <option value="1">待入库</option>
+                                <option value="2">部分入库</option>
+                                <option value="3">已入库</option>
+                                <option value="4">已取消</option>
+                            </select>
+                            <button class="standard-button primary" onclick="searchInbound()">
+                                <i class="fas fa-search"></i> 查询
+                            </button>
+                        </div>
+                        <div class="action-bar">
+                            <button class="standard-button primary" onclick="showAddInboundModal()">
+                                <i class="fas fa-plus"></i> 新增入库
+                            </button>
+                            <button class="standard-button" onclick="exportInbound()">
+                                <i class="fas fa-file-export"></i> 导出
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="standard-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>入库单号</th>
+                                    <th>入库类型</th>
+                                    <th>关联单号</th>
+                                    <th>入库仓库</th>
+                                    <th>商品数量</th>
+                                    <th>入库时间</th>
+                                    <th>经办人</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inboundTable"></tbody>
+                        </table>
+                    </div>
+                    <div class="standard-pagination" id="pagination"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 新增入库弹窗 -->
+    <div class="standard-modal" id="inboundModal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3><i class="fas fa-plus-circle"></i> 新增入库单</h3>
+                <button class="standard-close-btn" onclick="hideModal('inboundModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="inboundForm" class="standard-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>入库类型</label>
+                            <select class="form-control" name="type" required>
+                                <option value="1">采购入库</option>
+                                <option value="2">生产入库</option>
+                                <option value="3">退货入库</option>
+                                <option value="4">其他入库</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>入库仓库</label>
+                            <select class="form-control" name="warehouse" required>
+                                <option value="1">原料仓</option>
+                                <option value="2">成品仓</option>
+                                <option value="3">半成品仓</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>关联单号</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="relatedOrder">
+                                <button type="button" class="standard-button" onclick="selectOrder()">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h4>入库商品</h4>
+                        <div class="table-toolbar">
+                            <button type="button" class="standard-button" onclick="addProduct()">
+                                <i class="fas fa-plus"></i> 添加商品
+                            </button>
+                        </div>
+                        <div class="standard-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>商品编码</th>
+                                        <th>商品名称</th>
+                                        <th>规格型号</th>
+                                        <th>单位</th>
+                                        <th>数量</th>
+                                        <th>批次号</th>
+                                        <th>备注</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="productTable"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>经办人</label>
+                            <input type="text" class="form-control" name="handler" required>
+                        </div>
+                        <div class="form-group">
+                            <label>入库时间</label>
+                            <input type="datetime-local" class="form-control" name="inboundTime" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>备注</label>
+                        <textarea class="form-control" name="remark" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="standard-button secondary" onclick="hideModal('inboundModal')">
+                    <i class="fas fa-times"></i> 取消
+                </button>
+                <button class="standard-button primary" onclick="saveInbound()">
+                    <i class="fas fa-save"></i> 保存
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 选择商品弹窗 -->
+    <div class="standard-modal" id="productModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-box"></i> 选择商品</h3>
+                <button class="standard-close-btn" onclick="hideModal('productModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="search-bar">
+                    <input type="text" class="standard-input" placeholder="输入商品编码/名称">
+                    <button class="standard-button" onclick="searchProduct()">
+                        <i class="fas fa-search"></i> 搜索
+                    </button>
+                </div>
+                <div class="product-list" id="productList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/common.js"></script>
+    <script src="../../js/modules/inventory/inbound.js"></script>
+</body>
+</html> 

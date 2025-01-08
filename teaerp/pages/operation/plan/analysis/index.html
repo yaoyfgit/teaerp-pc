@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>计划分析 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../../css/common.css">
+    <link rel="stylesheet" href="../../../../css/layout.css">
+    <link rel="stylesheet" href="../../../../css/menu.css">
+    <link rel="stylesheet" href="../../../../css/modules/operation.css">
+    <style>
+        /* 统计卡片样式 */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            padding: 16px;
+        }
+        
+        .overview-item {
+            background: #fff;
+            border-radius: 4px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .overview-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .overview-item i {
+            font-size: 24px;
+            margin-right: 16px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+        
+        .overview-item:nth-child(1) i {
+            background-color: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .overview-item:nth-child(2) i {
+            background-color: #e8f5e9;
+            color: #43a047;
+        }
+        
+        .overview-item:nth-child(3) i {
+            background-color: #fff3e0;
+            color: #ef6c00;
+        }
+        
+        .overview-item:nth-child(4) i {
+            background-color: #f3e5f5;
+            color: #8e24aa;
+        }
+        
+        .overview-item .info {
+            flex: 1;
+        }
+        
+        .overview-item h4 {
+            margin: 0;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .overview-item .number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .overview-item .unit {
+            font-size: 14px;
+            color: #666;
+            margin-left: 4px;
+        }
+
+        /* 图表容器样式 */
+        .charts-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin: 16px 0;
+        }
+
+        .chart-card {
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            height: 450px;
+        }
+
+        .chart-card .card-header {
+            padding: 16px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+        }
+
+        .chart-card .card-body {
+            padding: 16px;
+            height: calc(100% - 60px);
+            position: relative;
+        }
+
+        .chart-card .card-body > div {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        /* 分析报告样式 */
+        .analysis-report {
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-top: 16px;
+        }
+
+        .analysis-report .report-header {
+            padding: 16px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .analysis-report .report-body {
+            padding: 16px;
+        }
+
+        .report-section {
+            margin-bottom: 24px;
+        }
+
+        .report-section h4 {
+            color: #333;
+            margin-bottom: 16px;
+            font-size: 16px;
+        }
+
+        .report-section p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .report-section .highlight {
+            color: #1976d2;
+            font-weight: bold;
+        }
+
+        .report-section .warning {
+            color: #ef6c00;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <!-- 面包屑 -->
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-chart-line"></i>
+                    <span>经营计划</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-chart-pie"></i>
+                    <span>计划分析</span>
+                </div>
+
+                <!-- 分析概览 -->
+                <div class="standard-card">
+                    <div class="overview-grid">
+                        <div class="overview-item">
+                            <i class="fas fa-chart-pie"></i>
+                            <div class="info">
+                                <h4>总计划数</h4>
+                                <div class="number">126<span class="unit">个</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item">
+                            <i class="fas fa-check-circle"></i>
+                            <div class="info">
+                                <h4>已完成</h4>
+                                <div class="number">85<span class="unit">个</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item">
+                            <i class="fas fa-clock"></i>
+                            <div class="info">
+                                <h4>进行中</h4>
+                                <div class="number">32<span class="unit">个</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item">
+                            <i class="fas fa-hourglass-start"></i>
+                            <div class="info">
+                                <h4>未开始</h4>
+                                <div class="number">9<span class="unit">个</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 查询条件 -->
+                <div class="standard-card">
+                    <div class="standard-card-header">
+                        <h3><i class="fas fa-filter"></i> 分析条件</h3>
+                        <div class="action-bar">
+                            <div class="search-group">
+                                <select class="standard-select" id="planScope">
+                                    <option value="">计划范围</option>
+                                    <option value="company">公司计划</option>
+                                    <option value="department">部门计划</option>
+                                    <option value="employee">员工计划</option>
+                                </select>
+                                <select class="standard-select">
+                                    <option value="">计划类型</option>
+                                    <option value="sales">销售计划</option>
+                                    <option value="profit">利润计划</option>
+                                    <option value="cost">成本计划</option>
+                                    <option value="production">生产计划</option>
+                                    <option value="quality">质量计划</option>
+                                </select>
+                                <select class="standard-select">
+                                    <option value="">完成状态</option>
+                                    <option value="completed">已完成</option>
+                                    <option value="in_progress">进行中</option>
+                                    <option value="not_started">未开始</option>
+                                    <option value="overdue">已逾期</option>
+                                </select>
+                                <select class="standard-select">
+                                    <option value="">时间维度</option>
+                                    <option value="day">日</option>
+                                    <option value="week">周</option>
+                                    <option value="month">月</option>
+                                    <option value="quarter">季度</option>
+                                    <option value="year">年</option>
+                                </select>
+                                <div class="date-range-group">
+                                    <input type="date" class="standard-input" placeholder="开始日期">
+                                    <span class="separator">至</span>
+                                    <input type="date" class="standard-input" placeholder="结束日期">
+                                </div>
+                                <button class="standard-button primary">
+                                    <i class="fas fa-search"></i>
+                                    <span>分析</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 分析图表 -->
+                <div class="charts-container">
+                    <!-- 完成情况分析 -->
+                    <div class="chart-card">
+                        <div class="card-header">
+                            <h3>完成情况分析</h3>
+                            <div class="card-tools">
+                                <button class="standard-button" onclick="exportChart('completion')">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="completionChart" style="width: 100%; height: 100%;"></div>
+                        </div>
+                    </div>
+                    <!-- 趋势分析 -->
+                    <div class="chart-card">
+                        <div class="card-header">
+                            <h3>趋势分析</h3>
+                            <div class="card-tools">
+                                <button class="standard-button" onclick="exportChart('trend')">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="trendChart" style="width: 100%; height: 100%;"></div>
+                        </div>
+                    </div>
+                    <!-- 类型分布 -->
+                    <div class="chart-card">
+                        <div class="card-header">
+                            <h3>计划类型分布</h3>
+                            <div class="card-tools">
+                                <button class="standard-button" onclick="exportChart('type')">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="typeChart" style="width: 100%; height: 100%;"></div>
+                        </div>
+                    </div>
+                    <!-- 部门对比 -->
+                    <div class="chart-card">
+                        <div class="card-header">
+                            <h3>部门完成率对比</h3>
+                            <div class="card-tools">
+                                <button class="standard-button" onclick="exportChart('department')">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="departmentChart" style="width: 100%; height: 100%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 分析报告 -->
+                <div class="analysis-report">
+                    <div class="report-header">
+                        <h3><i class="fas fa-file-alt"></i> 分析报告</h3>
+                        <div class="report-tools">
+                            <button class="standard-button" onclick="exportReport()">
+                                <i class="fas fa-download"></i>
+                                <span>导出报告</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="report-body">
+                        <div class="report-section">
+                            <h4>总体表现</h4>
+                            <p>本期计划完成情况总体良好，完成率达到<span class="highlight">85%</span>，较上期提升<span class="highlight">15%</span>。</p>
+                            <p>其中，销售计划表现最为突出，达成率<span class="highlight">92%</span>，超出预期目标。</p>
+                        </div>
+                        <div class="report-section">
+                            <h4>问题分析</h4>
+                            <p>成本控制计划完成率偏低，仅为<span class="warning">68%</span>，主要受以下因素影响：</p>
+                            <ul>
+                                <li>原材料价格上涨</li>
+                                <li>生产效率有待提升</li>
+                                <li>库存管理待优化</li>
+                            </ul>
+                        </div>
+                        <div class="report-section">
+                            <h4>改进建议</h4>
+                            <p>1. 加强供应链管理，寻找更优质的供应商</p>
+                            <p>2. 优化生产流程，提高自动化水平</p>
+                            <p>3. 实施精益库存管理，减少库存积压</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../../js/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="../../../../js/modules/operation/plan/analysis/index.js"></script>
+</body>
+</html> 

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>绩效分析 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/modules/production.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb">
+                <span>生产管理</span>
+                <span class="separator">/</span>
+                <span>生产统计分析</span>
+                <span class="separator">/</span>
+                <span>绩效分析</span>
+            </div>
+
+            <!-- 产量分析 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>产量分析</h3>
+                </div>
+                <div class="card-body">
+                    <div class="analysis-grid">
+                        <div class="analysis-card">
+                            <h4>产量统计</h4>
+                            <div id="outputStatsChart" class="chart"></div>
+                        </div>
+                        <div class="analysis-card">
+                            <h4>产量趋势</h4>
+                            <div id="outputTrendChart" class="chart"></div>
+                        </div>
+                        <div class="analysis-card">
+                            <h4>产量对比</h4>
+                            <div id="outputCompareChart" class="chart"></div>
+                        </div>
+                        <div class="analysis-card">
+                            <h4>产量改进建议</h4>
+                            <div class="suggestion-list" id="outputSuggestionList"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 成本分析 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>成本分析</h3>
+                </div>
+                <div class="card-body">
+                    <div class="analysis-grid">
+                        <div class="analysis-card">
+                            <h4>成本统计</h4>
+                            <div id="costStatsChart" class="chart"></div>
+                        </div>
+                        <div class="analysis-card">
+                            <h4>成本趋势</h4>
+                            <div id="costTrendChart" class="chart"></div>
+                        </div>
+                        <div class="analysis-card">
+                            <h4>成本对比</h4>
+                            <div id="costCompareChart" class="chart"></div>
+                        </div>
+                        <div class="analysis-card">
+                            <h4>成本改进建议</h4>
+                            <div class="suggestion-list" id="costSuggestionList"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="../../../js/common.js"></script>
+    <script src="../../../js/modules/production/performance.js"></script>
+</body>
+</html> 

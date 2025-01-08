@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新增应付单 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/modules/finance.css">
+    <style>
+        .form-container {
+            padding: 16px;
+        }
+
+        .form-section {
+            margin-bottom: 24px;
+        }
+
+        .form-section-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .form-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            margin-bottom: 8px;
+            color: #666;
+        }
+
+        .form-label.required::after {
+            content: '*';
+            color: #f56c6c;
+            margin-left: 4px;
+        }
+
+        .form-footer {
+            padding: 16px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        /* 表格样式 */
+        .document-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 16px;
+        }
+
+        .document-table th,
+        .document-table td {
+            padding: 8px;
+            border: 1px solid #eee;
+            text-align: left;
+        }
+
+        .document-table th {
+            background-color: #f5f7fa;
+            font-weight: normal;
+            color: #666;
+        }
+
+        .document-table td {
+            vertical-align: middle;
+        }
+
+        .document-table .amount-cell {
+            text-align: right;
+        }
+
+        .add-row-btn {
+            margin-bottom: 16px;
+        }
+
+        /* 附件上传 */
+        .upload-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .upload-item {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+
+        .upload-item i {
+            margin-right: 8px;
+            color: #666;
+        }
+
+        .upload-item .file-name {
+            flex: 1;
+        }
+
+        .upload-item .file-size {
+            color: #999;
+            margin: 0 16px;
+        }
+
+        .upload-item .remove-btn {
+            color: #f56c6c;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-money-check-alt"></i>
+                    <span>财务管理</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <span>应付单</span>
+                    <i class="fas fa-angle-right"></i>
+                    <span>新增应付单</span>
+                </div>
+
+                <div class="card standard-card">
+                    <div class="form-container">
+                        <!-- 基本信息 -->
+                        <div class="form-section">
+                            <div class="form-section-title">基本信息</div>
+                            <div class="form-row">
+                                <div class="form-item">
+                                    <label class="form-label required">单据编号</label>
+                                    <input type="text" class="standard-input" value="YF202403060001" readonly>
+                                </div>
+                                <div class="form-item">
+                                    <label class="form-label required">单据日期</label>
+                                    <input type="date" class="standard-input" value="2024-03-06">
+                                </div>
+                                <div class="form-item">
+                                    <label class="form-label required">供应商</label>
+                                    <select class="standard-select">
+                                        <option value="">请选择供应商</option>
+                                        <option value="1">茶叶供应商A</option>
+                                        <option value="2">茶叶供应商B</option>
+                                    </select>
+                                </div>
+                                <div class="form-item">
+                                    <label class="form-label">业务员</label>
+                                    <select class="standard-select">
+                                        <option value="">请选择业务员</option>
+                                        <option value="1">张三</option>
+                                        <option value="2">李四</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-item">
+                                    <label class="form-label required">应付金额</label>
+                                    <input type="number" class="standard-input" placeholder="请输入应付金额">
+                                </div>
+                                <div class="form-item">
+                                    <label class="form-label required">到期日期</label>
+                                    <input type="date" class="standard-input">
+                                </div>
+                                <div class="form-item">
+                                    <label class="form-label">备注</label>
+                                    <input type="text" class="standard-input" placeholder="请输入备注信息">
+                                </div>
+                                <div class="form-item">
+                                    <label class="form-label">&nbsp;</label>
+                                    <div></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 关联单据 -->
+                        <div class="form-section">
+                            <div class="form-section-title">关联单据</div>
+                            <button class="standard-button primary add-row-btn">
+                                <i class="fas fa-plus"></i>
+                                添加单据
+                            </button>
+                            <table class="document-table">
+                                <thead>
+                                    <tr>
+                                        <th>单据类型</th>
+                                        <th>单据编号</th>
+                                        <th>单据日期</th>
+                                        <th>单据金额</th>
+                                        <th>已付金额</th>
+                                        <th>未付金额</th>
+                                        <th>本次付款</th>
+                                        <th>备注</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>采购单</td>
+                                        <td>CG202403060001</td>
+                                        <td>2024-03-06</td>
+                                        <td class="amount-cell">10,000.00</td>
+                                        <td class="amount-cell">0.00</td>
+                                        <td class="amount-cell">10,000.00</td>
+                                        <td>
+                                            <input type="number" class="standard-input" placeholder="请输入金额">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="standard-input" placeholder="请输入备注">
+                                        </td>
+                                        <td>
+                                            <button class="standard-button small danger">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- 附件信息 -->
+                        <div class="form-section">
+                            <div class="form-section-title">附件信息</div>
+                            <button class="standard-button primary add-row-btn">
+                                <i class="fas fa-upload"></i>
+                                上传附件
+                            </button>
+                            <ul class="upload-list">
+                                <li class="upload-item">
+                                    <i class="fas fa-file-pdf"></i>
+                                    <span class="file-name">付款申请.pdf</span>
+                                    <span class="file-size">258KB</span>
+                                    <i class="fas fa-times remove-btn"></i>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="form-footer">
+                        <button class="standard-button" onclick="history.back()">取消</button>
+                        <button class="standard-button">保存草稿</button>
+                        <button class="standard-button primary">提交审核</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 初始化菜单
+            Menu.renderMenu();
+            // 初始化菜单切换功能
+            initMenuToggle();
+        });
+    </script>
+</body>
+</html> 

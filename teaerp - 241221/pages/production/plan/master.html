@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>主生产计划 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/modules/production.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb">
+                <span>生产管理</span>
+                <span class="separator">/</span>
+                <span>生产计划管理</span>
+                <span class="separator">/</span>
+                <span>主生产计划</span>
+            </div>
+
+            <!-- 计划制定 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>计划制定</h3>
+                    <div class="card-tools">
+                        <button class="button" onclick="showAddPlanModal()">新增计划</button>
+                        <button class="button" onclick="importPlan()">导入计划</button>
+                        <button class="button secondary" onclick="exportPlan()">导出计划</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="search-bar">
+                        <div class="form-group">
+                            <label>计划来源</label>
+                            <select class="form-control">
+                                <option value="">全部</option>
+                                <option value="mrp">MRP运算</option>
+                                <option value="manual">手工制定</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>计划周期</label>
+                            <select class="form-control">
+                                <option value="">全部</option>
+                                <option value="day">日计划</option>
+                                <option value="week">周计划</option>
+                                <option value="month">月计划</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>计划状态</label>
+                            <select class="form-control">
+                                <option value="">全部</option>
+                                <option value="draft">草稿</option>
+                                <option value="confirmed">已确认</option>
+                                <option value="executing">执行中</option>
+                                <option value="completed">已完成</option>
+                            </select>
+                        </div>
+                        <button class="button" onclick="searchPlans()">搜索</button>
+                    </div>
+
+                    <div class="data-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>计划编号</th>
+                                    <th>计划名称</th>
+                                    <th>计划来源</th>
+                                    <th>计划周期</th>
+                                    <th>开始日期</th>
+                                    <th>结束日期</th>
+                                    <th>计划产量</th>
+                                    <th>完成率</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="planTable"></tbody>
+                        </table>
+                    </div>
+                    <div class="pagination" id="pagination"></div>
+                </div>
+            </div>
+
+            <!-- 资源配置 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>资源配置</h3>
+                </div>
+                <div class="card-body">
+                    <div class="resource-grid">
+                        <div class="resource-card">
+                            <h4>人力资源</h4>
+                            <div class="resource-stats">
+                                <div class="stat-item">
+                                    <span class="label">计划人数</span>
+                                    <span class="value">50</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="label">实际人数</span>
+                                    <span class="value">45</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="label">缺口人数</span>
+                                    <span class="value warning">5</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="resource-card">
+                            <h4>设备资源</h4>
+                            <div class="resource-stats">
+                                <div class="stat-item">
+                                    <span class="label">计划设备</span>
+                                    <span class="value">10</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="label">可用设备</span>
+                                    <span class="value">8</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="label">维修中</span>
+                                    <span class="value warning">2</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="resource-card">
+                            <h4>物料资源</h4>
+                            <div class="resource-stats">
+                                <div class="stat-item">
+                                    <span class="label">物料种类</span>
+                                    <span class="value">15</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="label">库存充足</span>
+                                    <span class="value success">12</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="label">库存不足</span>
+                                    <span class="value error">3</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 新增计划弹窗 -->
+    <div class="modal" id="planModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>新增生产计划</h3>
+                <button class="close-btn" onclick="hideModal('planModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="planForm" class="form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>计划名称</label>
+                            <input type="text" class="form-control" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>计划来源</label>
+                            <select class="form-control" name="source" required>
+                                <option value="mrp">MRP运算</option>
+                                <option value="manual">手工制定</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>计划周期</label>
+                            <select class="form-control" name="period" required>
+                                <option value="day">日计划</option>
+                                <option value="week">周计划</option>
+                                <option value="month">月计划</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>开始日期</label>
+                            <input type="date" class="form-control" name="startDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>结束日期</label>
+                            <input type="date" class="form-control" name="endDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>计划产量</label>
+                            <input type="number" class="form-control" name="quantity" required>
+                        </div>
+                        <div class="form-group">
+                            <label>计划目标</label>
+                            <textarea class="form-control" name="target" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>资源需求</label>
+                            <textarea class="form-control" name="resources" rows="3"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideModal('planModal')">取消</button>
+                <button class="button" onclick="savePlan()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/common.js"></script>
+    <script src="../../../js/modules/production/master-plan.js"></script>
+</body>
+</html> 

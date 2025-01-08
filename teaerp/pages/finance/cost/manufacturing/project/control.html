@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>费用项目控制 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../../../css/common.css">
+    <link rel="stylesheet" href="../../../../../css/layout.css">
+    <link rel="stylesheet" href="../../../../../css/modules/finance.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb">
+                <span>财务管理</span>
+                <span class="separator">/</span>
+                <span>成本管理</span>
+                <span class="separator">/</span>
+                <span>制造费用</span>
+                <span class="separator">/</span>
+                <span>项目控制</span>
+            </div>
+
+            <!-- 控制面板 -->
+            <div class="control-panel">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>预警规则</h3>
+                        <div class="card-tools">
+                            <button class="button" onclick="showModal('ruleModal')">
+                                <i class="fas fa-plus"></i> 新增规则
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="ruleTable"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>预警监控</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="warningChart" style="height: 300px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 控制记录 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>控制记录</h3>
+                </div>
+                <div class="card-body">
+                    <div id="controlTable"></div>
+                    <div id="pagination"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 规则编辑弹窗 -->
+    <div class="modal" id="ruleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>预警规则</h3>
+                <button class="close-btn" onclick="hideModal('ruleModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="ruleForm">
+                    <div class="form-group">
+                        <label>费用项目</label>
+                        <select class="form-control" name="projectId" required>
+                            <option value="">请选择</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>预警类型</label>
+                        <select class="form-control" name="type" required>
+                            <option value="budget">预算预警</option>
+                            <option value="trend">趋势预警</option>
+                            <option value="abnormal">异常预警</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>预警条件</label>
+                        <input type="text" class="form-control" name="condition" required>
+                    </div>
+                    <div class="form-group">
+                        <label>预警级别</label>
+                        <select class="form-control" name="level">
+                            <option value="low">低级</option>
+                            <option value="medium">中级</option>
+                            <option value="high">高级</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>处理方案</label>
+                        <textarea class="form-control" name="solution" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideModal('ruleModal')">取消</button>
+                <button class="button" onclick="saveRule()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../../../js/common.js"></script>
+    <script src="../../../../../js/modules/finance/cost/manufacturing/project-control.js"></script>
+</body>
+</html> 

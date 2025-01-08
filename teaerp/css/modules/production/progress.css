@@ -1,0 +1,592 @@
+/* 生产进度页面通用样式 */
+.standard-cards {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.status-card {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 24px 24px 24px;
+    border-radius: 12px;
+    background: #fff;
+    min-width: 200px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
+}
+
+.status-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.status-card .card-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    margin-right: 16px;
+}
+
+.status-card .card-icon i {
+    font-size: 20px;
+}
+
+.status-card .card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-right: 16px;
+}
+
+.status-card .card-content h3 {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 4px;
+}
+
+.status-card .card-content .number {
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 1;
+}
+
+/* 状态卡片样式 */
+.status-card.warning {
+    border-left: 4px solid #ff9800;
+    background-color: #fff8e1;
+}
+
+.status-card.warning .card-icon,
+.status-card.warning .number {
+    color: #ff9800;
+}
+
+.status-card.success {
+    border-left: 4px solid #4caf50;
+    background-color: #e8f5e9;
+}
+
+.status-card.success .card-icon,
+.status-card.success .number {
+    color: #4caf50;
+}
+
+/* 工具栏样式 */
+.standard-toolbar {
+    padding: 16px;
+    border-bottom: 1px solid #eee;
+}
+
+.toolbar-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* 移除旧的样式 */
+.search-bar,
+.action-bar {
+    display: none;
+}
+
+/* 表格样式 */
+.standard-table {
+    padding: 16px;
+}
+
+.standard-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.standard-table th {
+    background: #f5f5f5;
+    padding: 12px 8px;
+    text-align: left;
+    font-weight: 500;
+    color: #333;
+}
+
+.standard-table td {
+    padding: 8px;
+    vertical-align: middle;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+    color: #333;
+}
+
+.standard-table .operation-column {
+    min-width: 160px;
+    white-space: nowrap;
+}
+
+.operation-column .standard-button {
+    height: 24px;
+    padding: 0 8px;
+    margin-right: 8px;
+    font-size: 12px;
+}
+
+.operation-column .standard-button:last-child {
+    margin-right: 0;
+}
+
+.operation-column .standard-button i {
+    font-size: 12px;
+}
+
+/* 按钮样式 */
+.standard-button {
+    height: 32px;
+    padding: 0 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.standard-button.primary {
+    background: #8fd4d2;
+    color: #fff;
+    border: none;
+}
+
+.standard-button.primary:hover {
+    background: #a8e0de;
+}
+
+.standard-button.secondary {
+    background: #fff;
+    border: 1px solid #d9d9d9;
+    color: #666;
+}
+
+.standard-button.secondary:hover {
+    border-color: #8fd4d2;
+    color: #8fd4d2;
+}
+
+/* 表单控件样式 */
+.standard-select,
+.standard-input {
+    height: 32px;
+    padding: 4px 8px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    font-size: 14px;
+    width: 180px;
+}
+
+.standard-select:hover,
+.standard-input:hover {
+    border-color: #8fd4d2;
+}
+
+.standard-select:focus,
+.standard-input:focus {
+    border-color: #8fd4d2;
+    box-shadow: 0 0 0 2px rgba(143, 212, 210, 0.2);
+    outline: none;
+}
+
+/* 弹窗样式 */
+.standard-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+}
+
+.standard-modal .modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 1400px;
+    max-height: 85vh;
+    background: #fff;
+    border-radius: 4px;
+    overflow: auto;
+}
+
+.standard-modal .modal-header {
+    padding: 16px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.standard-modal .modal-body {
+    padding: 16px;
+}
+
+.standard-modal .modal-footer {
+    padding: 16px;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+/* 表单布局 */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 14px;
+    color: #666;
+}
+
+.form-group textarea {
+    padding: 8px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* 分页样式 */
+.standard-pagination {
+    padding: 16px;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.standard-pagination button {
+    height: 32px;
+    min-width: 32px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    background: #fff;
+    color: #666;
+}
+
+.standard-pagination button.active {
+    background: #8fd4d2;
+    color: #fff;
+    border-color: #8fd4d2;
+}
+
+.standard-pagination button:hover:not(.active) {
+    border-color: #8fd4d2;
+    color: #8fd4d2;
+}
+
+/* 状态标签样式 */
+.status-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 2px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.status-badge.warning {
+    background-color: #fff8e1;
+    color: #ff9800;
+    border: 1px solid #ffe0b2;
+}
+
+.status-badge.success {
+    background-color: #e8f5e9;
+    color: #4caf50;
+    border: 1px solid #c8e6c9;
+}
+
+.status-badge.info {
+    background-color: #e3f2fd;
+    color: #2196f3;
+    border: 1px solid #bbdefb;
+}
+
+.status-badge.secondary {
+    background-color: #f5f5f5;
+    color: #666;
+    border: 1px solid #e0e0e0;
+}
+
+/* 进度条样式 */
+.progress-bar {
+    width: 100%;
+    height: 16px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-bar .progress {
+    height: 100%;
+    background-color: #8fd4d2;
+    transition: width 0.3s ease;
+}
+
+.progress-bar .progress-text {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    color: #666;
+}
+
+/* 表格单元格样式优化 */
+.standard-table td {
+    padding: 8px;
+    vertical-align: middle;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+    color: #333;
+}
+
+.standard-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+.standard-table tr:hover .standard-button {
+    opacity: 1;
+}
+
+.standard-table .standard-button {
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.standard-table .standard-button:hover {
+    opacity: 1;
+}
+
+/* 表格内容溢出处理 */
+.standard-table td {
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.standard-table td.operation-column {
+    overflow: visible;
+}
+
+/* 状态概览 */
+.status-overview {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 24px;
+    flex-wrap: nowrap;
+}
+
+.status-card {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px;
+    border-radius: 12px;
+    background: #fff;
+    min-width: 200px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.status-card .card-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+}
+
+.status-card .card-icon i {
+    font-size: 24px;
+}
+
+.status-card .card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.status-card .card-content h3 {
+    margin: 0;
+    font-size: 15px;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.status-card .card-content .number {
+    font-size: 28px;
+    font-weight: bold;
+    line-height: 1;
+}
+
+/* 状态卡片样式 */
+.status-card.info {
+    background-color: #f8fbff;
+    border-left-color: #2196f3;
+}
+
+.status-card.info .card-icon {
+    background-color: rgba(33, 150, 243, 0.1);
+}
+
+.status-card.info .card-icon i,
+.status-card.info .number {
+    color: #2196f3;
+}
+
+.status-card.warning {
+    background-color: #fff8f0;
+    border-left-color: #ff9800;
+}
+
+.status-card.warning .card-icon {
+    background-color: rgba(255, 152, 0, 0.1);
+}
+
+.status-card.warning .card-icon i,
+.status-card.warning .number {
+    color: #ff9800;
+}
+
+.status-card.success {
+    background-color: #f6fff7;
+    border-left-color: #52c41a;
+}
+
+.status-card.success .card-icon {
+    background-color: rgba(82, 196, 26, 0.1);
+}
+
+.status-card.success .card-icon i,
+.status-card.success .number {
+    color: #52c41a;
+}
+
+@media screen and (max-width: 768px) {
+    .status-overview {
+        flex-wrap: wrap;
+    }
+    
+    .status-card {
+        min-width: calc(50% - 12px);
+    }
+}
+
+/* 卡片标题栏 */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.header-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.header-title i {
+    font-size: 18px;
+    color: var(--primary);
+}
+
+.header-title h3 {
+    margin: 0;
+    font-size: 16px;
+    color: var(--text-primary);
+}
+
+.header-tools {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* 图表容器 */
+.card-body {
+    padding: 20px;
+}
+
+.chart {
+    width: 100%;
+    height: 400px;
+}
+
+/* 进行中状态 */
+.status-card:nth-child(2) {
+    background-color: #f9f9f9;
+    border-left-color: #666;
+}
+
+.status-card:nth-child(2) .card-icon {
+    background-color: rgba(102, 102, 102, 0.1);
+}
+
+.status-card:nth-child(2) .card-icon i,
+.status-card:nth-child(2) .number {
+    color: #666;
+}
+
+.status-card.warning {
+    background-color: #fff8f0;
+    border-left-color: #ff9800;
+}
+
+.status-card.warning .card-icon {
+    background-color: rgba(255, 152, 0, 0.1);
+}
+
+.status-card.warning .card-icon i,
+.status-card.warning .number {
+    color: #ff9800;
+}
+
+.status-card.success {
+    background-color: #f6fff7;
+    border-left-color: #52c41a;
+}
+
+.status-card.success .card-icon {
+    background-color: rgba(82, 196, 26, 0.1);
+}
+
+.status-card.success .card-icon i,
+.status-card.success .number {
+    color: #52c41a;
+}
+
+.toolbar-divider {
+    width: 1px;
+    height: 24px;
+    background-color: #eee;
+    margin: 0 16px;
+} 

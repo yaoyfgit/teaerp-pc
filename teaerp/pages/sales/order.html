@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>销售订单 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/menu.css">
+    <link rel="stylesheet" href="../../css/modules/sales.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-store"></i>
+                    <span>销售管理</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <span>销售订单</span>
+                </div>
+
+                <div class="standard-card">
+                    <div class="standard-toolbar">
+                        <div class="search-group">
+                            <input type="text" class="standard-input" placeholder="输入订单号或客户名称搜索">
+                            <select class="standard-select">
+                                <option value="">订单状态</option>
+                                <option value="draft">草稿</option>
+                                <option value="confirmed">已确认</option>
+                                <option value="delivered">已发货</option>
+                                <option value="completed">已完成</option>
+                                <option value="cancelled">已取消</option>
+                            </select>
+                            <div class="date-range-group">
+                                <input type="date" class="standard-input">
+                                <span class="date-separator">至</span>
+                                <input type="date" class="standard-input">
+                            </div>
+                            <button class="standard-button primary">
+                                <i class="fas fa-search"></i> 查询
+                            </button>
+                        </div>
+                        <div class="button-group">
+                            <button class="standard-button primary" onclick="createOrder()">
+                                <i class="fas fa-plus"></i> 新建订单
+                            </button>
+                            <button class="standard-button">
+                                <i class="fas fa-file-excel"></i> 导出Excel
+                            </button>
+                        </div>
+                    </div>
+
+                    <table class="standard-table">
+                        <thead>
+                            <tr>
+                                <th>订单号</th>
+                                <th>客户名称</th>
+                                <th>订单日期</th>
+                                <th>订单金额</th>
+                                <th>订单状态</th>
+                                <th class="operation-column">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>SO202403010001</td>
+                                <td>客户A</td>
+                                <td>2024-03-01</td>
+                                <td>¥10,000.00</td>
+                                <td><span class="status-badge success">已确认</span></td>
+                                <td>
+                                    <button class="standard-button">查看</button>
+                                    <button class="standard-button">编辑</button>
+                                    <button class="standard-button danger">删除</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="standard-pagination">
+                        <button><i class="fas fa-chevron-left"></i></button>
+                        <button class="active">1</button>
+                        <button>2</button>
+                        <button>3</button>
+                        <button><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="standard-modal" id="orderModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-file-invoice"></i> 新建销售订单</h3>
+                <button class="standard-button" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="orderForm">
+                    <div class="form-group">
+                        <label>客户名称</label>
+                        <select class="standard-select" required>
+                            <option value="">请选择客户</option>
+                            <option value="1">客户A</option>
+                            <option value="2">客户B</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>订单日期</label>
+                        <input type="date" class="standard-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>备注</label>
+                        <textarea class="standard-input"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>订单明细</label>
+                        <table class="standard-table">
+                            <thead>
+                                <tr>
+                                    <th>商品</th>
+                                    <th>数量</th>
+                                    <th>单价</th>
+                                    <th>金额</th>
+                                    <th class="operation-column">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <select class="standard-select">
+                                            <option value="">请选择商品</option>
+                                            <option value="1">商品A</option>
+                                            <option value="2">商品B</option>
+                                        </select>
+                                    </td>
+                                    <td><input type="number" class="standard-input" min="1"></td>
+                                    <td><input type="number" class="standard-input" step="0.01"></td>
+                                    <td>¥0.00</td>
+                                    <td>
+                                        <button type="button" class="standard-button danger">删除</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button type="button" class="standard-button" onclick="addOrderItem()">添加明细</button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="standard-button" onclick="closeModal()">取消</button>
+                <button class="standard-button primary" onclick="saveOrder()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/app.js"></script>
+    <script src="../../js/modules/sales/order.js"></script>
+</body>
+</html>

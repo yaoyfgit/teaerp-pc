@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>费用项目预算 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../../../css/common.css">
+    <link rel="stylesheet" href="../../../../../css/layout.css">
+    <link rel="stylesheet" href="../../../../../css/modules/finance.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb">
+                <span>财务管理</span>
+                <span class="separator">/</span>
+                <span>成本管理</span>
+                <span class="separator">/</span>
+                <span>制造费用</span>
+                <span class="separator">/</span>
+                <span>项目预算</span>
+            </div>
+
+            <!-- 预算汇总 -->
+            <div class="summary-cards">
+                <div class="summary-card">
+                    <h3>年度预算总额</h3>
+                    <div class="amount">¥1,280,000</div>
+                    <div class="trend up">+5.2%</div>
+                </div>
+                <div class="summary-card">
+                    <h3>已用预算</h3>
+                    <div class="amount">¥860,000</div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 67%;"></div>
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <h3>剩余预算</h3>
+                    <div class="amount">¥420,000</div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 33%;"></div>
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <h3>预警项目</h3>
+                    <div class="amount">3</div>
+                    <div class="trend warning">需关注</div>
+                </div>
+            </div>
+
+            <!-- 预算管理 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>预算管理</h3>
+                    <div class="card-tools">
+                        <button class="button" onclick="showModal('budgetModal')">
+                            <i class="fas fa-plus"></i> 新增预算
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="budgetTable"></div>
+                    <div id="pagination"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 预算编辑弹窗 -->
+    <div class="modal" id="budgetModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>预算编辑</h3>
+                <button class="close-btn" onclick="hideModal('budgetModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="budgetForm">
+                    <div class="form-group">
+                        <label>预算年度</label>
+                        <select class="form-control" name="year" required>
+                            <option value="2024">2024年</option>
+                            <option value="2025">2025年</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>费用项目</label>
+                        <select class="form-control" name="projectId" required>
+                            <option value="">请选择</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>预算金额</label>
+                        <input type="number" class="form-control" name="amount" required>
+                    </div>
+                    <div class="form-group">
+                        <label>分配方式</label>
+                        <select class="form-control" name="allocationType">
+                            <option value="average">平均分配</option>
+                            <option value="custom">自定义分配</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>备注说明</label>
+                        <textarea class="form-control" name="remark" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideModal('budgetModal')">取消</button>
+                <button class="button" onclick="saveBudget()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../../../js/common.js"></script>
+    <script src="../../../../../js/modules/finance/cost/manufacturing/project-budget.js"></script>
+</body>
+</html> 

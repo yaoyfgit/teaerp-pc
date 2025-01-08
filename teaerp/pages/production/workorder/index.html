@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生产工单 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/modules/production.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-industry"></i>
+                    <span>生产管理</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-file-alt"></i>
+                    <span>生产工单</span>
+                </div>
+
+                <div class="standard-card">
+                    <div class="standard-toolbar">
+                        <div class="search-group">
+                            <input type="text" class="standard-input" placeholder="工单号/产品">
+                            <input type="date" class="standard-input" placeholder="开始日期">
+                            <input type="date" class="standard-input" placeholder="结束日期">
+                            <select class="standard-select">
+                                <option value="">工单状态</option>
+                                <option value="draft">草稿</option>
+                                <option value="pending">待生产</option>
+                                <option value="processing">生产中</option>
+                                <option value="paused">已暂停</option>
+                                <option value="completed">已完成</option>
+                                <option value="closed">已关闭</option>
+                                <option value="cancelled">已取消</option>
+                            </select>
+                            <button class="standard-button primary" onclick="searchWorkOrder()">
+                                <i class="fas fa-search"></i> 搜索
+                            </button>
+                        </div>
+                        <div class="button-group">
+                            <button class="standard-button primary" onclick="showPlanSelectorModal()">
+                                <i class="fas fa-plus"></i> 从计划生成
+                            </button>
+                            <button class="standard-button" onclick="exportWorkOrder()">
+                                <i class="fas fa-file-export"></i> 导出
+                            </button>
+                        </div>
+                    </div>
+
+                    <table class="standard-table">
+                        <thead>
+                            <tr>
+                                <th>工单号</th>
+                                <th>产品编码</th>
+                                <th>产品名称</th>
+                                <th>计划数量</th>
+                                <th>已完成数量</th>
+                                <th>开始日期</th>
+                                <th>完成日期</th>
+                                <th>状态</th>
+                                <th class="operation-column">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="workOrderTable">
+                            <tr>
+                                <td>WO202403200001</td>
+                                <td>P001</td>
+                                <td>特级铁观音</td>
+                                <td>1000</td>
+                                <td>0</td>
+                                <td>2024-03-20</td>
+                                <td>2024-03-25</td>
+                                <td><span class="status-badge draft">草稿</span></td>
+                                <td>
+                                    <button class="standard-button" onclick="viewWorkOrder('WO202403200001')">
+                                        <i class="fas fa-eye"></i> 查看
+                                    </button>
+                                    <button class="standard-button" onclick="editWorkOrder('WO202403200001')">
+                                        <i class="fas fa-edit"></i> 编辑
+                                    </button>
+                                    <button class="standard-button primary" onclick="submitWorkOrder('WO202403200001')">
+                                        <i class="fas fa-check"></i> 提交
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>WO202403200002</td>
+                                <td>P002</td>
+                                <td>特级红茶</td>
+                                <td>800</td>
+                                <td>0</td>
+                                <td>2024-03-21</td>
+                                <td>2024-03-26</td>
+                                <td><span class="status-badge pending">待生产</span></td>
+                                <td>
+                                    <button class="standard-button" onclick="viewWorkOrder('WO202403200002')">
+                                        <i class="fas fa-eye"></i> 查看
+                                    </button>
+                                    <button class="standard-button primary" onclick="startWorkOrder('WO202403200002')">
+                                        <i class="fas fa-play"></i> 开始生产
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>WO202403200003</td>
+                                <td>P003</td>
+                                <td>特级乌龙茶</td>
+                                <td>1200</td>
+                                <td>500</td>
+                                <td>2024-03-20</td>
+                                <td>2024-03-25</td>
+                                <td><span class="status-badge processing">生产中</span></td>
+                                <td>
+                                    <button class="standard-button" onclick="viewWorkOrder('WO202403200003')">
+                                        <i class="fas fa-eye"></i> 查看
+                                    </button>
+                                    <button class="standard-button warning" onclick="pauseWorkOrder('WO202403200003')">
+                                        <i class="fas fa-pause"></i> 暂停
+                                    </button>
+                                    <button class="standard-button success" onclick="completeWorkOrder('WO202403200003')">
+                                        <i class="fas fa-check-double"></i> 完成
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>WO202403200004</td>
+                                <td>P004</td>
+                                <td>特级普洱茶</td>
+                                <td>1500</td>
+                                <td>700</td>
+                                <td>2024-03-19</td>
+                                <td>2024-03-24</td>
+                                <td><span class="status-badge paused">已暂停</span></td>
+                                <td>
+                                    <button class="standard-button" onclick="viewWorkOrder('WO202403200004')">
+                                        <i class="fas fa-eye"></i> 查看
+                                    </button>
+                                    <button class="standard-button primary" onclick="resumeWorkOrder('WO202403200004')">
+                                        <i class="fas fa-play"></i> 继续
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>WO202403200005</td>
+                                <td>P005</td>
+                                <td>特级大红袍</td>
+                                <td>2000</td>
+                                <td>2000</td>
+                                <td>2024-03-18</td>
+                                <td>2024-03-23</td>
+                                <td><span class="status-badge completed">已完成</span></td>
+                                <td>
+                                    <button class="standard-button" onclick="viewWorkOrder('WO202403200005')">
+                                        <i class="fas fa-eye"></i> 查看
+                                    </button>
+                                    <button class="standard-button" onclick="closeWorkOrder('WO202403200005')">
+                                        <i class="fas fa-archive"></i> 关闭
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>WO202403200006</td>
+                                <td>P006</td>
+                                <td>特级毛尖</td>
+                                <td>1800</td>
+                                <td>1800</td>
+                                <td>2024-03-17</td>
+                                <td>2024-03-22</td>
+                                <td><span class="status-badge closed">已关闭</span></td>
+                                <td>
+                                    <button class="standard-button" onclick="viewWorkOrder('WO202403200006')">
+                                        <i class="fas fa-eye"></i> 查看
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>WO202403200007</td>
+                                <td>P007</td>
+                                <td>特级碧螺春</td>
+                                <td>1600</td>
+                                <td>0</td>
+                                <td>2024-03-22</td>
+                                <td>2024-03-27</td>
+                                <td><span class="status-badge cancelled">已取消</span></td>
+                                <td>
+                                    <button class="standard-button" onclick="viewWorkOrder('WO202403200007')">
+                                        <i class="fas fa-eye"></i> 查看
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="standard-pagination">
+                        <button><i class="fas fa-chevron-left"></i></button>
+                        <button class="active">1</button>
+                        <button>2</button>
+                        <button>3</button>
+                        <button><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 从计划生成工单弹窗 -->
+    <div id="planSelectorModal" class="standard-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-plus-circle"></i> 选择生产计划</h3>
+                <button class="close-btn" onclick="hideModal('planSelectorModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="standard-toolbar">
+                    <div class="search-group">
+                        <input type="text" class="standard-input" placeholder="产品编码/名称">
+                        <input type="date" class="standard-input" placeholder="计划日期">
+                        <select class="standard-select">
+                            <option value="">计划状态</option>
+                            <option value="pending">待生产</option>
+                            <option value="partial">部分生产</option>
+                            <option value="completed">已完成</option>
+                        </select>
+                        <button class="standard-button primary" onclick="searchPlanForWorkOrder()">
+                            <i class="fas fa-search"></i> 搜索
+                        </button>
+                    </div>
+                </div>
+                <table class="standard-table">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" onclick="toggleAllPlans(this)"></th>
+                            <th>计划编号</th>
+                            <th>产品编码</th>
+                            <th>产品名称</th>
+                            <th>计划数量</th>
+                            <th>已生成数量</th>
+                            <th>计划日期</th>
+                            <th>状态</th>
+                        </tr>
+                    </thead>
+                    <tbody id="planSelectorTable">
+                        <tr>
+                            <td><input type="checkbox" name="planIds" value="PP202403200001"></td>
+                            <td>PP202403200001</td>
+                            <td>P001</td>
+                            <td>特级铁观音</td>
+                            <td>2000</td>
+                            <td>1000</td>
+                            <td>2024-03-20</td>
+                            <td><span class="status-badge partial">部分生产</span></td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" name="planIds" value="PP202403200002"></td>
+                            <td>PP202403200002</td>
+                            <td>P002</td>
+                            <td>特级红茶</td>
+                            <td>1500</td>
+                            <td>0</td>
+                            <td>2024-03-21</td>
+                            <td><span class="status-badge pending">待生产</span></td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" name="planIds" value="PP202403200003"></td>
+                            <td>PP202403200003</td>
+                            <td>P003</td>
+                            <td>特级乌龙茶</td>
+                            <td>1800</td>
+                            <td>1800</td>
+                            <td>2024-03-22</td>
+                            <td><span class="status-badge completed">已完成</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="standard-button" onclick="hideModal('planSelectorModal')">
+                    <i class="fas fa-times"></i> 取消
+                </button>
+                <button class="standard-button primary" onclick="generateWorkOrders()">
+                    <i class="fas fa-check"></i> 生成工单
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* 面包屑样式 */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            background: #fff;
+            border-radius: 4px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+        }
+
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #606266;
+            text-decoration: none;
+        }
+
+        .breadcrumb-item:not(.active):hover {
+            color: #409eff;
+        }
+
+        .breadcrumb-item.active {
+            color: #303133;
+            cursor: default;
+        }
+
+        .separator {
+            margin: 0 8px;
+            color: #909399;
+        }
+
+        /* 状态标签样式 */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            line-height: 1;
+        }
+
+        .status-badge.draft {
+            background: #f4f4f5;
+            color: #909399;
+        }
+
+        .status-badge.pending {
+            background: #ecf5ff;
+            color: #409eff;
+        }
+
+        .status-badge.processing {
+            background: #e1f3d8;
+            color: #67c23a;
+        }
+
+        .status-badge.paused {
+            background: #fdf6ec;
+            color: #e6a23c;
+        }
+
+        .status-badge.completed {
+            background: #f0f9eb;
+            color: #67c23a;
+        }
+
+        .status-badge.closed {
+            background: #f4f4f5;
+            color: #909399;
+        }
+
+        .status-badge.cancelled {
+            background: #fef0f0;
+            color: #f56c6c;
+        }
+
+        .status-badge.partial {
+            background: #e8f4ff;
+            color: #1890ff;
+        }
+
+        /* 弹窗样式 */
+        .standard-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            width: 90%;
+            max-width: 1200px;
+            margin: 5vh auto;
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            padding: 16px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .close-btn {
+            border: none;
+            background: none;
+            font-size: 20px;
+            color: #909399;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 16px;
+            max-height: calc(90vh - 120px);
+            overflow-y: auto;
+        }
+
+        .modal-footer {
+            padding: 16px;
+            border-top: 1px solid #eee;
+            text-align: right;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        /* 按钮样式 */
+        .standard-button.warning {
+            background: #e6a23c;
+            border-color: #e6a23c;
+            color: #fff;
+        }
+
+        .standard-button.warning:hover {
+            background: #ebb563;
+            border-color: #ebb563;
+        }
+
+        .standard-button.success {
+            background: #67c23a;
+            border-color: #67c23a;
+            color: #fff;
+        }
+
+        .standard-button.success:hover {
+            background: #85ce61;
+            border-color: #85ce61;
+        }
+    </style>
+
+    <script src="../../../js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            Menu.renderMenu();
+            initMenuToggle();
+        });
+
+        // 显示计划选择弹窗
+        function showPlanSelectorModal() {
+            document.getElementById('planSelectorModal').style.display = 'flex';
+        }
+
+        // 隐藏弹窗
+        function hideModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // 切换全选
+        function toggleAllPlans(checkbox) {
+            const checkboxes = document.getElementsByName('planIds');
+            checkboxes.forEach(item => {
+                item.checked = checkbox.checked;
+            });
+        }
+
+        // 搜索生产计划
+        function searchPlanForWorkOrder() {
+            const keyword = document.querySelector('#planSelectorModal input[placeholder="产品编码/名称"]').value;
+            const date = document.querySelector('#planSelectorModal input[type="date"]').value;
+            const status = document.querySelector('#planSelectorModal select').value;
+            
+            // TODO: 调用后端API进行搜索
+            console.log('搜索计划:', { keyword, date, status });
+        }
+
+        // 生成工单
+        function generateWorkOrders() {
+            const selectedPlans = document.querySelectorAll('input[name="planIds"]:checked');
+            if (selectedPlans.length === 0) {
+                alert('请选择至少一个生产计划');
+                return;
+            }
+            
+            const planIds = Array.from(selectedPlans).map(cb => cb.value);
+            // TODO: 调用后端API生成工单
+            console.log('生成工单，计划IDs:', planIds);
+            alert('工单生成成功！');
+            hideModal('planSelectorModal');
+        }
+
+        // 搜索工单
+        function searchWorkOrder() {
+            const keyword = document.querySelector('input[placeholder="工单号/产品"]').value;
+            const startDate = document.querySelector('input[placeholder="开始日期"]').value;
+            const endDate = document.querySelector('input[placeholder="结束日期"]').value;
+            const status = document.querySelector('select[class="standard-select"]').value;
+            
+            // TODO: 调用后端API进行搜索
+            console.log('搜索工单:', { keyword, startDate, endDate, status });
+        }
+
+        // 导出工单
+        function exportWorkOrder() {
+            // TODO: 调用后端API导出工单
+            console.log('导出工单');
+            alert('工单导出成功！');
+        }
+
+        // 查看工单
+        function viewWorkOrder(code) {
+            // TODO: 跳转到工单详情页
+            console.log('查看工单:', code);
+            alert('查看工单: ' + code);
+        }
+
+        // 编辑工单
+        function editWorkOrder(code) {
+            // TODO: 跳转到工单编辑页
+            console.log('编辑工单:', code);
+            alert('编辑工单: ' + code);
+        }
+
+        // 提交工单
+        function submitWorkOrder(code) {
+            if (confirm('确定要提交工单吗？')) {
+                // TODO: 调用后端API提交工单
+                console.log('提交工单:', code);
+                alert('工单提交成功！');
+                location.reload(); // 刷新页面
+            }
+        }
+
+        // 开始生产
+        function startWorkOrder(code) {
+            if (confirm('确定要开始生产吗？')) {
+                // TODO: 调用后端API开始生产
+                console.log('开始生产:', code);
+                alert('已开始生产！');
+                location.reload();
+            }
+        }
+
+        // 暂停生产
+        function pauseWorkOrder(code) {
+            if (confirm('确定要暂停生产吗？')) {
+                // TODO: 调用后端API暂停生产
+                console.log('暂停生产:', code);
+                alert('已暂停生产！');
+                location.reload();
+            }
+        }
+
+        // 继续生产
+        function resumeWorkOrder(code) {
+            if (confirm('确定要继续生产吗？')) {
+                // TODO: 调用后端API继续生产
+                console.log('继续生产:', code);
+                alert('已继续生产！');
+                location.reload();
+            }
+        }
+
+        // 完成生产
+        function completeWorkOrder(code) {
+            if (confirm('确定要完成生产吗？')) {
+                // TODO: 调用后端API完成生产
+                console.log('完成生产:', code);
+                alert('生产已完成！');
+                location.reload();
+            }
+        }
+
+        // 关闭工单
+        function closeWorkOrder(code) {
+            if (confirm('确定要关闭工单吗？')) {
+                // TODO: 调用后端API关闭工单
+                console.log('关闭工单:', code);
+                alert('工单已关闭！');
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html> 

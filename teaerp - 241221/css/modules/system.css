@@ -1,0 +1,1050 @@
+/* 系统管理模块样式 */
+.system-card {
+    background: #fff;
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* 用户管理特定样式 */
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-status {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+.user-status.active {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.user-status.inactive {
+    background-color: #f5f5f5;
+    color: #616161;
+}
+
+/* 权限管理样式 */
+.permission-tree {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+
+.permission-item {
+    padding: 5px 0;
+}
+
+.permission-item label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.permission-item input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+/* 添加以下样式 */
+
+/* 表格内的操作按钮 */
+.action-link {
+    color: #40B3A2;
+    margin-right: 8px;
+    text-decoration: none;
+}
+
+.action-link:hover {
+    color: #359588;
+}
+
+/* 表单验证样式 */
+.form-control.error {
+    border-color: #f56c6c;
+}
+
+.error-message {
+    color: #f56c6c;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+/* 多选框样式 */
+select[multiple] {
+    height: auto;
+    min-height: 80px;
+}
+
+/* 状态切换按钮 */
+.toggle-status {
+    cursor: pointer;
+    user-select: none;
+}
+
+.toggle-status:hover {
+    opacity: 0.8;
+}
+
+/* 添加角色管理相关样式 */
+.role-status {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+.role-status.active {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.role-status.inactive {
+    background-color: #f5f5f5;
+    color: #616161;
+}
+
+/* 权限树样式 */
+.permission-tree {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 15px;
+}
+
+.permission-item {
+    margin: 5px 0;
+    padding: 5px 0;
+}
+
+.permission-item.parent {
+    font-weight: bold;
+}
+
+.permission-item.child {
+    padding-left: 20px;
+}
+
+.permission-item label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.permission-item input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+/* 添加权限管理相关样式 */
+.tree-table {
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.tree-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tree-table th,
+.tree-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.tree-table th {
+    background-color: #f8f9fa;
+    font-weight: 500;
+}
+
+.tree-table .indent {
+    display: inline-block;
+    width: 20px;
+}
+
+.tree-table .expand-icon {
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+.tree-table .permission-type {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+.tree-table .permission-type.menu {
+    background-color: #e3f2fd;
+    color: #1565c0;
+}
+
+.tree-table .permission-type.operation {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.tree-table .permission-type.data {
+    background-color: #fff3e0;
+    color: #e65100;
+}
+
+/* 表单字段显示控制 */
+.menu-fields,
+.operation-fields,
+.data-fields {
+    display: none;
+}
+
+.menu-fields.active,
+.operation-fields.active,
+.data-fields.active {
+    display: flex;
+}
+
+/* 添加部门管理相关样式 */
+.department-tree {
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.department-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.department-item:last-child {
+    border-bottom: none;
+}
+
+.department-item .expand-icon {
+    cursor: pointer;
+    margin-right: 8px;
+    transition: transform 0.2s;
+}
+
+.department-item .expand-icon.expanded {
+    transform: rotate(90deg);
+}
+
+.department-item .indent {
+    width: 20px;
+    height: 1px;
+    margin-right: 8px;
+}
+
+.department-info {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.department-name {
+    font-weight: 500;
+    margin-right: 15px;
+}
+
+.department-code {
+    color: #666;
+    font-size: 12px;
+}
+
+.department-manager {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.department-status {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+.department-status.active {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.department-status.inactive {
+    background-color: #f5f5f5;
+    color: #616161;
+}
+
+/* 树形表格中的展开/收起图标 */
+.tree-table .toggle-icon {
+    cursor: pointer;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+    text-align: center;
+    margin-right: 4px;
+    transition: transform 0.2s;
+}
+
+.tree-table .toggle-icon.expanded {
+    transform: rotate(90deg);
+}
+
+/* 添加岗位管理相关样式 */
+.position-level {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+.position-level.high {
+    background-color: #e3f2fd;
+    color: #1565c0;
+}
+
+.position-level.middle {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.position-level.low {
+    background-color: #fff3e0;
+    color: #e65100;
+}
+
+.position-count {
+    display: inline-block;
+    padding: 2px 8px;
+    background-color: #f5f5f5;
+    border-radius: 12px;
+    font-size: 12px;
+    color: #666;
+}
+
+/* 表单特定样式 */
+.duty-list,
+.requirement-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.duty-list li,
+.requirement-list li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.duty-list input,
+.requirement-list input {
+    flex: 1;
+    margin-right: 8px;
+}
+
+.add-item-btn {
+    color: #40B3A2;
+    cursor: pointer;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.remove-item-btn {
+    color: #f56c6c;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* 添加菜单管理相关样式 */
+.menu-type {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+.menu-type.dir {
+    background-color: #e3f2fd;
+    color: #1565c0;
+}
+
+.menu-type.menu {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.menu-type.button {
+    background-color: #fff3e0;
+    color: #e65100;
+}
+
+/* 图标选择器样式 */
+.icon-selector {
+    display: flex;
+    gap: 10px;
+}
+
+.icon-picker {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 10px;
+    padding: 15px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.icon-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.icon-item:hover {
+    background-color: #f5f5f5;
+    border-color: #ddd;
+}
+
+.icon-item.selected {
+    background-color: #e3f2fd;
+}
+
+/* 添加字典管理相关样式 */
+.dict-items {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 15px;
+    margin-top: 10px;
+}
+
+.dict-item-header {
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr 1fr 1fr;
+    gap: 10px;
+    padding: 0 10px 10px;
+    border-bottom: 1px solid #eee;
+    font-weight: 500;
+}
+
+.dict-item-list {
+    margin: 10px 0;
+}
+
+.dict-item {
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr 1fr 1fr;
+    gap: 10px;
+    padding: 10px;
+    align-items: center;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.dict-item:last-child {
+    border-bottom: none;
+}
+
+.dict-item input {
+    width: 100%;
+}
+
+.dict-item select {
+    width: 100%;
+}
+
+.dict-item-action {
+    display: flex;
+    gap: 10px;
+}
+
+.dict-type {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+.dict-type.string {
+    background-color: #e3f2fd;
+    color: #1565c0;
+}
+
+.dict-type.number {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.dict-type.boolean {
+    background-color: #fff3e0;
+    color: #e65100;
+}
+
+/* 导入导出按钮样式 */
+.import-export {
+    display: flex;
+    gap: 10px;
+}
+
+.import-export .button {
+    padding: 6px 12px;
+}
+
+/* 字典项验证样式 */
+.dict-item.error input {
+    border-color: #f56c6c;
+}
+
+.dict-item .error-tip {
+    position: absolute;
+    font-size: 12px;
+    color: #f56c6c;
+    margin-top: 2px;
+}
+
+/* 添加参数设置相关样式 */
+.param-type {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+.param-type.system {
+    background-color: #e3f2fd;
+    color: #1565c0;
+}
+
+.param-type.business {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.built-in {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    background-color: #f5f5f5;
+    color: #666;
+}
+
+/* 值类型输入控件样式 */
+.value-input {
+    position: relative;
+}
+
+.value-input textarea.json {
+    font-family: monospace;
+    min-height: 100px;
+    white-space: pre;
+}
+
+.value-input .json-error {
+    position: absolute;
+    bottom: -20px;
+    left: 0;
+    font-size: 12px;
+    color: #f56c6c;
+}
+
+/* 验证规则样式 */
+.validation-rules {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 15px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.checkbox-label input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+.rule-fields {
+    display: flex;
+    gap: 10px;
+}
+
+.rule-fields input {
+    flex: 1;
+}
+
+/* 添加通知公告相关样式 */
+.notice-list {
+    display: grid;
+    gap: 20px;
+    padding: 20px;
+}
+
+.notice-card {
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    padding: 20px;
+}
+
+.notice-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.notice-title {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.notice-type {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+.notice-type.notice {
+    background-color: #e3f2fd;
+    color: #1565c0;
+}
+
+.notice-type.announcement {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.notice-meta {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: #666;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.notice-content {
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+.notice-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.notice-status {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+.notice-status.draft {
+    background-color: #f5f5f5;
+    color: #666;
+}
+
+.notice-status.published {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.notice-status.expired {
+    background-color: #fff3e0;
+    color: #e65100;
+}
+
+/* 富文本编辑器样式 */
+.rich-editor {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.editor-toolbar {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    background: #f8f9fa;
+}
+
+.tool-btn {
+    padding: 4px 8px;
+    margin-right: 5px;
+    border: 1px solid #ddd;
+    background: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.tool-btn:hover {
+    background: #f5f5f5;
+}
+
+.editor-content {
+    min-height: 200px;
+    padding: 15px;
+    outline: none;
+}
+
+/* 接收范围选择���样式 */
+.receiver-selector {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.selector-tabs {
+    display: flex;
+    border-bottom: 1px solid #eee;
+    background: #f8f9fa;
+}
+
+.selector-tabs .tab {
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.selector-tabs .tab.active {
+    background: #fff;
+    border-bottom: 2px solid #40B3A2;
+}
+
+.selector-content {
+    padding: 15px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* 附件上传样式 */
+.attachment-uploader {
+    border: 1px dashed #ddd;
+    border-radius: 4px;
+    padding: 15px;
+}
+
+.attachment-list {
+    margin-top: 10px;
+}
+
+.attachment-item {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.attachment-item:last-child {
+    border-bottom: none;
+}
+
+.attachment-name {
+    flex: 1;
+}
+
+.attachment-size {
+    color: #666;
+    margin: 0 15px;
+}
+
+.attachment-action {
+    display: flex;
+    gap: 10px;
+}
+
+/* 添加日志管理相关样式 */
+.log-type {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+.log-type.login {
+    background-color: #e3f2fd;
+    color: #1565c0;
+}
+
+.log-type.operation {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.log-type.error {
+    background-color: #fbe9e7;
+    color: #d32f2f;
+}
+
+.log-status {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+.log-status.success {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.log-status.fail {
+    background-color: #fbe9e7;
+    color: #d32f2f;
+}
+
+/* 日志详情样式 */
+.log-detail {
+    padding: 20px;
+}
+
+.log-detail-item {
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.log-detail-label {
+    width: 100px;
+    color: #666;
+}
+
+.log-detail-value {
+    flex: 1;
+}
+
+.log-detail-value.error {
+    color: #d32f2f;
+    font-family: monospace;
+    white-space: pre-wrap;
+    background: #fafafa;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+/* 日期范围选择器样式 */
+.date-range {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.date-range span {
+    color: #666;
+}
+
+/* 操作内容单元格样式 */
+.operation-content {
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.operation-content:hover {
+    white-space: normal;
+    word-break: break-all;
+}
+
+/* 卡片样式 */
+.card {
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+/* 工具栏样式 */
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    background: #fff;
+    padding: 16px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.search-bar {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.action-bar {
+    display: flex;
+    gap: 8px;
+}
+
+/* 按钮样式 */
+.button {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #fff;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.button:hover {
+    background: #f5f5f5;
+}
+
+.button.primary {
+    background: #40B3A2;
+    border-color: #40B3A2;
+    color: #fff;
+}
+
+.button.primary:hover {
+    background: #359588;
+}
+
+/* 表格样式 */
+.data-table {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.data-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.data-table th {
+    background: #f8f9fa;
+    font-weight: 500;
+}
+
+/* 分页器样式 */
+.pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+}
+
+.page-info {
+    color: #666;
+}
+
+.page-buttons {
+    display: flex;
+    gap: 4px;
+}
+
+.page-buttons .button {
+    padding: 6px 12px;
+    min-width: 32px;
+    justify-content: center;
+}
+
+.page-buttons .button.active {
+    background: #40B3A2;
+    border-color: #40B3A2;
+    color: #fff;
+}
+
+/* 表单样式 */
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #666;
+}
+
+.form-control {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: border-color 0.3s;
+}
+
+.form-control:focus {
+    border-color: #40B3A2;
+    outline: none;
+}
+
+/* 状态标签样式 */
+.status-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+.status-tag.active {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.status-tag.inactive {
+    background: #f5f5f5;
+    color: #666;
+}
+
+/* 图标样式 */
+.icon-plus:before {
+    content: "+";
+    font-weight: bold;
+}
+
+.icon-import:before {
+    content: "↑";
+}
+
+.icon-export:before {
+    content: "↓";
+}
+
+/* 按钮内的图标样式 */
+.button i {
+    font-style: normal;
+    margin-right: 4px;
+}
+
+.button.primary i {
+    color: #fff;
+} 

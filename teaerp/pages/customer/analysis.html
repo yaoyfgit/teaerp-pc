@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>客户分析 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/menu.css">
+    <link rel="stylesheet" href="../../css/modules/customer.css">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        /* 统计卡片样式 */
+        .statistics-cards {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .statistics-card {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            background: linear-gradient(135deg, #f6f8fc 0%, #f0f4f8 100%);
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border-left: 4px solid #8fd4d2;
+        }
+
+        .statistics-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(135deg, #f0f4f8 0%, #e9eff5 100%);
+        }
+
+        .statistics-card i {
+            font-size: 24px;
+            margin-right: 12px;
+            color: #8fd4d2;
+        }
+
+        .statistics-content {
+            flex: 1;
+        }
+
+        .stat-title {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* 工具栏样式 */
+        .toolbar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+            background: #fff;
+            padding: 16px;
+            border-radius: 4px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .date-range {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toolbar-divider {
+            width: 1px;
+            height: 24px;
+            background-color: #dcdfe6;
+            margin: 0 8px;
+        }
+
+        /* 图表区域样式 */
+        .analysis-charts {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .chart-card {
+            background: #fff;
+            border-radius: 4px;
+            padding: 16px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-card h3 {
+            margin: 0 0 16px 0;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .chart-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .chart-row .chart-card {
+            flex: 1;
+        }
+
+        .chart {
+            height: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- 侧边栏 -->
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <!-- 主内容区 -->
+        <div class="main-content">
+            <!-- 顶部导航栏 -->
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <!-- 内容区域 -->
+            <div class="content">
+                <!-- 面包屑导航 -->
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-users"></i>
+                    <span>客户管理</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-chart-bar"></i>
+                    <span>客户分析</span>
+                </div>
+
+                <!-- 统计卡片 -->
+                <div class="statistics-cards">
+                    <div class="statistics-card">
+                        <i class="fas fa-users"></i>
+                        <div class="statistics-content">
+                            <div class="stat-title">客户总数</div>
+                            <div class="stat-value">1,234</div>
+                        </div>
+                    </div>
+                    <div class="statistics-card">
+                        <i class="fas fa-chart-line"></i>
+                        <div class="statistics-content">
+                            <div class="stat-title">客户增长率</div>
+                            <div class="stat-value">23.4%</div>
+                        </div>
+                    </div>
+                    <div class="statistics-card">
+                        <i class="fas fa-shopping-cart"></i>
+                        <div class="statistics-content">
+                            <div class="stat-title">客单价</div>
+                            <div class="stat-value">¥2,345</div>
+                        </div>
+                    </div>
+                    <div class="statistics-card">
+                        <i class="fas fa-yen-sign"></i>
+                        <div class="statistics-content">
+                            <div class="stat-title">客户贡献</div>
+                            <div class="stat-value">¥567,890</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 工具栏 -->
+                <div class="toolbar">
+                    <div class="search-box">
+                        <select class="standard-select" onchange="updateCharts()">
+                            <option value="month">月度分析</option>
+                            <option value="quarter">季度分析</option>
+                            <option value="year">年度分析</option>
+                        </select>
+                        <div class="date-range">
+                            <input type="date" class="standard-input" onchange="updateCharts()">
+                            <span>至</span>
+                            <input type="date" class="standard-input" onchange="updateCharts()">
+                        </div>
+                        <div class="toolbar-divider"></div>
+                        <button class="standard-button">
+                            <i class="fas fa-file-export"></i>
+                            导出报表
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 图表区域 -->
+                <div class="analysis-charts">
+                    <!-- 客户趋势分析 -->
+                    <div class="chart-card">
+                        <h3><i class="fas fa-chart-line"></i> 客户趋势分析</h3>
+                        <div class="chart" id="trendChart"></div>
+                    </div>
+
+                    <!-- 客户分布分析 -->
+                    <div class="chart-row">
+                        <div class="chart-card">
+                            <h3>客户类型分布</h3>
+                            <div class="chart" id="typeChart"></div>
+                        </div>
+                        <div class="chart-card">
+                            <h3>客户等级分布</h3>
+                            <div class="chart" id="levelChart"></div>
+                        </div>
+                    </div>
+
+                    <!-- 客户活跃度分析 -->
+                    <div class="chart-row">
+                        <div class="chart-card">
+                            <h3>客户活跃度分析</h3>
+                            <div class="chart" id="activityChart"></div>
+                        </div>
+                        <div class="chart-card">
+                            <h3>客户地区分布</h3>
+                            <div class="chart" id="regionChart"></div>
+                        </div>
+                    </div>
+
+                    <!-- 客户价值分析 -->
+                    <div class="chart-row">
+                        <div class="chart-card">
+                            <h3>客户价值分析</h3>
+                            <div class="chart" id="valueChart"></div>
+                        </div>
+                        <div class="chart-card">
+                            <h3>客户满意度分析</h3>
+                            <div class="chart" id="satisfactionChart"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 加载应用脚本 -->
+    <script src="../../js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 初始化菜单
+            Menu.renderMenu();
+            // 初始化图表
+            initTrendChart();
+            initTypeChart();
+            initLevelChart();
+            initActivityChart();
+            initRegionChart();
+            initValueChart();
+            initSatisfactionChart();
+        });
+
+        // 客户趋势分析图表
+        function initTrendChart() {
+            const chart = echarts.init(document.getElementById('trendChart'));
+            const option = {
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['客户总数', '新增客户', '流失客户']
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['1月', '2月', '3月', '4月', '5月', '6月']
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [{
+                    name: '客户总数',
+                    type: 'line',
+                    data: [1200, 1250, 1320, 1400, 1480, 1560],
+                    itemStyle: {
+                        color: '#8fd4d2'
+                    }
+                }, {
+                    name: '新增客户',
+                    type: 'bar',
+                    data: [80, 70, 90, 100, 110, 95],
+                    itemStyle: {
+                        color: '#67c23a'
+                    }
+                }, {
+                    name: '流失客户',
+                    type: 'bar',
+                    data: [30, 20, 20, 20, 30, 15],
+                    itemStyle: {
+                        color: '#f56c6c'
+                    }
+                }]
+            };
+            chart.setOption(option);
+        }
+
+        // 客户类型分布图表
+        function initTypeChart() {
+            const chart = echarts.init(document.getElementById('typeChart'));
+            const option = {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{b}: {c} ({d}%)'
+                },
+                legend: {
+                    orient: 'vertical',
+                    right: 10,
+                    top: 'center'
+                },
+                series: [{
+                    name: '客户类型',
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    avoidLabelOverlap: false,
+                    itemStyle: {
+                        borderRadius: 10,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    },
+                    label: {
+                        show: false
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: '16',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    data: [
+                        { value: 735, name: '零售客户' },
+                        { value: 580, name: '批发客户' },
+                        { value: 484, name: '经销商' }
+                    ]
+                }]
+            };
+            chart.setOption(option);
+        }
+
+        // 客户等级分布图表
+        function initLevelChart() {
+            const chart = echarts.init(document.getElementById('levelChart'));
+            const option = {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{b}: {c} ({d}%)'
+                },
+                legend: {
+                    orient: 'vertical',
+                    right: 10,
+                    top: 'center'
+                },
+                series: [{
+                    name: '客户等级',
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    avoidLabelOverlap: false,
+                    itemStyle: {
+                        borderRadius: 10,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    },
+                    label: {
+                        show: false
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: '16',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    data: [
+                        { value: 234, name: 'A级客户' },
+                        { value: 456, name: 'B级客户' },
+                        { value: 544, name: 'C级客户' }
+                    ]
+                }]
+            };
+            chart.setOption(option);
+        }
+
+        // 客户活跃度分析图表
+        function initActivityChart() {
+            const chart = echarts.init(document.getElementById('activityChart'));
+            const option = {
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['活跃度']
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['1月', '2月', '3月', '4月', '5月', '6月']
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLabel: {
+                        formatter: '{value}%'
+                    }
+                },
+                series: [{
+                    name: '活跃度',
+                    type: 'line',
+                    data: [85.5, 86.2, 85.8, 87.1, 86.8, 86.5],
+                    itemStyle: {
+                        color: '#67c23a'
+                    },
+                    areaStyle: {
+                        color: {
+                            type: 'linear',
+                            x: 0,
+                            y: 0,
+                            x2: 0,
+                            y2: 1,
+                            colorStops: [{
+                                offset: 0,
+                                color: 'rgba(103, 194, 58, 0.3)'
+                            }, {
+                                offset: 1,
+                                color: 'rgba(103, 194, 58, 0.1)'
+                            }]
+                        }
+                    }
+                }]
+            };
+            chart.setOption(option);
+        }
+
+        // 客户地区分布图表
+        function initRegionChart() {
+            const chart = echarts.init(document.getElementById('regionChart'));
+            const option = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'value'
+                },
+                yAxis: {
+                    type: 'category',
+                    data: ['福建', '广东', '浙江', '江苏', '上海']
+                },
+                series: [{
+                    name: '客户数量',
+                    type: 'bar',
+                    data: [320, 280, 250, 220, 190],
+                    itemStyle: {
+                        color: '#8fd4d2'
+                    }
+                }]
+            };
+            chart.setOption(option);
+        }
+
+        // 客户价值分析图表
+        function initValueChart() {
+            const chart = echarts.init(document.getElementById('valueChart'));
+            const option = {
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['客单价', '消费频次']
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['1月', '2月', '3月', '4月', '5月', '6月']
+                },
+                yAxis: [{
+                    type: 'value',
+                    name: '客单价',
+                    axisLabel: {
+                        formatter: '¥{value}'
+                    }
+                }, {
+                    type: 'value',
+                    name: '消费频次',
+                    axisLabel: {
+                        formatter: '{value}次'
+                    }
+                }],
+                series: [{
+                    name: '客单价',
+                    type: 'bar',
+                    data: [2100, 2300, 2500, 2400, 2600, 2800],
+                    itemStyle: {
+                        color: '#8fd4d2'
+                    }
+                }, {
+                    name: '消费频次',
+                    type: 'line',
+                    yAxisIndex: 1,
+                    data: [3.2, 3.5, 3.8, 3.6, 4.1, 4.3],
+                    itemStyle: {
+                        color: '#409EFF'
+                    }
+                }]
+            };
+            chart.setOption(option);
+        }
+
+        // 客户满意度分析图表
+        function initSatisfactionChart() {
+            const chart = echarts.init(document.getElementById('satisfactionChart'));
+            const option = {
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['满意度']
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['1月', '2月', '3月', '4月', '5月', '6月']
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLabel: {
+                        formatter: '{value}%'
+                    }
+                },
+                series: [{
+                    name: '满意度',
+                    type: 'line',
+                    data: [92.5, 93.2, 92.8, 94.1, 93.8, 94.5],
+                    itemStyle: {
+                        color: '#67c23a'
+                    },
+                    areaStyle: {
+                        color: {
+                            type: 'linear',
+                            x: 0,
+                            y: 0,
+                            x2: 0,
+                            y2: 1,
+                            colorStops: [{
+                                offset: 0,
+                                color: 'rgba(103, 194, 58, 0.3)'
+                            }, {
+                                offset: 1,
+                                color: 'rgba(103, 194, 58, 0.1)'
+                            }]
+                        }
+                    }
+                }]
+            };
+            chart.setOption(option);
+        }
+
+        // 更新图表数据
+        function updateCharts() {
+            // TODO: 根据选择的时间范围和分析维度重新加载数据
+            // 这里可以添加 AJAX 请求获取新数据
+        }
+    </script>
+</body>
+</html> 

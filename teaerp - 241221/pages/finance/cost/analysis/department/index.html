@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>部门成本分析 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../../../css/common.css">
+    <link rel="stylesheet" href="../../../../../css/layout.css">
+    <link rel="stylesheet" href="../../../../../css/modules/finance.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb">
+                <span>财务管理</span>
+                <span class="separator">/</span>
+                <span>成本分析</span>
+                <span class="separator">/</span>
+                <span>部门成本分析</span>
+            </div>
+
+            <!-- 分析条件 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>分析条件</h3>
+                </div>
+                <div class="card-body">
+                    <form id="analysisForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>部门</label>
+                                <select class="form-control" name="departmentId">
+                                    <option value="">全部</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>分析期间</label>
+                                <input type="month" class="form-control" name="period" required>
+                            </div>
+                            <div class="form-group">
+                                <label>分析维度</label>
+                                <select class="form-control" name="dimension" required>
+                                    <option value="cost_type">按成本类型</option>
+                                    <option value="activity">按业务活动</option>
+                                    <option value="project">按项目</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="button">
+                                <i class="fas fa-chart-line"></i> 开始分析
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- 分析结果 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>分析结果</h3>
+                    <div class="card-tools">
+                        <button class="button" onclick="exportResult()">
+                            <i class="fas fa-download"></i> 导出结果
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="result-summary">
+                        <div class="summary-item">
+                            <label>总成本</label>
+                            <span id="totalCost">0.00</span>
+                        </div>
+                        <div class="summary-item">
+                            <label>直接成本</label>
+                            <span id="directCost">0.00</span>
+                        </div>
+                        <div class="summary-item">
+                            <label>间接成本</label>
+                            <span id="indirectCost">0.00</span>
+                        </div>
+                        <div class="summary-item">
+                            <label>预算完成率</label>
+                            <span id="budgetRate">0%</span>
+                        </div>
+                    </div>
+
+                    <div class="tabs">
+                        <div class="tab-header">
+                            <button class="tab-btn active" data-tab="table">分析表格</button>
+                            <button class="tab-btn" data-tab="chart">分析图表</button>
+                            <button class="tab-btn" data-tab="trend">趋势分析</button>
+                            <button class="tab-btn" data-tab="compare">对比分析</button>
+                        </div>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tableTab">
+                                <div id="analysisTable"></div>
+                            </div>
+                            <div class="tab-pane" id="chartTab">
+                                <div id="costStructureChart"></div>
+                            </div>
+                            <div class="tab-pane" id="trendTab">
+                                <div id="costTrendChart"></div>
+                            </div>
+                            <div class="tab-pane" id="compareTab">
+                                <div id="costCompareChart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 分析历史 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>分析历史</h3>
+                </div>
+                <div class="card-body">
+                    <div class="search-bar">
+                        <div class="form-group">
+                            <label>部门</label>
+                            <select class="form-control" id="searchDepartment">
+                                <option value="">全部</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>日期范围</label>
+                            <input type="date" class="form-control" id="startDate">
+                            <span>至</span>
+                            <input type="date" class="form-control" id="endDate">
+                        </div>
+                        <button class="button" onclick="searchRecords()">
+                            <i class="fas fa-search"></i> 搜索
+                        </button>
+                    </div>
+                    <div id="historyTable"></div>
+                    <div id="pagination"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../../../../js/common.js"></script>
+    <script src="../../../../../js/modules/finance/cost/analysis/department/index.js"></script>
+</body>
+</html> 

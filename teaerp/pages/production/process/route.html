@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>工艺路线管理 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/modules/production.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-industry"></i>
+                    <span>生产管理</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-route"></i>
+                    <span>工艺路线管理</span>
+                </div>
+
+                <!-- 工艺路线统计 -->
+                <div class="standard-card">
+                    <div class="overview-grid">
+                        <div class="overview-item">
+                            <i class="fas fa-route"></i>
+                            <div class="info">
+                                <h4>工艺路线总数</h4>
+                                <div class="number">25<span class="unit">条</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item">
+                            <i class="fas fa-check-circle"></i>
+                            <div class="info">
+                                <h4>已启用路线</h4>
+                                <div class="number">18<span class="unit">条</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item">
+                            <i class="fas fa-pause-circle"></i>
+                            <div class="info">
+                                <h4>已停用路线</h4>
+                                <div class="number">7<span class="unit">条</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item">
+                            <i class="fas fa-clock"></i>
+                            <div class="info">
+                                <h4>平均工序数</h4>
+                                <div class="number">6<span class="unit">道</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 工艺路线列表 -->
+                <div class="standard-card">
+                    <div class="standard-card-header">
+                        <h3><i class="fas fa-list"></i> 工艺路线列表</h3>
+                        <div class="action-bar">
+                            <div class="search-group">
+                                <input type="text" class="standard-input" placeholder="路线编号/名称">
+                                <select class="standard-select">
+                                    <option value="">产品类型</option>
+                                    <option value="green">绿茶</option>
+                                    <option value="black">红茶</option>
+                                    <option value="oolong">乌龙茶</option>
+                                </select>
+                                <select class="standard-select">
+                                    <option value="">使用状态</option>
+                                    <option value="enabled">已启用</option>
+                                    <option value="disabled">已停用</option>
+                                </select>
+                                <button class="standard-button primary" onclick="searchRoute()">
+                                    <i class="fas fa-search"></i> 查询
+                                </button>
+                                <button class="standard-button primary" onclick="showRouteModal()">
+                                    <i class="fas fa-plus"></i> 新增路线
+                                </button>
+                                <button class="standard-button" onclick="importRoute()">
+                                    <i class="fas fa-file-import"></i> 导入
+                                </button>
+                                <button class="standard-button" onclick="exportRoute()">
+                                    <i class="fas fa-file-export"></i> 导出
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="standard-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>路线编号</th>
+                                    <th>路线名称</th>
+                                    <th>产品类型</th>
+                                    <th>工序数量</th>
+                                    <th>标准工时</th>
+                                    <th>创建人</th>
+                                    <th>创建时间</th>
+                                    <th>使用状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="routeTable">
+                                <!-- 示例数据 -->
+                                <tr>
+                                    <td>PR202403200001</td>
+                                    <td>特级绿茶加工工艺</td>
+                                    <td>绿茶</td>
+                                    <td>8</td>
+                                    <td>4.5小时</td>
+                                    <td>张三</td>
+                                    <td>2024-03-20</td>
+                                    <td><span class="status enabled">已启用</span></td>
+                                    <td>
+                                        <button class="button-link" onclick="viewRoute('PR202403200001')">查看</button>
+                                        <button class="button-link" onclick="editRoute('PR202403200001')">编辑</button>
+                                        <button class="button-link" onclick="toggleRoute('PR202403200001')">停用</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="standard-pagination" id="pagination"></div>
+                    </div>
+                </div>
+
+                <!-- 工序流程图 -->
+                <div class="standard-card">
+                    <div class="standard-card-header">
+                        <h3><i class="fas fa-project-diagram"></i> 工序流程图</h3>
+                    </div>
+                    <div class="process-flow-container">
+                        <div id="processFlow"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/app.js"></script>
+    <script src="../../../js/modules/production/process-route.js"></script>
+</body>
+</html> 

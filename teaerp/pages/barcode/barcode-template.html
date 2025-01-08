@@ -1,0 +1,173 @@
+<!-- 所有条码管理页面的head部分统一修改为: -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XXX - TeaERP</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- ECharts图表库 -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <!-- 系统样式 -->
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/modules/inventory.css">
+</head>
+</html> <body>
+    <div class="app-container">
+        <!-- 顶部导航 -->
+        <header class="app-header">
+            <!-- ... 顶部导航内容 ... -->
+        </header>
+
+        <div class="app-main">
+            <!-- 左侧菜单 -->
+            <aside class="app-sidebar">
+                <!-- ... 菜单内容 ... -->
+            </aside>
+
+            <!-- 内容区域 -->
+            <main class="app-content">
+                <div class="breadcrumb">
+                    <span>库存管理</span>
+                    <span class="separator">/</span>
+                    <span>条码管理</span>
+                    <span class="separator">/</span>
+                    <span>打印模板</span>
+                </div>
+
+                <div class="toolbar">
+                    <div class="search-bar">
+                        <select class="form-control" name="templateType">
+                            <option value="">模板类型</option>
+                            <option value="product">商品标签</option>
+                            <option value="location">库位标签</option>
+                            <option value="batch">批次标签</option>
+                        </select>
+                        <button class="button primary">搜索</button>
+                    </div>
+                    <div class="action-bar">
+                        <button class="button primary" onclick="showTemplateDesigner()">新建模板</button>
+                    </div>
+                </div>
+
+                <div class="data-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>模板名称</th>
+                                <th>模板类型</th>
+                                <th>纸张规格</th>
+                                <th>打印密度</th>
+                                <th>创建时间</th>
+                                <th>创建人</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 模板列表 -->
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- 模板设计器弹窗 -->
+    <div class="modal" id="templateDesignerModal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3>模板设计</h3>
+                <button class="close-btn" onclick="hideModal('templateDesignerModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="template-designer">
+                    <!-- 设计区域 -->
+                    <div class="design-area">
+                        <div class="template-canvas" id="templateCanvas">
+                            <!-- 可拖拽的元素将在这里显示 -->
+                        </div>
+                        <div class="element-toolbar">
+                            <button class="button" onclick="addBarcodeElement()">添加条码</button>
+                            <button class="button" onclick="addTextElement()">添加文字</button>
+                            <button class="button" onclick="addImageElement()">添加图片</button>
+                            <button class="button" onclick="addLineElement()">添加线条</button>
+                        </div>
+                    </div>
+
+                    <!-- 属性设置面板 -->
+                    <div class="properties-panel">
+                        <h4>模板属性</h4>
+                        <div class="form-group">
+                            <label>模板名称</label>
+                            <input type="text" class="form-control" name="templateName">
+                        </div>
+                        <div class="form-group">
+                            <label>纸张规格</label>
+                            <select class="form-control" name="paperSize">
+                                <option value="custom">自定义</option>
+                                <option value="a4">A4</option>
+                                <option value="a5">A5</option>
+                                <option value="label-small">小标签(40x30mm)</option>
+                                <option value="label-medium">中标签(60x40mm)</option>
+                                <option value="label-large">大标签(100x70mm)</option>
+                            </select>
+                        </div>
+                        <div class="form-row custom-size" style="display: none;">
+                            <div class="form-group">
+                                <label>宽度(mm)</label>
+                                <input type="number" class="form-control" name="width">
+                            </div>
+                            <div class="form-group">
+                                <label>高度(mm)</label>
+                                <input type="number" class="form-control" name="height">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>打印密度(dpi)</label>
+                            <select class="form-control" name="dpi">
+                                <option value="203">203</option>
+                                <option value="300">300</option>
+                                <option value="600">600</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>打印速度</label>
+                            <select class="form-control" name="speed">
+                                <option value="2">2 inch/s</option>
+                                <option value="4">4 inch/s</option>
+                                <option value="6">6 inch/s</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>打印温度</label>
+                            <input type="range" class="form-control" name="temperature" min="0" max="15" value="8">
+                        </div>
+                        <div class="form-group">
+                            <label>打印方向</label>
+                            <select class="form-control" name="orientation">
+                                <option value="portrait">纵向</option>
+                                <option value="landscape">横向</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 元素属性面板 -->
+                    <div class="element-properties" style="display: none;">
+                        <h4>元素属性</h4>
+                        <!-- 元素属性将根据选中的元素动态显示 -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="button" onclick="previewTemplate()">预览</button>
+                <button class="button" onclick="saveTemplate()">保存</button>
+                <button class="button primary" onclick="saveAndUseTemplate()">保存并使用</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/common.js"></script>
+    <script src="../../js/modules/stock/barcode-template.js"></script>
+</body>
+</html> 

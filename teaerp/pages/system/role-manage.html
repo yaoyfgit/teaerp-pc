@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>角色管理 - TeaERP</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- 系统样式 - 确保所有必需的CSS文件都已引入 -->
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/menu.css">
+    <!-- 模块样式 -->
+    <link rel="stylesheet" href="../../css/modules/system.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 侧边栏 -->
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <!-- 主内容区 -->
+        <div class="main-content">
+            <!-- 顶部导航栏 -->
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <!-- 内容区域 -->
+            <div class="content">
+                <!-- 标准化的面包屑导航 -->
+                <div class="breadcrumb">
+                    <span>系统管理</span>
+                    <span class="separator">/</span>
+                    <span>角色管理</span>
+                </div>
+
+                <!-- 统一使用标准卡片布局 -->
+                <div class="card standard-card">
+                    <!-- 工具栏 -->
+                    <div class="toolbar">
+                        <div class="search-bar">
+                            <input type="text" class="form-control" placeholder="输入角色名称搜索">
+                            <select class="form-control">
+                                <option value="">角色状态</option>
+                                <option value="active">启用</option>
+                                <option value="disabled">禁用</option>
+                            </select>
+                            <button class="btn btn-primary">查询</button>
+                        </div>
+                        <div class="action-bar">
+                            <button class="btn btn-primary" onclick="createRole()">新建角色</button>
+                            <button class="btn btn-secondary">导出Excel</button>
+                        </div>
+                    </div>
+
+                    <!-- 使用统一的表格样式类 -->
+                    <div class="table-container standard-table">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>角色名称</th>
+                                    <th>角色编码</th>
+                                    <th>角色描述</th>
+                                    <th>创建时间</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>超级管理员</td>
+                                    <td>SUPER_ADMIN</td>
+                                    <td>系统超级管理员，拥有所有权限</td>
+                                    <td>2024-03-01 10:30:00</td>
+                                    <td><span class="badge badge-success">启用</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary">查看</button>
+                                        <button class="btn btn-sm btn-secondary">编辑</button>
+                                        <button class="btn btn-sm btn-danger">禁用</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 统一分页样式 -->
+                    <div class="pagination standard-pagination">
+                        <button class="btn btn-sm">&lt;</button>
+                        <button class="btn btn-sm active">1</button>
+                        <button class="btn btn-sm">2</button>
+                        <button class="btn btn-sm">3</button>
+                        <button class="btn btn-sm">&gt;</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新建/编辑角色弹窗 -->
+    <div class="modal" id="roleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>新建角色</h3>
+                <button class="close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="roleForm">
+                    <div class="form-group">
+                        <label class="form-label">角色名称</label>
+                        <input type="text" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">角色编码</label>
+                        <input type="text" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">角色描述</label>
+                        <textarea class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">权限设置</label>
+                        <div class="permission-tree">
+                            <!-- 权限树形结构 -->
+                            <div class="permission-group">
+                                <div class="permission-item">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" class="checkbox-input">
+                                        <span class="checkbox-text">系统管理</span>
+                                    </label>
+                                    <div class="permission-children">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" class="checkbox-input">
+                                            <span class="checkbox-text">用户管理</span>
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" class="checkbox-input">
+                                            <span class="checkbox-text">角色管理</span>
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" class="checkbox-input">
+                                            <span class="checkbox-text">权限管理</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 更多权限组... -->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">数据权限</label>
+                        <div class="data-permission">
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="dataScope" value="all">
+                                    <span class="radio-text">全部数据权限</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="dataScope" value="dept">
+                                    <span class="radio-text">本部门数据权限</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="dataScope" value="custom">
+                                    <span class="radio-text">自定义数据权限</span>
+                                </label>
+                            </div>
+                            <div class="custom-dept-list" style="display: none;">
+                                <!-- 部门树形结构 -->
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">取消</button>
+                <button class="btn btn-primary" onclick="saveRole()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 确保加载所有必需的JavaScript文件 -->
+    <script src="../../js/lib/common.js"></script>
+    <script src="../../js/app.js"></script>
+    <script src="../../js/modules/system/role-manage.js"></script>
+</body>
+</html> 

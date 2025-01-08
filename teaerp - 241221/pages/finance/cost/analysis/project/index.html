@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>项目成本分析 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../../../css/common.css">
+    <link rel="stylesheet" href="../../../../../css/layout.css">
+    <link rel="stylesheet" href="../../../../../css/modules/finance.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb">
+                <span>财务管理</span>
+                <span class="separator">/</span>
+                <span>成本分析</span>
+                <span class="separator">/</span>
+                <span>项目成本分析</span>
+            </div>
+
+            <!-- 分析条件 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>分析条件</h3>
+                </div>
+                <div class="card-body">
+                    <form id="analysisForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>项目类型</label>
+                                <select class="form-control" name="projectType">
+                                    <option value="">全部</option>
+                                    <option value="research">研发项目</option>
+                                    <option value="production">生产项目</option>
+                                    <option value="marketing">营销项目</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>项目状态</label>
+                                <select class="form-control" name="projectStatus">
+                                    <option value="">全部</option>
+                                    <option value="ongoing">进行中</option>
+                                    <option value="completed">已完成</option>
+                                    <option value="suspended">已暂停</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>分析期间</label>
+                                <input type="month" class="form-control" name="period" required>
+                            </div>
+                            <div class="form-group">
+                                <label>分析维度</label>
+                                <select class="form-control" name="dimension" required>
+                                    <option value="cost_type">按成本类型</option>
+                                    <option value="department">按部门</option>
+                                    <option value="stage">按阶段</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="button">
+                                <i class="fas fa-chart-line"></i> 开始分析
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- 分析结果 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>分析结果</h3>
+                    <div class="card-tools">
+                        <button class="button" onclick="exportResult()">
+                            <i class="fas fa-download"></i> 导出结果
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="result-summary">
+                        <div class="summary-item">
+                            <label>总预算</label>
+                            <span id="totalBudget">0.00</span>
+                        </div>
+                        <div class="summary-item">
+                            <label>实际成本</label>
+                            <span id="actualCost">0.00</span>
+                        </div>
+                        <div class="summary-item">
+                            <label>预算执行率</label>
+                            <span id="budgetRate">0%</span>
+                        </div>
+                        <div class="summary-item">
+                            <label>项目进度</label>
+                            <span id="progress">0%</span>
+                        </div>
+                    </div>
+
+                    <div class="tabs">
+                        <div class="tab-header">
+                            <button class="tab-btn active" data-tab="table">分析表格</button>
+                            <button class="tab-btn" data-tab="chart">分析图表</button>
+                            <button class="tab-btn" data-tab="trend">趋势分析</button>
+                            <button class="tab-btn" data-tab="progress">进度分析</button>
+                        </div>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tableTab">
+                                <div id="analysisTable"></div>
+                            </div>
+                            <div class="tab-pane" id="chartTab">
+                                <div id="costStructureChart"></div>
+                            </div>
+                            <div class="tab-pane" id="trendTab">
+                                <div id="costTrendChart"></div>
+                            </div>
+                            <div class="tab-pane" id="progressTab">
+                                <div id="progressChart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 分析历史 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>分析历史</h3>
+                </div>
+                <div class="card-body">
+                    <div class="search-bar">
+                        <div class="form-group">
+                            <label>项目类型</label>
+                            <select class="form-control" id="searchType">
+                                <option value="">全部</option>
+                                <option value="research">研发项目</option>
+                                <option value="production">生产项目</option>
+                                <option value="marketing">营销项目</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>日期范围</label>
+                            <input type="date" class="form-control" id="startDate">
+                            <span>至</span>
+                            <input type="date" class="form-control" id="endDate">
+                        </div>
+                        <button class="button" onclick="searchRecords()">
+                            <i class="fas fa-search"></i> 搜索
+                        </button>
+                    </div>
+                    <div id="historyTable"></div>
+                    <div id="pagination"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../../../../js/common.js"></script>
+    <script src="../../../../../js/modules/finance/cost/analysis/project/index.js"></script>
+</body>
+</html> 

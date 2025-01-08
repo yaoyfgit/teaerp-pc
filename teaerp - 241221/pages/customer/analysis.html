@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>客户分析 - TeaERP</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- 系统样式 -->
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <!-- 模块样式 -->
+    <link rel="stylesheet" href="../../css/modules/customer.css">
+</head>
+</html> <body>
+    <div class="app-container">
+        <!-- 顶部导航 -->
+        <header class="app-header">
+            <div class="logo">TeaERP</div>
+            <nav class="top-nav">
+                <ul>
+                    <li><a href="../../index.html">首页</a></li>
+                    <li><a href="#">消息</a></li>
+                    <li><a href="#">帮助</a></li>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <span class="username">管理员</span>
+                <a href="#" class="logout">退出</a>
+            </div>
+        </header>
+
+        <!-- 主体内容 -->
+        <div class="app-main">
+            <!-- 左侧菜单 -->
+            <aside class="app-sidebar">
+                <!-- 复制index.html的菜单结构 -->
+            </aside>
+
+            <!-- 内容区域 -->
+            <main class="app-content">
+                <!-- 面包屑导航 -->
+                <div class="breadcrumb">
+                    <span>客户管理</span>
+                    <span class="separator">/</span>
+                    <span>客户分析</span>
+                </div>
+
+                <!-- 工具栏 -->
+                <div class="toolbar">
+                    <div class="search-bar">
+                        <select class="form-control">
+                            <option value="month">月度分析</option>
+                            <option value="quarter">季度分析</option>
+                            <option value="year">年度分析</option>
+                        </select>
+                        <div class="date-range">
+                            <input type="date" class="form-control" onchange="updateCharts()">
+                            <span>至</span>
+                            <input type="date" class="form-control" onchange="updateCharts()">
+                        </div>
+                    </div>
+                    <div class="action-bar">
+                        <button class="button" onclick="exportReport()">导出报表</button>
+                    </div>
+                </div>
+
+                <!-- 分析图表区域 -->
+                <div class="analysis-charts">
+                    <!-- 客户来源分析 -->
+                    <div class="chart-card">
+                        <h3>客户来源分析</h3>
+                        <div class="chart" id="sourceChart" style="height: 300px;"></div>
+                    </div>
+
+                    <!-- 客户行业和地域分布 -->
+                    <div class="chart-row">
+                        <div class="chart-card">
+                            <h3>客户行业分布</h3>
+                            <div class="chart" id="industryChart" style="height: 300px;"></div>
+                        </div>
+                        <div class="chart-card">
+                            <h3>客户地域分布</h3>
+                            <div class="chart" id="regionChart" style="height: 300px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- 客户等级和规模分 -->
+                    <div class="chart-row">
+                        <div class="chart-card">
+                            <h3>客户等级分布</h3>
+                            <div class="chart" id="levelChart" style="height: 300px;">
+                                <div style="padding: 20px; background: #f5f5f5;">图表加载中...</div>
+                            </div>
+                        </div>
+                        <div class="chart-card">
+                            <h3>客户规模分布</h3>
+                            <div class="chart" id="scaleChart" style="height: 300px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- 客户发展趋势 -->
+                    <div class="chart-row">
+                        <div class="chart-card">
+                            <h3>客户发展趋势</h3>
+                            <div class="chart" id="trendChart" style="height: 300px;"></div>
+                        </div>
+                        <div class="chart-card">
+                            <h3>客户流失分析</h3>
+                            <div class="chart" id="churnChart" style="height: 300px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- 客户价值分析 -->
+                    <div class="chart-row">
+                        <div class="chart-card">
+                            <h3>客户贡献分析</h3>
+                            <div class="chart" id="contributionChart" style="height: 300px;"></div>
+                        </div>
+                        <div class="chart-card">
+                            <h3>客户满意度分析</h3>
+                            <div class="chart" id="satisfactionChart" style="height: 300px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="../../js/common.js"></script>
+    <script src="../../js/modules/customer.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="../../js/libs/china.js"></script>
+    <script src="../../js/modules/customer-analysis.js"></script>
+</body>
+</html> 

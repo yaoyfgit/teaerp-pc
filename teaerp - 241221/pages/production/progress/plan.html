@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>进度计划 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/modules/production.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb">
+                <span>生产管理</span>
+                <span class="separator">/</span>
+                <span>生产进度管理</span>
+                <span class="separator">/</span>
+                <span>进度计划</span>
+            </div>
+
+            <div class="card">
+                <div class="toolbar">
+                    <div class="search-bar">
+                        <select class="form-control">
+                            <option value="">计划类型</option>
+                            <option value="1">总进度计划</option>
+                            <option value="2">月度计划</option>
+                            <option value="3">周进度计划</option>
+                        </select>
+                        <select class="form-control">
+                            <option value="">计划状态</option>
+                            <option value="1">未开始</option>
+                            <option value="2">进行中</option>
+                            <option value="3">已完成</option>
+                            <option value="4">已延期</option>
+                        </select>
+                        <button class="button" onclick="searchPlans()">搜索</button>
+                    </div>
+                    <div class="action-bar">
+                        <button class="button" onclick="showAddPlanModal()">新增计划</button>
+                        <button class="button secondary" onclick="exportPlans()">导出</button>
+                    </div>
+                </div>
+
+                <div class="data-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>计划编号</th>
+                                <th>计��名称</th>
+                                <th>计划类型</th>
+                                <th>开始时间</th>
+                                <th>结束时间</th>
+                                <th>完成率</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="planTable"></tbody>
+                    </table>
+                </div>
+                <div class="pagination" id="pagination"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 计划详情弹窗 -->
+    <div class="modal" id="planModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">计划详情</h3>
+                <button class="close-btn" onclick="hideModal('planModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="planForm" class="form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>计划名称</label>
+                            <input type="text" class="form-control" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>计划类型</label>
+                            <select class="form-control" name="type" required>
+                                <option value="1">总进度计划</option>
+                                <option value="2">月度计划</option>
+                                <option value="3">周进度计划</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>开始时间</label>
+                            <input type="date" class="form-control" name="startDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>结束时间</label>
+                            <input type="date" class="form-control" name="endDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>计划内容</label>
+                            <textarea class="form-control" name="content" rows="4"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>资源配置</label>
+                            <textarea class="form-control" name="resources" rows="4"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideModal('planModal')">取消</button>
+                <button class="button" onclick="savePlan()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/common.js"></script>
+    <script src="../../../js/modules/production/plan.js"></script>
+</body>
+</html> 

@@ -1,0 +1,144 @@
+<!-- 所有条码管理页面的head部分统一修改为: -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XXX - TeaERP</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- ECharts图表库 -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <!-- 系统样式 -->
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/modules/inventory.css">
+</head>
+</html> <body>
+    <div class="app-container">
+        <!-- 顶部导航 -->
+        <header class="app-header">
+            <!-- ... 顶部导航内容 ... -->
+        </header>
+
+        <div class="app-main">
+            <!-- 左侧菜单 -->
+            <aside class="app-sidebar">
+                <!-- ... 菜单内容 ... -->
+            </aside>
+
+            <!-- 内容区域 -->
+            <main class="app-content">
+                <div class="breadcrumb">
+                    <span>库存管理</span>
+                    <span class="separator">/</span>
+                    <span>条码管理</span>
+                    <span class="separator">/</span>
+                    <span>条码生成</span>
+                </div>
+
+                <div class="toolbar">
+                    <div class="search-bar">
+                        <select class="form-control" name="generateType">
+                            <option value="">生成类型</option>
+                            <option value="product">商品条码</option>
+                            <option value="location">库位条码</option>
+                            <option value="batch">批次条码</option>
+                        </select>
+                        <button class="button primary">搜索</button>
+                    </div>
+                    <div class="action-bar">
+                        <button class="button primary" onclick="showGenerateModal()">生成条码</button>
+                        <button class="button" onclick="batchPrint()">批量打印</button>
+                    </div>
+                </div>
+
+                <div class="data-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>
+                                    <input type="checkbox" onclick="toggleSelectAll(this)">
+                                </th>
+                                <th>条码</th>
+                                <th>类型</th>
+                                <th>关联对象</th>
+                                <th>生成时间</th>
+                                <th>生成人</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 条码列表 -->
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- 生成条码弹窗 -->
+    <div class="modal" id="generateModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>生成条码</h3>
+                <button class="close-btn" onclick="hideModal('generateModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form class="form">
+                    <!-- 基本信息 -->
+                    <div class="form-section">
+                        <h4>基本信息</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>生成类型</label>
+                                <select class="form-control" name="generateType" required>
+                                    <option value="">请选择生成类型</option>
+                                    <option value="product">商品条码</option>
+                                    <option value="location">库位条码</option>
+                                    <option value="batch">批次条码</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>条码规则</label>
+                                <select class="form-control" name="ruleId" required>
+                                    <option value="">请选择条码规则</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 类型特定选项 -->
+                    <div id="typeSpecificOptions">
+                        <!-- 根据选择的类型动态显示选项 -->
+                    </div>
+
+                    <!-- 打印设置 -->
+                    <div class="form-section">
+                        <h4>打印设置</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>打印数量</label>
+                                <input type="number" class="form-control" name="printQuantity" min="1" value="1">
+                            </div>
+                            <div class="form-group">
+                                <label>打印模板</label>
+                                <select class="form-control" name="templateId">
+                                    <option value="">请选择打印模板</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="button" onclick="hideModal('generateModal')">取消</button>
+                <button class="button" onclick="previewBarcode()">预览</button>
+                <button class="button primary" onclick="generateBarcode()">生成并打印</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/common.js"></script>
+    <script src="../../js/modules/stock/barcode-generate.js"></script>
+</body>
+</html> 

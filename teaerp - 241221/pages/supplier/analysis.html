@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>供应商分析 - TeaERP</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- 系统样式 -->
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <!-- 模块样式 -->
+    <link rel="stylesheet" href="../../css/modules/supplier.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 顶部导航 -->
+        <header class="app-header">
+            <div class="logo">TeaERP</div>
+            <nav class="top-nav">
+                <ul>
+                    <li><a href="../../index.html">首页</a></li>
+                    <li><a href="#">消息</a></li>
+                    <li><a href="#">帮助</a></li>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <span class="username">管理员</span>
+                <a href="#" class="logout">退出</a>
+            </div>
+        </header>
+
+        <div class="app-main">
+            <!-- 左侧菜单 -->
+            <aside class="app-sidebar">
+                <!-- 菜单内容 -->
+            </aside>
+
+            <!-- 内容区域 -->
+            <main class="app-content">
+                <!-- 面包屑导航 -->
+                <div class="breadcrumb">
+                    <span>供应商管理</span>
+                    <span class="separator">/</span>
+                    <span>供应商分析</span>
+                </div>
+
+                <!-- 筛选条件 -->
+                <div class="filter-bar">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>供应商</label>
+                            <select class="form-control" name="supplierId">
+                                <option value="">全部供应商</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>时间范围</label>
+                            <div class="date-range">
+                                <input type="date" class="form-control" name="startDate">
+                                <span>至</span>
+                                <input type="date" class="form-control" name="endDate">
+                            </div>
+                        </div>
+                        <button class="button primary" onclick="applyFilter()">查询</button>
+                    </div>
+                </div>
+
+                <!-- 数据概览 -->
+                <div class="data-overview">
+                    <div class="overview-card">
+                        <div class="card-title">采购总额</div>
+                        <div class="card-value">¥1,234,567.89</div>
+                        <div class="card-trend up">+12.5%</div>
+                    </div>
+                    <div class="overview-card">
+                        <div class="card-title">供应商数量</div>
+                        <div class="card-value">128</div>
+                        <div class="card-trend up">+5.2%</div>
+                    </div>
+                    <div class="overview-card">
+                        <div class="card-title">平均交付周期</div>
+                        <div class="card-value">7.5天</div>
+                        <div class="card-trend down">-2.1天</div>
+                    </div>
+                    <div class="overview-card">
+                        <div class="card-title">合格率</div>
+                        <div class="card-value">98.5%</div>
+                        <div class="card-trend up">+1.2%</div>
+                    </div>
+                </div>
+
+                <!-- 图表区域 -->
+                <div class="chart-row">
+                    <div class="chart-card">
+                        <h3>采购金额趋势</h3>
+                        <div id="purchaseAmountChart" class="chart"></div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>供应商占比</h3>
+                        <div id="supplierRatioChart" class="chart"></div>
+                    </div>
+                </div>
+
+                <div class="chart-row">
+                    <div class="chart-card">
+                        <h3>品类分布</h3>
+                        <div id="categoryDistributionChart" class="chart"></div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>供应商评分</h3>
+                        <div id="supplierScoreChart" class="chart"></div>
+                    </div>
+                </div>
+
+                <!-- 供应商排名 -->
+                <div class="data-table-section">
+                    <h3>供应商排名</h3>
+                    <div class="data-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>排名</th>
+                                    <th>供应商名称</th>
+                                    <th>采购金额</th>
+                                    <th>订单数量</th>
+                                    <th>平均交付周期</th>
+                                    <th>合格率</th>
+                                    <th>综合评分</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- 供应商排名数据 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="../../js/common.js"></script>
+    <script src="../../js/modules/supplier/analysis.js"></script>
+</body>
+</html> 

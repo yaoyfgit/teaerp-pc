@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>物料消耗采集 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/modules/production.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb">
+                <span>生产管理</span>
+                <span class="separator">/</span>
+                <span>生产数据采集</span>
+                <span class="separator">/</span>
+                <span>物料消耗采集</span>
+            </div>
+
+            <!-- 物料消耗采集 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>物料消耗采集</h3>
+                </div>
+                <div class="card-body">
+                    <div class="search-bar">
+                        <div class="form-group">
+                            <label>生产任务</label>
+                            <select class="form-control" onchange="loadMaterialList(this.value)">
+                                <option value="">请选择任务</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="data-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>物料编码</th>
+                                    <th>物料名称</th>
+                                    <th>规格型号</th>
+                                    <th>计划用量</th>
+                                    <th>已消耗</th>
+                                    <th>本次消耗</th>
+                                    <th>消耗原因</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="materialTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 消耗分析 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>消耗分析</h3>
+                </div>
+                <div class="card-body">
+                    <div class="analysis-grid">
+                        <div class="analysis-card">
+                            <h4>消耗趋势</h4>
+                            <div id="consumptionChart" class="chart"></div>
+                        </div>
+                        <div class="analysis-card">
+                            <h4>异常分析</h4>
+                            <div id="abnormalChart" class="chart"></div>
+                        </div>
+                        <div class="analysis-card">
+                            <h4>改进建议</h4>
+                            <div class="suggestion-list" id="suggestionList">
+                                <!-- 建议列表 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 消耗录入弹窗 -->
+    <div class="modal" id="consumptionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>物料消耗录入</h3>
+                <button class="close-btn" onclick="hideModal('consumptionModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="consumptionForm" class="form">
+                    <input type="hidden" name="materialId">
+                    <div class="form-group">
+                        <label>物料名称</label>
+                        <input type="text" class="form-control" name="materialName" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>消耗数量</label>
+                        <input type="number" class="form-control" name="quantity" required>
+                    </div>
+                    <div class="form-group">
+                        <label>消耗原因</label>
+                        <select class="form-control" name="reason" required>
+                            <option value="normal">正常生产</option>
+                            <option value="waste">报废损耗</option>
+                            <option value="test">试验调试</option>
+                            <option value="other">其他原因</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>备注说明</label>
+                        <textarea class="form-control" name="remark" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideModal('consumptionModal')">取消</button>
+                <button class="button" onclick="saveConsumption()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="../../../js/common.js"></script>
+    <script src="../../../js/modules/production/material-collect.js"></script>
+</body>
+</html> 

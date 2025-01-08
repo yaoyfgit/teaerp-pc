@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeaERP</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- 系统样式 -->
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/layout.css">
+</head>
+</html> <body>
+    <div class="app-container">
+        <!-- 顶部导航 -->
+        <header class="app-header">
+            <div class="logo">TeaERP</div>
+            <nav class="top-nav">
+                <ul>
+                    <li><a href="../../index.html">首页</a></li>
+                    <li><a href="#">消息</a></li>
+                    <li><a href="#">帮助</a></li>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <span class="username">管理员</span>
+                <a href="#" class="logout">退出</a>
+            </div>
+        </header>
+
+        <div class="app-main">
+            <!-- 左侧菜单 -->
+            <aside class="app-sidebar">
+                <!-- 系���管理菜单 -->
+            </aside>
+
+            <!-- 内容区域 -->
+            <main class="app-content">
+                <!-- 面包屑导航 -->
+                <div class="breadcrumb">
+                    <span>系统管理</span>
+                    <span class="separator">/</span>
+                    <span>日志管理</span>
+                </div>
+
+                <!-- 工具栏 -->
+                <div class="toolbar">
+                    <div class="search-bar">
+                        <input type="text" placeholder="输入操作人/模块/IP搜索" class="form-control">
+                        <select class="form-control">
+                            <option value="">日志类型</option>
+                            <option value="login">登录日志</option>
+                            <option value="operation">操作日志</option>
+                            <option value="error">错误日志</option>
+                        </select>
+                        <select class="form-control">
+                            <option value="">操作状态</option>
+                            <option value="success">成功</option>
+                            <option value="fail">失败</option>
+                        </select>
+                        <div class="date-range">
+                            <input type="date" class="form-control" name="startDate">
+                            <span>至</span>
+                            <input type="date" class="form-control" name="endDate">
+                        </div>
+                        <button class="button">搜索</button>
+                    </div>
+                    <div class="action-bar">
+                        <button class="button" onclick="exportLogs()">导出日志</button>
+                        <button class="button secondary" onclick="clearLogs()">清空日志</button>
+                    </div>
+                </div>
+
+                <!-- 日志列表 -->
+                <div class="data-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>日志类型</th>
+                                <th>操作模块</th>
+                                <th>操作人</th>
+                                <th>操作内容</th>
+                                <th>操作IP</th>
+                                <th>操作地点</th>
+                                <th>操作时间</th>
+                                <th>操作状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 日志数据行 -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 分页器 -->
+                <div class="pagination">
+                    <!-- 分页控件 -->
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- 日志详情弹窗 -->
+    <div class="modal" id="logDetailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>日志详情</h3>
+                <button class="close-btn" onclick="hideModal('logDetailModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="log-detail">
+                    <!-- 日志详细信息 -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="button" onclick="hideModal('logDetailModal')">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/common.js"></script>
+    <script src="../../js/modules/system/log.js"></script>
+</body>
+</html> 

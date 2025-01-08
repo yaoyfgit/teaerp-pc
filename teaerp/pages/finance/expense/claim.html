@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>费用报销 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/modules/finance.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <span>财务管理</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <span>费用管理</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <span>费用报销</span>
+                </div>
+
+                <!-- 统计卡片 -->
+                <div class="statistics-cards">
+                    <div class="card">
+                        <div class="card-body">
+                            <i class="fas fa-receipt"></i>
+                            <div class="stat-info">
+                                <div class="stat-title">本月报销总额</div>
+                                <div class="stat-value">¥126,450.00</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card info">
+                        <div class="card-body">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                            <div class="stat-info">
+                                <div class="stat-title">待审核金额</div>
+                                <div class="stat-value">¥45,800.00</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card success">
+                        <div class="card-body">
+                            <i class="fas fa-check-circle"></i>
+                            <div class="stat-info">
+                                <div class="stat-title">已支付金额</div>
+                                <div class="stat-value">¥80,650.00</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card warning">
+                        <div class="card-body">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <div class="stat-info">
+                                <div class="stat-title">超额报销</div>
+                                <div class="stat-value">2笔</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 报销列表 -->
+                <div class="card standard-card">
+                    <div class="toolbar">
+                        <div class="search-bar">
+                            <div class="search-row">
+                                <input type="text" class="form-control search-input" placeholder="报销编号/申请人">
+                                <select class="form-control search-input">
+                                    <option value="">费用类型</option>
+                                    <option value="travel">差旅费</option>
+                                    <option value="office">办公费</option>
+                                    <option value="salary">工资</option>
+                                    <option value="rent">房租</option>
+                                    <option value="utility">水电费</option>
+                                    <option value="other">其他</option>
+                                </select>
+                                <select class="form-control search-input">
+                                    <option value="">报销状态</option>
+                                    <option value="pending">待审核</option>
+                                    <option value="approved">已审核</option>
+                                    <option value="paid">已支付</option>
+                                    <option value="rejected">已驳回</option>
+                                </select>
+                                <input type="date" class="form-control search-input" placeholder="开始日期">
+                                <input type="date" class="form-control search-input" placeholder="结束日期">
+                                <div class="search-actions">
+                                    <button class="btn btn-primary">
+                                        <i class="fas fa-search"></i>
+                                        <span>查询</span>
+                                    </button>
+                                    <button class="btn btn-secondary">
+                                        <i class="fas fa-redo"></i>
+                                        <span>重置</span>
+                                    </button>
+                                    <div class="divider"></div>
+                                    <button class="btn btn-primary" onclick="showClaimModal()">
+                                        <i class="fas fa-plus"></i>
+                                        <span>新增</span>
+                                    </button>
+                                    <button class="btn btn-secondary">
+                                        <i class="fas fa-file-export"></i>
+                                        <span>导出</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th width="40"><input type="checkbox"></th>
+                                    <th>报销编号</th>
+                                    <th>费用类型</th>
+                                    <th>报销金额</th>
+                                    <th>报销日期</th>
+                                    <th>申请部门</th>
+                                    <th>申请人</th>
+                                    <th>状态</th>
+                                    <th width="120">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="checkbox"></td>
+                                    <td>BX2023120001</td>
+                                    <td>差旅费</td>
+                                    <td>2,580.00</td>
+                                    <td>2023-12-01</td>
+                                    <td>销售部</td>
+                                    <td>张三</td>
+                                    <td><span class="badge warning">待审核</span></td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button class="btn btn-secondary btn-xs" title="查看">
+                                                <i class="fas fa-eye"></i>
+                                                <span>查看</span>
+                                            </button>
+                                            <button class="btn btn-secondary btn-xs" title="编辑">
+                                                <i class="fas fa-edit"></i>
+                                                <span>编辑</span>
+                                            </button>
+                                            <button class="btn btn-danger btn-xs" title="撤销">
+                                                <i class="fas fa-undo"></i>
+                                                <span>撤销</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="pagination-container">
+                        <div class="pagination">
+                            <button class="btn btn-secondary" disabled>
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="btn btn-primary">1</button>
+                            <button class="btn btn-secondary">2</button>
+                            <button class="btn btn-secondary">3</button>
+                            <button class="btn btn-secondary">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 费用报销弹窗 -->
+    <div class="modal" id="claimModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>费用报销</h3>
+                <button class="close-btn" onclick="closeClaimModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="claimForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>费用申请单</label>
+                            <select name="applyNo" class="form-control">
+                                <option value="">选择关联的费用申请单</option>
+                                <option value="SQ2023120001">SQ2023120001 - 差旅费</option>
+                            </select>
+                            <small class="form-text text-muted">如果有预先申请的费用，请选择对应的申请单</small>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>费用类型</label>
+                            <select name="type" class="form-control" required>
+                                <option value="travel">差旅费</option>
+                                <option value="office">办公费</option>
+                                <option value="salary">工资</option>
+                                <option value="rent">房租</option>
+                                <option value="utility">水电费</option>
+                                <option value="other">其他</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>报销金额（元）</label>
+                            <input type="number" name="amount" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>费用发生日期</label>
+                            <input type="date" name="expenseDate" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>申请部门</label>
+                            <select name="department" class="form-control" required>
+                                <option value="sales">销售部</option>
+                                <option value="production">生产部</option>
+                                <option value="finance">财务部</option>
+                                <option value="hr">人力资源部</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>费用说明</label>
+                        <textarea name="description" class="form-control" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>发票信息</label>
+                        <div class="invoice-list">
+                            <div class="invoice-item">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>发票代码</label>
+                                        <input type="text" name="invoiceCode[]" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>发票号码</label>
+                                        <input type="text" name="invoiceNo[]" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>发票金额</label>
+                                        <input type="number" name="invoiceAmount[]" class="form-control" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="addInvoiceItem()">
+                            <i class="fas fa-plus"></i> 添加发票
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <label>附件</label>
+                        <input type="file" name="attachments" class="form-control" multiple>
+                        <small class="form-text text-muted">请上传发票扫描件、费用明细等相关文件</small>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeClaimModal()">取消</button>
+                <button class="btn btn-primary" onclick="submitClaim()">提交报销</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 初始化菜单
+            Menu.renderMenu();
+            // 初始化菜单切换功能
+            initMenuToggle();
+        });
+
+        // 显示报销弹窗
+        function showClaimModal() {
+            document.getElementById('claimModal').style.display = 'block';
+        }
+
+        // 关闭报销弹窗
+        function closeClaimModal() {
+            document.getElementById('claimModal').style.display = 'none';
+        }
+
+        // 添加发票项
+        function addInvoiceItem() {
+            const invoiceList = document.querySelector('.invoice-list');
+            const invoiceItem = document.querySelector('.invoice-item').cloneNode(true);
+            
+            // 清空克隆项的输入值
+            invoiceItem.querySelectorAll('input').forEach(input => {
+                input.value = '';
+            });
+            
+            invoiceList.appendChild(invoiceItem);
+        }
+
+        // 提交报销
+        function submitClaim() {
+            // TODO: 实现报销提交逻辑
+            alert('报销已提交');
+            closeClaimModal();
+        }
+    </script>
+</body>
+</html> 

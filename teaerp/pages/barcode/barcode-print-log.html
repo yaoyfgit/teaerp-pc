@@ -1,0 +1,179 @@
+<!-- 所有条码管理页面的head部分统一修改为: -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XXX - TeaERP</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- ECharts图表库 -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <!-- 系统样式 -->
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/modules/inventory.css">
+</head>
+</html> <body>
+    <div class="app-container">
+        <!-- 顶部导航 -->
+        <header class="app-header">
+            <!-- ... 顶部导航内容 ... -->
+        </header>
+
+        <div class="app-main">
+            <!-- 左侧菜单 -->
+            <aside class="app-sidebar">
+                <!-- ... 菜单内容 ... -->
+            </aside>
+
+            <!-- 内容区域 -->
+            <main class="app-content">
+                <div class="breadcrumb">
+                    <span>库存管理</span>
+                    <span class="separator">/</span>
+                    <span>条码管理</span>
+                    <span class="separator">/</span>
+                    <span>打印记录</span>
+                </div>
+
+                <div class="toolbar">
+                    <div class="search-bar">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="打印任务编号/内容">
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control" name="printType">
+                                <option value="">打印类型</option>
+                                <option value="product">商品标签</option>
+                                <option value="location">库位标签</option>
+                                <option value="batch">批次标签</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control" name="status">
+                                <option value="">打印状态</option>
+                                <option value="success">打印成功</option>
+                                <option value="failed">打印失败</option>
+                                <option value="cancelled">已取消</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="date" class="form-control" name="startDate">
+                            <span>至</span>
+                            <input type="date" class="form-control" name="endDate">
+                        </div>
+                        <button class="button primary">搜索</button>
+                    </div>
+                    <div class="action-bar">
+                        <button class="button" onclick="exportLog()">导出记录</button>
+                        <button class="button" onclick="clearLog()">清空记录</button>
+                    </div>
+                </div>
+
+                <div class="data-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>任务编号</th>
+                                <th>打印类型</th>
+                                <th>打印内容</th>
+                                <th>打印模板</th>
+                                <th>打印机</th>
+                                <th>打印数量</th>
+                                <th>打印时间</th>
+                                <th>打印人</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 打印记录列表 -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 分页器 -->
+                <div class="pagination">
+                    <!-- 分页控件 -->
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- 打印详情弹窗 -->
+    <div class="modal" id="printDetailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>打印详情</h3>
+                <button class="close-btn" onclick="hideModal('printDetailModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="print-detail">
+                    <!-- 基本信息 -->
+                    <div class="detail-section">
+                        <h4>基本信息</h4>
+                        <div class="detail-row">
+                            <span class="label">任务编号：</span>
+                            <span class="value"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">打印类型：</span>
+                            <span class="value"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">打印时间：</span>
+                            <span class="value"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">打印人：</span>
+                            <span class="value"></span>
+                        </div>
+                    </div>
+
+                    <!-- 打印设置 -->
+                    <div class="detail-section">
+                        <h4>打印设置</h4>
+                        <div class="detail-row">
+                            <span class="label">打印机：</span>
+                            <span class="value"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">打印模板：</span>
+                            <span class="value"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">打印数量：</span>
+                            <span class="value"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">打印参数：</span>
+                            <span class="value"></span>
+                        </div>
+                    </div>
+
+                    <!-- 打印内容 -->
+                    <div class="detail-section">
+                        <h4>打印内容</h4>
+                        <div class="print-content">
+                            <!-- 打印内容预览 -->
+                        </div>
+                    </div>
+
+                    <!-- 错误信息 -->
+                    <div class="detail-section error-section" style="display: none;">
+                        <h4>错误信息</h4>
+                        <div class="error-message"></div>
+                        <div class="error-stack"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="button retry-btn" onclick="retryPrint()">重新打印</button>
+                <button class="button" onclick="hideModal('printDetailModal')">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/common.js"></script>
+    <script src="../../js/modules/stock/barcode-print-log.js"></script>
+</body>
+</html> 

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>库存预警 - TeaERP</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- 系统样式 -->
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <!-- 模块样式 -->
+    <link rel="stylesheet" href="../../css/modules/stock.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 左侧菜单 -->
+        <div class="app-sidebar"></div>
+
+        <!-- 内容区域 -->
+        <main class="app-content">
+            <!-- 面包屑导航 -->
+            <div class="breadcrumb">
+                <span>库存管理</span>
+                <span class="separator">/</span>
+                <span>库存预警</span>
+            </div>
+
+            <!-- 预警汇总卡片 -->
+            <div class="card summary-cards">
+                <div class="summary-card warning">
+                    <h3>库存不足</h3>
+                    <div class="number" id="lowStockCount">-</div>
+                    <div class="desc">低于最低库存</div>
+                </div>
+                <div class="summary-card danger">
+                    <h3>库存积压</h3>
+                    <div class="number" id="highStockCount">-</div>
+                    <div class="desc">超过最高库存</div>
+                </div>
+                <div class="summary-card info">
+                    <h3>临期预警</h3>
+                    <div class="number" id="expiringCount">-</div>
+                    <div class="desc">30天内过期</div>
+                </div>
+                <div class="summary-card success">
+                    <h3>正常商品</h3>
+                    <div class="number" id="normalCount">-</div>
+                    <div class="desc">库存正常</div>
+                </div>
+            </div>
+
+            <!-- 工具栏 -->
+            <div class="card">
+                <div class="toolbar">
+                    <div class="search-bar">
+                        <input type="text" id="searchKeyword" placeholder="输入商品编码/名称搜索" class="form-control">
+                        <select class="form-control" id="warningTypeSelect">
+                            <option value="">预警类型</option>
+                            <option value="low">库存不足</option>
+                            <option value="high">库存积压</option>
+                            <option value="expire">临期预警</option>
+                        </select>
+                        <select class="form-control" id="categorySelect">
+                            <option value="">商品分类</option>
+                            <option value="1">茶叶</option>
+                            <option value="2">茶具</option>
+                        </select>
+                        <button class="button" onclick="searchWarnings()">搜索</button>
+                    </div>
+                    <div class="action-bar">
+                        <button class="button" onclick="showSettingModal()">预警设置</button>
+                        <button class="button secondary" onclick="exportWarnings()">导出</button>
+                    </div>
+                </div>
+                <!-- 数据表格 -->
+                <div class="data-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>商品编码</th>
+                                <th>商品名称</th>
+                                <th>规格型号</th>
+                                <th>仓库</th>
+                                <th>当前库存</th>
+                                <th>最低库存</th>
+                                <th>最高库存</th>
+                                <th>生产日期</th>
+                                <th>有效期至</th>
+                                <th>预警类型</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="warningTable"></tbody>
+                    </table>
+                </div>
+                <!-- 分页器 -->
+                <div class="pagination" id="pagination"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 预警设置弹窗 -->
+    <div class="modal" id="settingModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>预警设置</h3>
+                <button class="close-btn" onclick="hideModal('settingModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form class="form">
+                    <div class="form-group">
+                        <label>商品分类</label>
+                        <select class="form-control" onchange="loadProducts(this.value)">
+                            <option value="">请选择商品分类</option>
+                            <option value="1">茶叶</option>
+                            <option value="2">茶具</option>
+                        </select>
+                    </div>
+                    <div class="detail-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>商品</th>
+                                    <th>规格型号</th>
+                                    <th>最低库存</th>
+                                    <th>最高库存</th>
+                                    <th>临期天数</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>大红袍</td>
+                                    <td>特级</td>
+                                    <td><input type="number" class="form-control" value="20"></td>
+                                    <td><input type="number" class="form-control" value="100"></td>
+                                    <td><input type="number" class="form-control" value="30"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideModal('settingModal')">取消</button>
+                <button class="button" onclick="saveSettings()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加采购需求弹窗 -->
+    <div class="modal" id="purchaseRequirementModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>生成采购需求</h3>
+                <button class="close-btn" onclick="hideModal('purchaseRequirementModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form class="form">
+                    <div class="form-group">
+                        <label>商品名称</label>
+                        <input type="text" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>建议采购数量</label>
+                        <input type="number" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>备注</label>
+                        <textarea class="form-control"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="button" onclick="hideModal('purchaseRequirementModal')">取消</button>
+                <button class="button primary" onclick="submitPurchaseRequirement()">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/common.js"></script>
+    <script src="../../js/modules/stock.js"></script>
+    <script src="../../js/modules/stock-warning.js"></script>
+</body>
+</html> 

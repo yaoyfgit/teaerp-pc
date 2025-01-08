@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>库存分析 - TeaERP</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- 系统样式 -->
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <!-- 模块样式 -->
+    <link rel="stylesheet" href="../../css/modules/inventory.css">
+</head>
+</html> <body>
+    <div class="app-container">
+        <!-- 顶部导航 -->
+        <header class="app-header">
+            <div class="logo">TeaERP</div>
+            <nav class="top-nav">
+                <ul>
+                    <li><a href="../../index.html">首页</a></li>
+                    <li><a href="#">消息</a></li>
+                    <li><a href="#">帮助</a></li>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <span class="username">管理员</span>
+                <a href="#" class="logout">退出</a>
+            </div>
+        </header>
+
+        <!-- ���体内容 -->
+        <div class="app-main">
+            <!-- 左侧菜单 -->
+            <aside class="app-sidebar">
+                <ul class="menu-list">
+                    <li class="menu-item">
+                        <a href="#" class="menu-link">
+                            <span class="menu-icon">�</span>
+                            <span class="menu-text">采购管理</span>
+                            <span class="arrow">›</span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="../purchase/demand.html">采购需求</a></li>
+                            <li><a href="../purchase/order.html">采购订单</a></li>
+                            <li><a href="../purchase/receive.html">通知收货</a></li>
+                            <li><a href="../purchase/inbound.html">采购入库</a></li>
+                            <li><a href="../purchase/return-notify.html">通知退货</a></li>
+                            <li><a href="../purchase/return.html">采购退货</a></li>
+                            <li><a href="../purchase/reconciliation.html">供应商对账</a></li>
+                            <li><a href="../purchase/analysis.html">统计分析</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" class="menu-link">
+                            <span class="menu-icon">🛒</span>
+                            <span class="menu-text">销售管理</span>
+                            <span class="arrow">›</span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="../sales/order.html">销售订单</a></li>
+                            <li><a href="../sales/delivery.html">通知发货</a></li>
+                            <li><a href="../sales/outbound.html">销售出库</a></li>
+                            <li><a href="../sales/return-notify.html">通知退货</a></li>
+                            <li><a href="../sales/return.html">销售退货</a></li>
+                            <li><a href="../sales/reconciliation.html">客户对账</a></li>
+                            <li><a href="../sales/analysis.html">统计分析</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item active">
+                        <a href="#" class="menu-link">
+                            <span class="menu-icon">📦</span>
+                            <span class="menu-text">库存管理</span>
+                            <span class="arrow">›</span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="stock-query.html">库存查询</a></li>
+                            <li><a href="stock-transfer.html">库存调拨</a></li>
+                            <li><a href="stock-check.html">库存盘点</a></li>
+                            <li><a href="stock-warning.html">库存预警</a></li>
+                            <li><a href="#" class="active">库存分析</a></li>
+                        </ul>
+                    </li>
+                    <!-- 其他菜单项... -->
+                </ul>
+            </aside>
+
+            <!-- 内容区域 -->
+            <main class="app-content">
+                <!-- 面包屑导航 -->
+                <div class="breadcrumb">
+                    <span>库存管理</span>
+                    <span class="separator">/</span>
+                    <span>库存分析</span>
+                </div>
+
+                <!-- 工具栏 -->
+                <div class="toolbar">
+                    <div class="search-bar">
+                        <select class="form-control">
+                            <option value="month">月度分析</option>
+                            <option value="quarter">季度分析</option>
+                            <option value="year">年度分析</option>
+                        </select>
+                        <div class="date-range">
+                            <input type="date" class="form-control" onchange="updateCharts()">
+                            <span>至</span>
+                            <input type="date" class="form-control" onchange="updateCharts()">
+                        </div>
+                    </div>
+                    <div class="action-bar">
+                        <button class="button" onclick="exportReport()">导出报表</button>
+                    </div>
+                </div>
+
+                <!-- 分析图表区域 -->
+                <div class="analysis-charts">
+                    <!-- 库存趋势分析 -->
+                    <div class="chart-card">
+                        <h3>库存趋势分析</h3>
+                        <div class="chart" id="trendChart" style="height: 300px;"></div>
+                    </div>
+
+                    <!-- 库存结构分析 -->
+                    <div class="chart-row">
+                        <div class="chart-card">
+                            <h3>库存金额占比</h3>
+                            <div class="chart" id="amountPieChart" style="height: 300px;"></div>
+                        </div>
+                        <div class="chart-card">
+                            <h3>库存数量占比</h3>
+                            <div class="chart" id="quantityPieChart" style="height: 300px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- 库存周转分析 -->
+                    <div class="chart-row">
+                        <div class="chart-card">
+                            <h3>周转天数分析</h3>
+                            <div class="chart" id="turnoverChart" style="height: 300px;"></div>
+                        </div>
+                        <div class="chart-card">
+                            <h3>周转率排名</h3>
+                            <div class="chart" id="turnoverRankChart" style="height: 300px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- 库存效率分析 -->
+                    <div class="chart-row">
+                        <div class="chart-card">
+                            <h3>库存准确率分析</h3>
+                            <div class="chart" id="accuracyChart" style="height: 300px;"></div>
+                        </div>
+                        <div class="chart-card">
+                            <h3>库存利用率分析</h3>
+                            <div class="chart" id="utilizationChart" style="height: 300px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="../../js/common.js"></script>
+    <script src="../../js/modules/stock.js"></script>
+    <script src="../../js/modules/stock-analysis.js"></script>
+</body>
+</html> 

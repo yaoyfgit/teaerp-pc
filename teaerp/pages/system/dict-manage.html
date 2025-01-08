@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeaERP</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- 系统样式 -->
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/menu.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 顶部导航 -->
+        <header class="app-header">
+            <div class="logo">TeaERP</div>
+            <nav class="top-nav">
+                <ul>
+                    <li><a href="../../index.html">首页</a></li>
+                    <li><a href="#">消息</a></li>
+                    <li><a href="#">帮助</a></li>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <span class="username">管理员</span>
+                <a href="#" class="logout">退出</a>
+            </div>
+        </header>
+
+        <div class="app-main">
+            <!-- 左侧菜单 -->
+            <aside class="app-sidebar">
+                <nav class="side-menu">
+                    <!-- 系统管理菜单将由JavaScript动态加载 -->
+                </nav>
+            </aside>
+
+            <!-- 内容区域 -->
+            <main class="app-content">
+                <!-- 面包屑导航 -->
+                <div class="breadcrumb">
+                    <span>系统管理</span>
+                    <span class="separator">/</span>
+                    <span>字典管理</span>
+                </div>
+
+                <!-- 内容卡片 -->
+                <div class="content-card">
+                    <!-- 工具栏 -->
+                    <div class="toolbar">
+                        <div class="search-bar">
+                            <input type="text" placeholder="输入字典名称/编码搜索" class="form-control">
+                            <select class="form-control">
+                                <option value="">字典状态</option>
+                                <option value="1">启用</option>
+                                <option value="0">禁用</option>
+                            </select>
+                            <button class="button">搜索</button>
+                        </div>
+                        <div class="action-bar">
+                            <button class="button primary" onclick="showCreateModal()">
+                                <i class="icon-plus"></i>新建字典
+                            </button>
+                            <button class="button">
+                                <i class="icon-import"></i>导入
+                            </button>
+                            <button class="button">
+                                <i class="icon-export"></i>导出
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 字典列表 -->
+                    <div class="data-table standard-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>字典名称</th>
+                                    <th>字典编码</th>
+                                    <th>字典类型</th>
+                                    <th>排序号</th>
+                                    <th>状态</th>
+                                    <th>创建时间</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- 字典数据行 -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 分页器 -->
+                    <div class="pagination standard-pagination">
+                        <!-- 分页控件 -->
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- 新建字典弹窗 -->
+    <div class="modal standard-modal" id="createDictModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>新建字典</h3>
+                <button class="close-btn" onclick="hideModal('createDictModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>字典名称</label>
+                            <input type="text" class="form-control" name="dictName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>字典编码</label>
+                            <input type="text" class="form-control" name="dictCode" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>字典类型</label>
+                            <select class="form-control" name="dictType">
+                                <option value="string">字符串</option>
+                                <option value="number">数字</option>
+                                <option value="boolean">布尔值</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>排序号</label>
+                            <input type="number" class="form-control" name="orderNum" value="0">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>字典项</label>
+                        <div class="dict-items">
+                            <div class="dict-item-header">
+                                <div class="dict-item-label">标签</div>
+                                <div class="dict-item-value">值</div>
+                                <div class="dict-item-order">排序</div>
+                                <div class="dict-item-status">状态</div>
+                                <div class="dict-item-action">操作</div>
+                            </div>
+                            <div class="dict-item-list">
+                                <!-- 字典项列表 -->
+                            </div>
+                            <button class="button secondary" onclick="addDictItem()">添加字典项</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>备注</label>
+                        <textarea class="form-control" name="remarks" rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideModal('createDictModal')">取消</button>
+                <button class="button" onclick="submitCreateDict()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/lib/jquery.min.js"></script>
+    <script src="../../js/common.js"></script>
+    <script src="../../js/menu.js"></script>
+    <script src="../../js/modules/system/dict.js"></script>
+</body>
+</html> 

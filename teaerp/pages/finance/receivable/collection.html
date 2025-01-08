@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>收款管理 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/modules/finance.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <nav class="breadcrumb">
+                <a href="../../index.html">首页</a>
+                <i class="fas fa-angle-right separator"></i>
+                <a href="../index.html">财务管理</a>
+                <i class="fas fa-angle-right separator"></i>
+                <a href="./index.html">应收管理</a>
+                <i class="fas fa-angle-right separator"></i>
+                <span>收款管理</span>
+            </nav>
+
+            <!-- 收款登记 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>收款登记</h3>
+                    <div class="card-tools">
+                        <button class="button" onclick="showReceiveModal()">收款登记</button>
+                        <button class="button" onclick="batchConfirm()">批量确认</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="search-bar">
+                        <div class="form-group">
+                            <label>客户</label>
+                            <select class="form-control">
+                                <option value="">请选择客户</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>收款方式</label>
+                            <select class="form-control">
+                                <option value="">全部</option>
+                                <option value="cash">现金</option>
+                                <option value="bank">银行转账</option>
+                                <option value="check">支票</option>
+                                <option value="other">其他</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>日期范围</label>
+                            <input type="date" class="form-control">
+                            <span>至</span>
+                            <input type="date" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>状态</label>
+                            <select class="form-control">
+                                <option value="">全部</option>
+                                <option value="pending">待确认</option>
+                                <option value="confirmed">已确认</option>
+                                <option value="rejected">已驳回</option>
+                            </select>
+                        </div>
+                        <button class="button" onclick="searchReceipts()">搜索</button>
+                    </div>
+
+                    <div class="data-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" onclick="toggleSelectAll(this)"></th>
+                                    <th>收款单号</th>
+                                    <th>客户</th>
+                                    <th>收款金额</th>
+                                    <th>收款方式</th>
+                                    <th>收款日期</th>
+                                    <th>收款人</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="receiptTable"></tbody>
+                        </table>
+                    </div>
+                    <div class="pagination" id="pagination"></div>
+                </div>
+            </div>
+
+            <!-- 收款核销 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>收款核销</h3>
+                </div>
+                <div class="card-body">
+                    <div class="data-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>应收单号</th>
+                                    <th>客户</th>
+                                    <th>应收金额</th>
+                                    <th>已收金额</th>
+                                    <th>未收金额</th>
+                                    <th>本次核销</th>
+                                    <th>核销状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="writeoffTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 收款登记弹窗 -->
+    <div class="modal" id="receiveModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>收款登记</h3>
+                <button class="close-btn" onclick="hideModal('receiveModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="receiveForm" class="form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>客户</label>
+                            <select class="form-control" name="customer" required>
+                                <option value="">请选择客户</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>收款金额</label>
+                            <input type="number" class="form-control" name="amount" required>
+                        </div>
+                        <div class="form-group">
+                            <label>收款方式</label>
+                            <select class="form-control" name="method" required>
+                                <option value="cash">现金</option>
+                                <option value="bank">银行转账</option>
+                                <option value="check">支票</option>
+                                <option value="other">其他</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>收款日期</label>
+                            <input type="date" class="form-control" name="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label>收款账户</label>
+                            <select class="form-control" name="account">
+                                <option value="">请选择账户</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>备注</label>
+                            <textarea class="form-control" name="remark" rows="3"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideModal('receiveModal')">取消</button>
+                <button class="button" onclick="saveReceipt()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 核销弹窗 -->
+    <div class="modal" id="writeoffModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>收款核销</h3>
+                <button class="close-btn" onclick="hideModal('writeoffModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="writeoffForm" class="form">
+                    <input type="hidden" name="receiptId">
+                    <div class="form-group">
+                        <label>应收单号</label>
+                        <input type="text" class="form-control" name="receivableId" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>应收金额</label>
+                        <input type="number" class="form-control" name="receivableAmount" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>未收金额</label>
+                        <input type="number" class="form-control" name="remainingAmount" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>核销金额</label>
+                        <input type="number" class="form-control" name="writeoffAmount" required>
+                    </div>
+                    <div class="form-group">
+                        <label>核销说明</label>
+                        <textarea class="form-control" name="remark" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideModal('writeoffModal')">取消</button>
+                <button class="button" onclick="saveWriteoff()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/common.js"></script>
+    <script src="../../../js/menu.js"></script>
+    <script src="../../../js/modules/finance/collection.js"></script>
+</body>
+</html> 

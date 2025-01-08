@@ -1,0 +1,331 @@
+<!-- 所有库存管理页面的head部分统一修改为: -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XXX - TeaERP</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- ECharts图表库 -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <!-- 系统样式 -->
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/modules/inventory.css">
+</head>
+</html> <body>
+    <div class="app-container">
+        <!-- 顶部导航 -->
+        <header class="app-header">
+            <div class="logo">TeaERP</div>
+            <nav class="top-nav">
+                <ul>
+                    <li><a href="../../index.html">首页</a></li>
+                    <li><a href="#">消息</a></li>
+                    <li><a href="#">帮助</a></li>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <span class="username">管理员</span>
+                <a href="#" class="logout">退出</a>
+            </div>
+        </header>
+
+        <div class="app-main">
+            <!-- 左侧菜单 -->
+            <aside class="app-sidebar">
+                <nav class="side-nav">
+                    <div class="menu-group">
+                        <div class="menu-title">库存管理</div>
+                        <ul class="menu-list">
+                            <li>
+                                <a href="inbound.html" class="active">
+                                    <i class="icon-inbound"></i>入库管理
+                                </a>
+                            </li>
+                            <li>
+                                <a href="outbound.html">
+                                    <i class="icon-outbound"></i>出库管理
+                                </a>
+                            </li>
+                            <li>
+                                <a href="transfer.html">
+                                    <i class="icon-transfer"></i>库存调拨
+                                </a>
+                            </li>
+                            <li>
+                                <a href="check.html">
+                                    <i class="icon-check"></i>库存盘点
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </aside>
+
+            <!-- 内容区域 -->
+            <main class="app-content">
+                <!-- 面包屑导航 -->
+                <div class="breadcrumb">
+                    <span>库存管理</span>
+                    <span class="separator">/</span>
+                    <span>入库管理</span>
+                </div>
+
+                <!-- 入库待办 -->
+                <div class="section">
+                    <h3>入库待办</h3>
+                    <div class="toolbar">
+                        <div class="search-bar">
+                            <div class="form-group">
+                                <select class="form-control" name="sourceType">
+                                    <option value="">全部来源</option>
+                                    <option value="purchase">采购通知收货单</option>
+                                    <option value="salesReturn">销售退货通知单</option>
+                                    <option value="production">生产入库单</option>
+                                    <option value="productionReturn">生产退料单</option>
+                                    <option value="other">其他入库单</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="输入待办编号/来源单据号">
+                            </div>
+                            <button class="button primary">搜索</button>
+                            <button class="button" onclick="resetSearch()">重置</button>
+                        </div>
+                    </div>
+
+                    <!-- 待办列表 -->
+                    <div class="data-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>待办编号</th>
+                                    <th>来源单据号</th>
+                                    <th>来源类型</th>
+                                    <th>供应商/客户</th>
+                                    <th>预计入库日期</th>
+                                    <th>待入库数量</th>
+                                    <th>已入库数量</th>
+                                    <th>待办状态</th>
+                                    <th>创建时间</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>TD001</td>
+                                    <td>PO001</td>
+                                    <td>采购通知收货单</td>
+                                    <td>供应商A</td>
+                                    <td>2024-03-20</td>
+                                    <td>100</td>
+                                    <td>0</td>
+                                    <td><span class="status pending">待处理</span></td>
+                                    <td>2024-03-19 10:00:00</td>
+                                    <td>
+                                        <button class="button-link" onclick="createInbound('TD001')">生成入库单</button>
+                                        <button class="button-link" onclick="viewTodoDetail('TD001')">查看</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>TD002</td>
+                                    <td>SR001</td>
+                                    <td>销售退货通知单</td>
+                                    <td>客户B</td>
+                                    <td>2024-03-21</td>
+                                    <td>50</td>
+                                    <td>20</td>
+                                    <td><span class="status processing">处理中</span></td>
+                                    <td>2024-03-19 14:30:00</td>
+                                    <td>
+                                        <button class="button-link" onclick="createInbound('TD002')">生成入库单</button>
+                                        <button class="button-link" onclick="viewTodoDetail('TD002')">查看</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 入库单管理 -->
+                <div class="section">
+                    <h3>入库单管理</h3>
+                    <div class="toolbar">
+                        <div class="search-bar">
+                            <div class="form-group">
+                                <select class="form-control" name="inboundType">
+                                    <option value="">全部类型</option>
+                                    <option value="purchase">采购入库</option>
+                                    <option value="salesReturn">销售退货</option>
+                                    <option value="production">生产入库</option>
+                                    <option value="other">其他入库</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="输入入库单号/来源单据号">
+                            </div>
+                            <div class="form-group">
+                                <input type="date" class="form-control" name="startDate">
+                            </div>
+                            <div class="form-group">
+                                <input type="date" class="form-control" name="endDate">
+                            </div>
+                            <button class="button primary">搜索</button>
+                            <button class="button" onclick="resetSearch()">重置</button>
+                        </div>
+                    </div>
+
+                    <!-- 入库单列表 -->
+                    <div class="data-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>入库单号</th>
+                                    <th>关联待办号</th>
+                                    <th>来源单据号</th>
+                                    <th>入库类型</th>
+                                    <th>供应商/客户</th>
+                                    <th>入库仓库</th>
+                                    <th>入库日期</th>
+                                    <th>经办人</th>
+                                    <th>审核人</th>
+                                    <th>入库状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>IN001</td>
+                                    <td>TD001</td>
+                                    <td>PO001</td>
+                                    <td>采购入库</td>
+                                    <td>供应商A</td>
+                                    <td>主仓库</td>
+                                    <td>2024-03-20</td>
+                                    <td>张三</td>
+                                    <td>李四</td>
+                                    <td><span class="status completed">已完成</span></td>
+                                    <td>
+                                        <button class="button-link" onclick="viewInboundDetail('IN001')">查看</button>
+                                        <button class="button-link" onclick="printInbound('IN001')">打印</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>IN002</td>
+                                    <td>TD002</td>
+                                    <td>SR001</td>
+                                    <td>销售退货</td>
+                                    <td>客户B</td>
+                                    <td>次仓库</td>
+                                    <td>2024-03-21</td>
+                                    <td>王五</td>
+                                    <td>-</td>
+                                    <td><span class="status pending">待审核</span></td>
+                                    <td>
+                                        <button class="button-link" onclick="reviewInbound('IN002')">审核</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- 入库单弹窗 -->
+    <div class="modal" id="inboundModal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3>新建入库单</h3>
+                <button class="close-btn" onclick="hideModal('inboundModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form">
+                    <!-- 基本信息 -->
+                    <div class="form-section">
+                        <h4>基本信息</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>入库类型</label>
+                                <select class="form-control" name="inboundType" required>
+                                    <option value="">请选择入库类型</option>
+                                    <option value="purchase">采购入库</option>
+                                    <option value="salesReturn">销售退货</option>
+                                    <option value="production">生产入库</option>
+                                    <option value="other">其他入库</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>入库仓库</label>
+                                <div class="warehouse-select">
+                                    <input type="text" class="form-control scan-input" 
+                                           placeholder="输入/扫描仓库编码"
+                                           onchange="handleWarehouseScan(this)">
+                                    <button type="button" class="button-icon" onclick="showWarehouseSelector(this)" title="选择仓库">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>入库日期</label>
+                                <input type="date" class="form-control" name="inboundDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label>经办人</label>
+                                <input type="text" class="form-control" name="operator" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>备注说明</label>
+                            <textarea class="form-control" name="remarks" rows="2"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- 入库明细 -->
+                    <div class="form-section">
+                        <h4>入库明细</h4>
+                        <div class="data-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>商品编码</th>
+                                        <th>商品名称</th>
+                                        <th>规格型号</th>
+                                        <th>单位</th>
+                                        <th>批次号</th>
+                                        <th>生产日期</th>
+                                        <th>保质期</th>
+                                        <th>入库数量</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="add-row">
+                                        <td colspan="8"></td>
+                                        <td class="action-column">
+                                            <button type="button" class="button-icon" onclick="addInboundDetail()" title="添加">
+                                                <i class="fa-solid fa-plus"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="button" onclick="hideModal('inboundModal')">取消</button>
+                <button class="button" onclick="saveAsDraft()">保存草稿</button>
+                <button class="button primary" onclick="submitInbound()">提交</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/common.js"></script>
+    <script src="../../js/modules/stock/inbound.js"></script>
+</body>
+</html> 

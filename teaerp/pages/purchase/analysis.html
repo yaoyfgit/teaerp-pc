@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>统计分析 - TeaERP</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- 系统样式 -->
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/menu.css">
+    <!-- 模块样式 -->
+    <link rel="stylesheet" href="../../css/modules/purchase.css">
+    <style>
+        /* 统计卡片样式 */
+        .statistics-cards {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .statistics-card {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            background: linear-gradient(135deg, #f6f8fc 0%, #f0f4f8 100%);
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border-left: 4px solid #8fd4d2;
+        }
+
+        .statistics-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(135deg, #f0f4f8 0%, #e9eff5 100%);
+        }
+
+        .statistics-card i {
+            font-size: 24px;
+            margin-right: 12px;
+            color: #8fd4d2;
+        }
+
+        .statistics-content {
+            flex: 1;
+        }
+
+        .stat-title {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* 工具栏样式 */
+        .toolbar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+            background: #fff;
+            padding: 16px;
+            border-radius: 4px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .date-range {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toolbar-divider {
+            width: 1px;
+            height: 24px;
+            background-color: #dcdfe6;
+            margin: 0 8px;
+        }
+
+        .button-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* 图表样式 */
+        .analysis-charts {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .chart-card {
+            background: #fff;
+            border-radius: 4px;
+            padding: 16px;
+        }
+
+        .chart-card h3 {
+            margin: 0 0 16px 0;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .chart-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .chart-row .chart-card {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- 侧边栏 -->
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <!-- 主内容区 -->
+        <div class="main-content">
+            <!-- 顶部导航栏 -->
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <!-- 内容区域 -->
+            <div class="content">
+                <!-- 更新面包屑导航样式和图标 -->
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>采购管理</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-chart-bar"></i>
+                    <span>统计分析</span>
+                </div>
+
+                <!-- 统计卡片 -->
+                <div class="statistics-cards">
+                    <div class="statistics-card">
+                        <i class="fas fa-chart-line"></i>
+                        <div class="statistics-content">
+                            <div class="stat-title">本月采购总额</div>
+                            <div class="stat-value">¥1,234,567</div>
+                        </div>
+                    </div>
+                    <div class="statistics-card">
+                        <i class="fas fa-percentage"></i>
+                        <div class="statistics-content">
+                            <div class="stat-title">同比增长</div>
+                            <div class="stat-value">23.45%</div>
+                        </div>
+                    </div>
+                    <div class="statistics-card">
+                        <i class="fas fa-undo"></i>
+                        <div class="statistics-content">
+                            <div class="stat-title">退货率</div>
+                            <div class="stat-value">2.34%</div>
+                        </div>
+                    </div>
+                    <div class="statistics-card">
+                        <i class="fas fa-clock"></i>
+                        <div class="statistics-content">
+                            <div class="stat-title">及时率</div>
+                            <div class="stat-value">96.5%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 工具栏 -->
+                <div class="toolbar">
+                    <div class="search-box">
+                        <select class="standard-select" onchange="updateCharts()">
+                            <option value="month">月度分析</option>
+                            <option value="quarter">季度分析</option>
+                            <option value="year">年度分析</option>
+                        </select>
+                        <div class="date-range">
+                            <input type="date" class="standard-input" onchange="updateCharts()">
+                            <span>至</span>
+                            <input type="date" class="standard-input" onchange="updateCharts()">
+                        </div>
+                        <div class="toolbar-divider"></div>
+                        <div class="button-group">
+                            <button class="standard-button">
+                                <i class="fas fa-file-export"></i>
+                                导出报表
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 图表区域 -->
+                <div class="analysis-charts">
+                    <div class="chart-card">
+                        <h3><i class="fas fa-chart-line"></i> 采购趋势分析</h3>
+                        <div class="chart" id="trendChart" style="height: 300px;"></div>
+                    </div>
+
+                    <!-- 供应商分析 -->
+                    <div class="chart-row">
+                        <div class="chart-card">
+                            <h3>供应商采购额占比</h3>
+                            <div class="chart" id="supplierPieChart" style="height: 300px;"></div>
+                        </div>
+                        <div class="chart-card">
+                            <h3>供应商采购排名</h3>
+                            <div class="chart" id="supplierRankChart" style="height: 300px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- 商品分析 -->
+                    <div class="chart-row">
+                        <div class="chart-card">
+                            <h3>商品采购额占比</h3>
+                            <div class="chart" id="productPieChart" style="height: 300px;"></div>
+                        </div>
+                        <div class="chart-card">
+                            <h3>商品采购排名</h3>
+                            <div class="chart" id="productRankChart" style="height: 300px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- 采购指标分析 -->
+                    <div class="chart-row">
+                        <div class="chart-card">
+                            <h3>采购退货率分析</h3>
+                            <div class="chart" id="returnRateChart" style="height: 300px;"></div>
+                        </div>
+                        <div class="chart-card">
+                            <h3>采购及时率分析</h3>
+                            <div class="chart" id="onTimeRateChart" style="height: 300px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 加载应用脚本 -->
+    <script src="../../js/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 初始化菜单
+            Menu.renderMenu();
+            // 初始化图表
+            initTrendChart();
+            initSupplierCharts();
+            initProductCharts();
+            initRateCharts();
+        });
+
+        // 采购趋势分析图表
+        function initTrendChart() {
+            const chart = echarts.init(document.getElementById('trendChart'));
+            const option = {
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['采购金额', '同比']
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['1月', '2月', '3月', '4月', '5月', '6月']
+                },
+                yAxis: [{
+                    type: 'value',
+                    name: '采购金额',
+                    axisLabel: {
+                        formatter: '¥{value}'
+                    }
+                }, {
+                    type: 'value',
+                    name: '同比',
+                    axisLabel: {
+                        formatter: '{value}%'
+                    }
+                }],
+                series: [{
+                    name: '采购金额',
+                    type: 'bar',
+                    data: [1234567, 1345678, 1456789, 1567890, 1678901, 1789012],
+                    itemStyle: {
+                        color: '#8fd4d2'
+                    }
+                }, {
+                    name: '同比',
+                    type: 'line',
+                    yAxisIndex: 1,
+                    data: [12.5, 15.6, 18.2, 20.1, 22.5, 23.4],
+                    itemStyle: {
+                        color: '#409EFF'
+                    }
+                }]
+            };
+            chart.setOption(option);
+        }
+
+        // 供应商分析图表
+        function initSupplierCharts() {
+            // 供应商占比饼图
+            const pieChart = echarts.init(document.getElementById('supplierPieChart'));
+            const pieOption = {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{b}: {c} ({d}%)'
+                },
+                legend: {
+                    orient: 'vertical',
+                    right: 10,
+                    top: 'center'
+                },
+                series: [{
+                    name: '供应商采购额',
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    avoidLabelOverlap: false,
+                    itemStyle: {
+                        borderRadius: 10,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    },
+                    label: {
+                        show: false
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: '16',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    data: [
+                        { value: 735000, name: '供应商A' },
+                        { value: 580000, name: '供应商B' },
+                        { value: 484000, name: '供应商C' },
+                        { value: 300000, name: '供应商D' },
+                        { value: 235000, name: '其他' }
+                    ]
+                }]
+            };
+            pieChart.setOption(pieOption);
+
+            // 供应商排名柱状图
+            const rankChart = echarts.init(document.getElementById('supplierRankChart'));
+            const rankOption = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'value',
+                    axisLabel: {
+                        formatter: '¥{value}'
+                    }
+                },
+                yAxis: {
+                    type: 'category',
+                    data: ['供应商A', '供应商B', '供应商C', '供应商D', '供应商E']
+                },
+                series: [{
+                    name: '采购金额',
+                    type: 'bar',
+                    data: [735000, 580000, 484000, 300000, 235000],
+                    itemStyle: {
+                        color: '#8fd4d2'
+                    }
+                }]
+            };
+            rankChart.setOption(rankOption);
+        }
+
+        // 商品分析图表
+        function initProductCharts() {
+            // 商品占比饼图
+            const pieChart = echarts.init(document.getElementById('productPieChart'));
+            const pieOption = {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{b}: {c} ({d}%)'
+                },
+                legend: {
+                    orient: 'vertical',
+                    right: 10,
+                    top: 'center'
+                },
+                series: [{
+                    name: '商品采购额',
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    avoidLabelOverlap: false,
+                    itemStyle: {
+                        borderRadius: 10,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    },
+                    label: {
+                        show: false
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: '16',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    data: [
+                        { value: 635000, name: '特级碧螺春' },
+                        { value: 480000, name: '特级龙井' },
+                        { value: 384000, name: '红茶' },
+                        { value: 300000, name: '茶具' },
+                        { value: 235000, name: '其他' }
+                    ]
+                }]
+            };
+            pieChart.setOption(pieOption);
+
+            // 商品排名柱状图
+            const rankChart = echarts.init(document.getElementById('productRankChart'));
+            const rankOption = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'value',
+                    axisLabel: {
+                        formatter: '¥{value}'
+                    }
+                },
+                yAxis: {
+                    type: 'category',
+                    data: ['特级碧螺春', '特级龙井', '红茶', '茶具', '其他']
+                },
+                series: [{
+                    name: '采购金额',
+                    type: 'bar',
+                    data: [635000, 480000, 384000, 300000, 235000],
+                    itemStyle: {
+                        color: '#8fd4d2'
+                    }
+                }]
+            };
+            rankChart.setOption(rankOption);
+        }
+
+        // 指标分析图表
+        function initRateCharts() {
+            // 退货率分析
+            const returnChart = echarts.init(document.getElementById('returnRateChart'));
+            const returnOption = {
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['退货率']
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['1月', '2月', '3月', '4月', '5月', '6月']
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLabel: {
+                        formatter: '{value}%'
+                    }
+                },
+                series: [{
+                    name: '退货率',
+                    type: 'line',
+                    data: [2.1, 2.4, 2.2, 2.5, 2.3, 2.1],
+                    itemStyle: {
+                        color: '#f56c6c'
+                    },
+                    areaStyle: {
+                        color: {
+                            type: 'linear',
+                            x: 0,
+                            y: 0,
+                            x2: 0,
+                            y2: 1,
+                            colorStops: [{
+                                offset: 0,
+                                color: 'rgba(245, 108, 108, 0.3)'
+                            }, {
+                                offset: 1,
+                                color: 'rgba(245, 108, 108, 0.1)'
+                            }]
+                        }
+                    }
+                }]
+            };
+            returnChart.setOption(returnOption);
+
+            // 及时率分析
+            const onTimeChart = echarts.init(document.getElementById('onTimeRateChart'));
+            const onTimeOption = {
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['及时率']
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['1月', '2月', '3月', '4月', '5月', '6月']
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLabel: {
+                        formatter: '{value}%'
+                    }
+                },
+                series: [{
+                    name: '及时率',
+                    type: 'line',
+                    data: [95.5, 96.2, 95.8, 97.1, 96.8, 96.5],
+                    itemStyle: {
+                        color: '#67c23a'
+                    },
+                    areaStyle: {
+                        color: {
+                            type: 'linear',
+                            x: 0,
+                            y: 0,
+                            x2: 0,
+                            y2: 1,
+                            colorStops: [{
+                                offset: 0,
+                                color: 'rgba(103, 194, 58, 0.3)'
+                            }, {
+                                offset: 1,
+                                color: 'rgba(103, 194, 58, 0.1)'
+                            }]
+                        }
+                    }
+                }]
+            };
+            onTimeChart.setOption(onTimeOption);
+        }
+
+        // 更新图表数据
+        function updateCharts() {
+            // TODO: 根据选择的时间范围和分析维度重新加载数据
+            // 这里可以添加 AJAX 请求获取新数据
+        }
+    </script>
+</body>
+</html> 

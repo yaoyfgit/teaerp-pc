@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人工成本分析 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../../css/common.css">
+    <link rel="stylesheet" href="../../../../css/layout.css">
+    <link rel="stylesheet" href="../../../../css/modules/finance.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb">
+                <span>财务管理</span>
+                <span class="separator">/</span>
+                <span>成本管理</span>
+                <span class="separator">/</span>
+                <span>人工成本</span>
+                <span class="separator">/</span>
+                <span>成本分析</span>
+            </div>
+
+            <!-- 分析维度选择 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>分析维度</h3>
+                </div>
+                <div class="card-body">
+                    <div class="analysis-filters">
+                        <div class="form-group">
+                            <label>时间范围</label>
+                            <select class="form-control" id="timeRange">
+                                <option value="month">本月</option>
+                                <option value="quarter">本季度</option>
+                                <option value="year">本年度</option>
+                                <option value="custom">自定义</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>部门</label>
+                            <select class="form-control" id="department">
+                                <option value="">全部部门</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>成本类型</label>
+                            <select class="form-control" id="costType">
+                                <option value="">全部类型</option>
+                                <option value="base">基本工资</option>
+                                <option value="overtime">加班工资</option>
+                                <option value="insurance">社保成本</option>
+                                <option value="other">其他成本</option>
+                            </select>
+                        </div>
+                        <button class="button primary" onclick="analyzeData()">
+                            <i class="fas fa-chart-line"></i> 分析
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 分析图表 -->
+            <div class="analysis-charts">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>成本构成分析</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="costStructureChart" style="height: 300px;"></div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3>同比环比分析</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="compareChart" style="height: 300px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 分析结论 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>分析结论</h3>
+                </div>
+                <div class="card-body">
+                    <div id="analysisConclusions"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="../../../../js/common.js"></script>
+    <script src="../../../../js/modules/finance/cost/labor-analysis.js"></script>
+</body>
+</html> 

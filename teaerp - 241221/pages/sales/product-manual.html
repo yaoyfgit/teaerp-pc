@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>产品手册 - TeaERP</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- 系统样式 -->
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <!-- 模块样式 -->
+    <link rel="stylesheet" href="../../css/modules/sales.css">
+</head>
+<body>
+</html> <body>
+    <div class="app-container">
+        <!-- 顶部导航 -->
+        <header class="app-header">
+            <div class="logo">TeaERP</div>
+            <nav class="top-nav">
+                <ul>
+                    <li><a href="../../index.html">首页</a></li>
+                    <li><a href="#">消息</a></li>
+                    <li><a href="#">帮助</a></li>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <span class="username">管理员</span>
+                <a href="#" class="logout">退出</a>
+            </div>
+        </header>
+
+        <div class="app-main">
+            <!-- 左侧菜单 -->
+            <aside class="app-sidebar">
+                <nav class="side-nav">
+                    <div class="menu-group">
+                        <div class="menu-title">销售管理</div>
+                        <ul class="menu-list">
+                            <li>
+                                <a href="../sales/order.html">
+                                    <i class="icon-order"></i>销售订单
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../sales/delivery.html">
+                                    <i class="icon-delivery"></i>通知发货
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../sales/outbound.html">
+                                    <i class="icon-outbound"></i>销售出库
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../sales/return.html">
+                                    <i class="icon-return"></i>销售退货
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../sales/product-manual.html" class="active">
+                                    <i class="icon-manual"></i>产品手册
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- 其他菜单组 -->
+                </nav>
+            </aside>
+
+            <!-- 内容区域 -->
+            <main class="app-content">
+                <!-- 面包屑导航 -->
+                <div class="breadcrumb">
+                    <span>销售管理</span>
+                    <span class="separator">/</span>
+                    <span>产品手册管理</span>
+                </div>
+
+                <!-- 工具栏 -->
+                <div class="toolbar">
+                    <div class="search-bar">
+                        <div class="form-group">
+                            <select class="form-control" name="category">
+                                <option value="">商品品类</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="输入商品名称/编码搜索">
+                        </div>
+                        <button class="button primary">搜索</button>
+                        <button class="button" onclick="resetSearch()">重置</button>
+                    </div>
+                    <div class="action-bar">
+                        <button class="button primary" onclick="showCreateModal()">新建手册</button>
+                        <button class="button" onclick="batchDownload()">批量下载</button>
+                    </div>
+                </div>
+
+                <!-- 数据表格 -->
+                <div class="data-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>商品编码</th>
+                                <th>商品名称</th>
+                                <th>品类</th>
+                                <th>手册版本</th>
+                                <th>更新时间</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 手册数据行 -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 分页器 -->
+                <div class="pagination">
+                    <!-- 分页内容 -->
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- 新建/编辑手册弹窗 -->
+    <div class="modal" id="manualModal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3>新建产品手册</h3>
+                <button class="close-btn" onclick="hideModal('manualModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form">
+                    <!-- 基本信息 -->
+                    <div class="form-section">
+                        <h4>基本信息</h4>
+                        <div class="section-content">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>商品品类</label>
+                                    <select class="form-control" name="category" required>
+                                        <option value="">请选择品类</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>商品名称</label>
+                                    <select class="form-control" name="productId" required>
+                                        <option value="">请选择商品</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>手册版本</label>
+                                    <input type="text" class="form-control" name="version" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>生效日期</label>
+                                    <input type="date" class="form-control" name="effectiveDate" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 产品特性 -->
+                    <div class="form-section">
+                        <h4>产品特性</h4>
+                        <div class="section-content">
+                            <div class="form-group">
+                                <label>产品介绍</label>
+                                <textarea class="form-control" name="introduction" rows="3" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>配料表</label>
+                                <div class="ingredient-list">
+                                    <div class="ingredient-item">
+                                        <input type="text" class="form-control" name="ingredients[]" placeholder="配料名称">
+                                        <input type="text" class="form-control" name="proportions[]" placeholder="配料占比">
+                                        <button type="button" class="button-icon" onclick="removeIngredient(this)">
+                                            <i class="icon-close"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <button type="button" class="button" onclick="addIngredient()">
+                                    <i class="icon-plus"></i>添加配料
+                                </button>
+                            </div>
+                            <div class="form-group">
+                                <label>产品特点</label>
+                                <div class="feature-list">
+                                    <div class="feature-item">
+                                        <input type="text" class="form-control" name="features[]">
+                                        <button type="button" class="button-icon" onclick="removeFeature(this)">
+                                            <i class="icon-close"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <button type="button" class="button" onclick="addFeature()">
+                                    <i class="icon-plus"></i>添加特点
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 价格设置 -->
+                    <div class="form-section">
+                        <h4>价格设置</h4>
+                        <div class="section-content">
+                            <!-- 阶梯价格 -->
+                            <div class="form-group">
+                                <label>阶梯价格</label>
+                                <div class="price-table ladder-price-table">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>起始数量</th>
+                                                <th>结束数量</th>
+                                                <th>单价</th>
+                                                <th>生效日期</th>
+                                                <th>失效日期</th>
+                                                <th class="action-column">操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="add-row">
+                                                <td colspan="5"></td>
+                                                <td class="action-column">
+                                                    <button type="button" class="button-icon" onclick="addLadderPrice()" title="添加">
+                                                        <i class="fas fa-plus"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- 客户等级价格 -->
+                            <div class="form-group">
+                                <label>客户等级价格</label>
+                                <div class="price-table level-price-table">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>客户等级</th>
+                                                <th>折扣率(%)</th>
+                                                <th>最低限价</th>
+                                                <th class="action-column">操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="add-row">
+                                                <td colspan="3"></td>
+                                                <td class="action-column">
+                                                    <button type="button" class="button-icon" onclick="addLevelPrice()" title="添加">
+                                                        <i class="fas fa-plus"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- 促销价格 -->
+                            <div class="form-group">
+                                <label>促销价格</label>
+                                <div class="price-table promotion-price-table">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>促销方案</th>
+                                                <th>开始日期</th>
+                                                <th>结束日期</th>
+                                                <th>促销价格</th>
+                                                <th>限购数量</th>
+                                                <th class="action-column">操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="add-row">
+                                                <td colspan="5"></td>
+                                                <td class="action-column">
+                                                    <button type="button" class="button-icon" onclick="addPromotionPrice()" title="添加">
+                                                        <i class="fas fa-plus"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 发布流程 -->
+                    <div class="form-section">
+                        <h4>发布流程</h4>
+                        <div class="section-content">
+                            <div class="publish-flow">
+                                <!-- 左侧步骤条 -->
+                                <div class="steps-wrapper">
+                                    <ul class="steps-list">
+                                        <li class="step-item active" data-step="prepare">
+                                            <div class="step-number">1</div>
+                                            <div class="step-content" onclick="switchStep('prepare')">
+                                                <div class="step-title">准备阶段</div>
+                                                <div class="step-desc">资料审核、样品确认</div>
+                                            </div>
+                                        </li>
+                                        <li class="step-item" data-step="implement">
+                                            <div class="step-number">2</div>
+                                            <div class="step-content" onclick="switchStep('implement')">
+                                                <div class="step-title">实施阶段</div>
+                                                <div class="step-desc">执行发布计划</div>
+                                            </div>
+                                        </li>
+                                        <li class="step-item" data-step="verify">
+                                            <div class="step-number">3</div>
+                                            <div class="step-content" onclick="switchStep('verify')">
+                                                <div class="step-title">验证阶段</div>
+                                                <div class="step-desc">验证发布结果</div>
+                                            </div>
+                                        </li>
+                                        <li class="step-item" data-step="complete">
+                                            <div class="step-number">4</div>
+                                            <div class="step-content" onclick="switchStep('complete')">
+                                                <div class="step-title">完成发布</div>
+                                                <div class="step-desc">确认无误后完成</div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <!-- 右侧内容区 -->
+                                <div class="step-details">
+                                    <div class="step-details-header">
+                                        <h5 class="step-details-title">准备阶段</h5>
+                                        <span class="step-details-status">进行中</span>
+                                    </div>
+                                    <div class="step-form-group">
+                                        <label>计划发布日期</label>
+                                        <input type="date" class="form-control" name="publishDate" required>
+                                    </div>
+                                    <div class="step-form-group">
+                                        <label>发布类型</label>
+                                        <select class="form-control" name="publishType" required>
+                                            <option value="new">新品发布</option>
+                                            <option value="update">版本更新</option>
+                                            <option value="revision">修订发布</option>
+                                        </select>
+                                    </div>
+                                    <div class="step-form-group">
+                                        <label>准备工作</label>
+                                        <textarea class="form-control" name="prepareSteps" rows="3" 
+                                            placeholder="请描述发布前的准备工作，如：资料审核、样品确认等"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 附件信息 -->
+                    <div class="form-section">
+                        <h4>附件信息</h4>
+                        <!-- 主图 -->
+                        <div class="form-group">
+                            <label>主图</label>
+                            <div class="image-uploader" data-type="main">
+                                <input type="file" accept="image/*">
+                                <div class="image-preview single">
+                                    <!-- 主图预览 -->
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 细节图 -->
+                        <div class="form-group">
+                            <label>细节图</label>
+                            <div class="image-uploader" data-type="detail">
+                                <input type="file" accept="image/*" multiple>
+                                <div class="image-preview">
+                                    <!-- 细节图预览 -->
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 实物图 -->
+                        <div class="form-group">
+                            <label>实物图</label>
+                            <div class="image-uploader" data-type="product">
+                                <input type="file" accept="image/*" multiple>
+                                <div class="image-preview">
+                                    <!-- 实物图预览 -->
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 应用图 -->
+                        <div class="form-group">
+                            <label>应用图</label>
+                            <div class="image-uploader" data-type="application">
+                                <input type="file" accept="image/*" multiple>
+                                <div class="image-preview">
+                                    <!-- 应用图预览 -->
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 包装图 -->
+                        <div class="form-group">
+                            <label>包装图</label>
+                            <div class="image-uploader" data-type="package">
+                                <input type="file" accept="image/*" multiple>
+                                <div class="image-preview">
+                                    <!-- 包装图预览 -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>PDF手册</label>
+                            <div class="file-uploader">
+                                <input type="file" accept=".pdf">
+                                <button type="button" class="button">上传文件</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="button" onclick="hideModal('manualModal')">取消</button>
+                <button class="button" onclick="saveAsDraft()">保存草稿</button>
+                <button class="button primary" onclick="submitManual()">发布</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/common.js"></script>
+    <script src="../../js/modules/sales/product-manual.js"></script>
+</body>
+</html> 

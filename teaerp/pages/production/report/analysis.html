@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>报工分析 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/modules/production.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 左侧菜单 -->
+        <aside class="main-sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <img src="../../../assets/images/logo.png" alt="TeaERP Logo">
+                    <span>TeaERP</span>
+                </div>
+            </div>
+            <div class="sidebar-menu">
+                <ul class="menu-list">
+                    <li class="menu-item">
+                        <a href="../../../index.html">
+                            <i class="fas fa-home"></i>
+                            <span>首页</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="../../stock/stock-warning.html">
+                            <i class="fas fa-boxes"></i>
+                            <span>库存管理</span>
+                        </a>
+                    </li>
+                    <li class="menu-item active">
+                        <a href="../report/daily.html">
+                            <i class="fas fa-industry"></i>
+                            <span>生产管理</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="../../purchase/order.html">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>采购管理</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="../../sales/order.html">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span>销售管理</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="../../finance/expense.html">
+                            <i class="fas fa-money-bill"></i>
+                            <span>财务管理</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="../../hr/employee.html">
+                            <i class="fas fa-users"></i>
+                            <span>人事管理</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="../../settings/company.html">
+                            <i class="fas fa-cog"></i>
+                            <span>系统设置</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <div class="main-content">
+            <!-- 顶部导航栏 -->
+            <header class="main-header">
+                <div class="nav-left">
+                    <button class="menu-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+                <div class="nav-right">
+                    <div class="user-info">
+                        <img src="../../../assets/images/avatar.jpg" alt="User Avatar" class="avatar">
+                        <span class="username">管理员</span>
+                    </div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-bell"></i>
+                            <span class="badge">3</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </a>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-industry"></i>
+                    <span>生产管理</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-clipboard-check"></i>
+                    <span>生产报工</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-chart-line"></i>
+                    <span>报工分析</span>
+                </div>
+
+                <!-- 分析维度选择 -->
+                <div class="standard-card">
+                    <div class="standard-card-header">
+                        <h3><i class="fas fa-filter"></i> 分析维度</h3>
+                    </div>
+                    <div class="standard-card-body">
+                        <div class="dimension-selector">
+                            <div class="dimension-group">
+                                <label>时间维度</label>
+                                <select class="standard-select" onchange="updateAnalysis()">
+                                    <option value="day">按天</option>
+                                    <option value="week">按周</option>
+                                    <option value="month">按月</option>
+                                </select>
+                            </div>
+                            <div class="dimension-group">
+                                <label>分析对象</label>
+                                <select class="standard-select" onchange="updateAnalysis()">
+                                    <option value="process">工序</option>
+                                    <option value="worker">人员</option>
+                                    <option value="product">产品</option>
+                                </select>
+                            </div>
+                            <div class="dimension-group">
+                                <label>分析指标</label>
+                                <select class="standard-select" onchange="updateAnalysis()">
+                                    <option value="quantity">产量</option>
+                                    <option value="quality">质量</option>
+                                    <option value="efficiency">效率</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 分析图表 -->
+                <div class="standard-card">
+                    <div class="standard-card-header">
+                        <h3><i class="fas fa-chart-bar"></i> 分析图表</h3>
+                        <div class="card-tools">
+                            <button class="standard-button" onclick="exportChart()">
+                                <i class="fas fa-download"></i> 导出
+                            </button>
+                        </div>
+                    </div>
+                    <div class="standard-card-body">
+                        <div id="analysisChart" style="height: 400px;"></div>
+                    </div>
+                </div>
+
+                <!-- 异常分析 -->
+                <div class="standard-card">
+                    <div class="standard-card-header">
+                        <h3><i class="fas fa-exclamation-circle"></i> 异常分析</h3>
+                    </div>
+                    <div class="standard-card-body">
+                        <div class="analysis-list">
+                            <div class="analysis-item warning">
+                                <div class="analysis-icon">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <div class="analysis-content">
+                                    <h4>工序效率异常</h4>
+                                    <p>注塑工序的平均工时较上月增加25%，建议排查工艺参数和设备状态</p>
+                                    <div class="analysis-actions">
+                                        <button class="standard-button" onclick="showProcessDetail()">查看详情</button>
+                                        <button class="standard-button primary" onclick="createImprovement()">创建改善</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="analysis-item danger">
+                                <div class="analysis-icon">
+                                    <i class="fas fa-times-circle"></i>
+                                </div>
+                                <div class="analysis-content">
+                                    <h4>质量问题频发</h4>
+                                    <p>装配工序的不良品率超过5%，主要原因是零件配合问题</p>
+                                    <div class="analysis-actions">
+                                        <button class="standard-button" onclick="showQualityDetail()">查看详情</button>
+                                        <button class="standard-button primary" onclick="createQualityReport()">质量报告</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 改善建议 -->
+                <div class="standard-card">
+                    <div class="standard-card-header">
+                        <h3><i class="fas fa-lightbulb"></i> 改善建议</h3>
+                    </div>
+                    <div class="standard-card-body">
+                        <div class="suggestion-list">
+                            <div class="suggestion-item">
+                                <div class="suggestion-icon">
+                                    <i class="fas fa-tools"></i>
+                                </div>
+                                <div class="suggestion-content">
+                                    <h4>工艺优化建议</h4>
+                                    <p>建议优化注塑工序的模具温度和保压时间，预计可提升15%效率</p>
+                                    <button class="standard-button" onclick="showOptimizationPlan()">查看方案</button>
+                                </div>
+                            </div>
+                            <div class="suggestion-item">
+                                <div class="suggestion-icon">
+                                    <i class="fas fa-user-cog"></i>
+                                </div>
+                                <div class="suggestion-content">
+                                    <h4>人员培训建议</h4>
+                                    <p>新入职操作工的合格率偏低，建议加强工艺标准培训</p>
+                                    <button class="standard-button" onclick="showTrainingPlan()">查看方案</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript 引用 -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="../../../js/app.js"></script>
+    <script>
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', () => {
+            // 初始化菜单
+            Menu.renderMenu();
+            // 初始化菜单切换功能
+            initMenuToggle();
+        });
+    </script>
+</body>
+</html> 

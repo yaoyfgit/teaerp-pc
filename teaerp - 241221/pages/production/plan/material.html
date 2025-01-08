@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>物料准备 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/modules/production.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb">
+                <span>生产管理</span>
+                <span class="separator">/</span>
+                <span>生产计划管理</span>
+                <span class="separator">/</span>
+                <span>物料准备</span>
+            </div>
+
+            <!-- 物料清单 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>物料清单</h3>
+                </div>
+                <div class="card-body">
+                    <div class="search-bar">
+                        <div class="form-group">
+                            <label>生产计划</label>
+                            <select class="form-control" onchange="loadMaterialList(this.value)">
+                                <option value="">请选择计划</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="data-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>物料编码</th>
+                                    <th>物料名称</th>
+                                    <th>规格型号</th>
+                                    <th>需求数量</th>
+                                    <th>库存数量</th>
+                                    <th>已领用</th>
+                                    <th>待领用</th>
+                                    <th>单位</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="materialTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 领退记录 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>领退记录</h3>
+                </div>
+                <div class="card-body">
+                    <div class="data-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>记录编号</th>
+                                    <th>物料编码</th>
+                                    <th>物料名称</th>
+                                    <th>操作类型</th>
+                                    <th>数量</th>
+                                    <th>操作人</th>
+                                    <th>操作时间</th>
+                                    <th>备注</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recordTable"></tbody>
+                        </table>
+                    </div>
+                    <div class="pagination" id="pagination"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 领用弹窗 -->
+    <div class="modal" id="pickModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>物料领用</h3>
+                <button class="close-btn" onclick="hideModal('pickModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="pickForm" class="form">
+                    <input type="hidden" name="materialId">
+                    <div class="form-group">
+                        <label>物料名称</label>
+                        <input type="text" class="form-control" name="materialName" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>领用数量</label>
+                        <input type="number" class="form-control" name="quantity" required>
+                    </div>
+                    <div class="form-group">
+                        <label>备注</label>
+                        <textarea class="form-control" name="remark" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideModal('pickModal')">取消</button>
+                <button class="button" onclick="savePick()">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 退库弹窗 -->
+    <div class="modal" id="returnModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>物料退库</h3>
+                <button class="close-btn" onclick="hideModal('returnModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="returnForm" class="form">
+                    <input type="hidden" name="materialId">
+                    <div class="form-group">
+                        <label>物料名称</label>
+                        <input type="text" class="form-control" name="materialName" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>退库数量</label>
+                        <input type="number" class="form-control" name="quantity" required>
+                    </div>
+                    <div class="form-group">
+                        <label>退库原因</label>
+                        <textarea class="form-control" name="reason" rows="3" required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideModal('returnModal')">取消</button>
+                <button class="button" onclick="saveReturn()">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/common.js"></script>
+    <script src="../../../js/modules/production/material-prepare.js"></script>
+</body>
+</html> 

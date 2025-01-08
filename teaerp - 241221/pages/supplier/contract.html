@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>合同管理 - TeaERP</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- 系统样式 -->
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <!-- 模块样式 -->
+    <link rel="stylesheet" href="../../css/modules/supplier.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 顶部导航 -->
+        <header class="app-header">
+            <div class="logo">TeaERP</div>
+            <nav class="top-nav">
+                <ul>
+                    <li><a href="../../index.html">首页</a></li>
+                    <li><a href="#">消息</a></li>
+                    <li><a href="#">帮助</a></li>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <span class="username">管理员</span>
+                <a href="#" class="logout">退出</a>
+            </div>
+        </header>
+
+        <div class="app-main">
+            <!-- 左侧菜单 -->
+            <aside class="app-sidebar">
+                <!-- 内容 -->
+            </aside>
+
+            <!-- 内容区域 -->
+            <main class="app-content">
+                <!-- 面包屑导航 -->
+                <div class="breadcrumb">
+                    <span>供应商管理</span>
+                    <span class="separator">/</span>
+                    <span>合同管理</span>
+                </div>
+
+                <!-- 工具栏 -->
+                <div class="toolbar">
+                    <div class="search-bar">
+                        <div class="form-group">
+                            <input type="text" placeholder="输入合同编号/供应商名称搜索" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control">
+                                <option value="">合同类型</option>
+                                <option value="purchase">采购合同</option>
+                                <option value="framework">框架合同</option>
+                                <option value="supplementary">补充协议</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control">
+                                <option value="">合同状态</option>
+                                <option value="draft">草稿</option>
+                                <option value="active">生效中</option>
+                                <option value="expired">已到期</option>
+                                <option value="terminated">已终止</option>
+                            </select>
+                        </div>
+                        <button class="button primary">搜索</button>
+                        <button class="button">重置</button>
+                    </div>
+                    <div class="action-bar">
+                        <button class="button primary" onclick="showCreateModal()">
+                            <i class="icon-plus"></i>新建合同
+                        </button>
+                        <button class="button secondary">
+                            <i class="icon-import"></i>导入
+                        </button>
+                        <button class="button secondary">
+                            <i class="icon-export"></i>导出
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 数据表格卡片 -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="data-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>合同编号</th>
+                                        <th>合同名称</th>
+                                        <th>供应商名称</th>
+                                        <th>合同类型</th>
+                                        <th>签订日期</th>
+                                        <th>生效日期</th>
+                                        <th>到期日期</th>
+                                        <th>合同金额</th>
+                                        <th>合同状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- 合同数据行 -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- 新建合同弹窗 -->
+    <div class="modal" id="createContractModal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3>新建合同</h3>
+                <button class="close-btn" onclick="hideModal('createContractModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form">
+                    <!-- 基本信息 -->
+                    <div class="form-section">
+                        <h4>基本信息</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>合同名称</label>
+                                <input type="text" class="form-control" name="contractName" required>
+                            </div>
+                            <div class="form-group">
+                                <label>合同类型</label>
+                                <select class="form-control" name="contractType" required>
+                                    <option value="purchase">采购合同</option>
+                                    <option value="framework">框架合同</option>
+                                    <option value="supplementary">补充协议</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>供应商</label>
+                                <select class="form-control" name="supplierId" required>
+                                    <option value="">请选择供应商</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>签订部门</label>
+                                <select class="form-control" name="departmentId" required>
+                                    <option value="">请选择部门</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>关联采购订单</label>
+                            <div class="order-selector">
+                                <div class="selected-orders">
+                                    <!-- 已选择的采购订单会显示在这里 -->
+                                </div>
+                                <button type="button" class="button" onclick="showOrderSelector()">
+                                    <i class="icon-link"></i>关联订单
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 合同期限 -->
+                    <div class="form-section">
+                        <h4>合同期限</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>签订日期</label>
+                                <input type="date" class="form-control" name="signDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label>生效日期</label>
+                                <input type="date" class="form-control" name="startDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label>到期日期</label>
+                                <input type="date" class="form-control" name="endDate" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 合同金额 -->
+                    <div class="form-section">
+                        <h4>合同金额</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>合同金额</label>
+                                <input type="number" class="form-control" name="contractAmount">
+                            </div>
+                            <div class="form-group">
+                                <label>币种</label>
+                                <select class="form-control" name="currency">
+                                    <option value="CNY">人民币</option>
+                                    <option value="USD">美元</option>
+                                    <option value="EUR">欧元</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>税率(%)</label>
+                                <input type="number" class="form-control" name="taxRate">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 付款条件 -->
+                    <div class="form-section">
+                        <h4>付款条件</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>付款方式</label>
+                                <select class="form-control" name="paymentMethod">
+                                    <option value="monthly">月结</option>
+                                    <option value="prepaid">预付</option>
+                                    <option value="installment">分期付款</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>账期(天)</label>
+                                <input type="number" class="form-control" name="paymentDays">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>付款说明</label>
+                            <textarea class="form-control" name="paymentTerms" rows="3"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- 其他信息 -->
+                    <div class="form-section">
+                        <h4>其他信息</h4>
+                        <div class="form-group">
+                            <label>合同附件</label>
+                            <input type="file" class="form-control" name="attachment" multiple>
+                        </div>
+                        <div class="form-group">
+                            <label>备注说明</label>
+                            <textarea class="form-control" name="remarks" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="button" onclick="hideModal('createContractModal')">取消</button>
+                <button class="button secondary" onclick="saveDraft()">保存草稿</button>
+                <button class="button primary" onclick="submitContract()">提交</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 合同执行情况弹窗 -->
+    <div class="modal" id="contractExecutionModal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3>合同执行情况</h3>
+                <button class="close-btn" onclick="hideModal('contractExecutionModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="tab-nav">
+                    <div class="tab active" data-tab="execution-progress" role="button">执行进度</div>
+                    <div class="tab" data-tab="payment-plan" role="button">付款计划</div>
+                    <div class="tab" data-tab="payment-record" role="button">付款记录</div>
+                    <div class="tab" data-tab="invoice-record" role="button">开票记录</div>
+                </div>
+
+                <!-- 执行进度 -->
+                <div class="tab-content active" id="execution-progress">
+                    <div class="progress-info">
+                        <div class="form-group">
+                            <label>整体进度</label>
+                            <input type="number" class="form-control" name="progress" min="0" max="100" value="60">
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 60%;"></div>
+                        </div>
+                        <div class="progress-text">合同执行进度：60%</div>
+                    </div>
+                    <div class="milestone-list">
+                        <h4>执行里程碑</h4>
+                        <div class="action-bar">
+                            <button class="button primary" onclick="addMilestone()">
+                                <i class="icon-plus"></i>添加里程碑
+                            </button>
+                        </div>
+                        <div class="data-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>里程碑</th>
+                                        <th>计划日期</th>
+                                        <th>实际日期</th>
+                                        <th>状态</th>
+                                        <th>备注</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- 里程碑列表 -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 付款计划 -->
+                <div class="tab-content" id="payment-plan" style="display: none;">
+                    <div class="action-bar">
+                        <button class="button primary" onclick="addPaymentPlan()">
+                            <i class="icon-plus"></i>添加付款计划
+                        </button>
+                    </div>
+                    <div class="data-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>期次</th>
+                                    <th>计划付款期</th>
+                                    <th>计划付款金额</th>
+                                    <th>付款条件</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- 付款计划列表 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 付款记录 -->
+                <div class="tab-content" id="payment-record" style="display: none;">
+                    <div class="action-bar">
+                        <button class="button primary" onclick="addPaymentRecord()">
+                            <i class="icon-plus"></i>登记付款
+                        </button>
+                    </div>
+                    <div class="data-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>付款日期</th>
+                                    <th>付款金额</th>
+                                    <th>付款方式</th>
+                                    <th>付款账户</th>
+                                    <th>收款账户</th>
+                                    <th>经办人</th>
+                                    <th>状态</th>
+                                    <th>备注</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- 付款记录列表 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 开票记录 -->
+                <div class="tab-content" id="invoice-record" style="display: none;">
+                    <div class="action-bar">
+                        <button class="button primary" onclick="addInvoiceRecord()">
+                            <i class="icon-plus"></i>登记发票
+                        </button>
+                    </div>
+                    <div class="data-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>发票日期</th>
+                                    <th>发票号码</th>
+                                    <th>发票类型</th>
+                                    <th>开票金额</th>
+                                    <th>税率</th>
+                                    <th>税额</th>
+                                    <th>价税合计</th>
+                                    <th>状态</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- 开票记录列表 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 采购订单选择弹窗 -->
+    <div class="modal" id="orderSelectorModal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3>选择采购订单</h3>
+                <button class="close-btn" onclick="hideModal('orderSelectorModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="search-bar">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="输入订单编号/商品名称搜索">
+                    </div>
+                    <button class="button primary">搜索</button>
+                </div>
+                <div class="data-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>选择</th>
+                                <th>订单编号</th>
+                                <th>订单日期</th>
+                                <th>商品名称</th>
+                                <th>数量</th>
+                                <th>单价</th>
+                                <th>金额</th>
+                                <th>状态</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 采购订单列表 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="button" onclick="hideModal('orderSelectorModal')">取消</button>
+                <button class="button primary" onclick="confirmSelectedOrders()">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/common.js"></script>
+    <script src="../../js/modules/supplier/contract.js"></script>
+</body>
+</html> 

@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>能耗数据采集 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/modules/production.css">
+    <style>
+        .content {
+            padding: 16px 24px;
+            background: #f5f7fa;
+            min-height: calc(100vh - 60px);
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 0;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ebeef5;
+        }
+
+        .breadcrumb i {
+            font-size: 14px;
+            color: #606266;
+        }
+
+        .breadcrumb span {
+            font-size: 14px;
+            color: #606266;
+        }
+
+        .breadcrumb span:last-child {
+            color: #303133;
+            font-weight: 500;
+        }
+
+        .breadcrumb .separator {
+            margin: 0;
+            color: #c0c4cc;
+        }
+
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .stat-card {
+            background: #fff;
+            border-radius: 4px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 2px 12px 0 rgba(0,0,0,0.1);
+        }
+
+        .stat-card:nth-child(1) {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+        }
+
+        .stat-card:nth-child(2) {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+
+        .stat-card:nth-child(3) {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+        }
+
+        .stat-card:nth-child(4) {
+            background: linear-gradient(135deg, #fad0c4 0%, #ffd1ff 100%);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stat-icon i {
+            font-size: 24px;
+            color: #fff;
+        }
+
+        .stat-info {
+            flex: 1;
+        }
+
+        .stat-title {
+            font-size: 14px;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .standard-card {
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 0 2px 12px 0 rgba(0,0,0,0.1);
+        }
+
+        .standard-card-header {
+            padding: 16px;
+            border-bottom: 1px solid #ebeef5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .standard-card-header h3 {
+            margin: 0;
+            font-size: 16px;
+            color: #303133;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .action-bar {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .search-group {
+            background: #fff;
+            padding: 16px;
+            border-radius: 4px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .search-input {
+            height: 32px;
+            border: 1px solid #dcdfe6;
+            border-radius: 4px;
+            padding: 0 12px;
+            color: #606266;
+        }
+
+        .search-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn {
+            height: 32px;
+            padding: 0 16px;
+            font-size: 14px;
+            border-radius: 4px;
+            border: 1px solid #dcdfe6;
+            background: #fff;
+            color: #606266;
+        }
+
+        .btn-primary {
+            background: #8fd4d2;
+            border-color: #8fd4d2;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #a8e0de;
+            border-color: #a8e0de;
+        }
+
+        .divider {
+            width: 1px;
+            height: 16px;
+            background: #dcdfe6;
+            margin: 0 8px;
+        }
+
+        .standard-table {
+            padding: 16px;
+        }
+
+        .standard-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .standard-table th {
+            background-color: #f5f7fa;
+            color: #606266;
+            font-weight: 500;
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #ebeef5;
+        }
+
+        .standard-table td {
+            padding: 12px 16px;
+            color: #606266;
+            border-bottom: 1px solid #ebeef5;
+        }
+
+        .standard-table tbody tr:hover {
+            background-color: #f5f7fa;
+        }
+
+        .status {
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            min-width: 80px;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .status.success {
+            background-color: #f0f9eb;
+            color: #67c23a;
+        }
+
+        .status.warning {
+            background-color: #fdf6ec;
+            color: #e6a23c;
+        }
+
+        .status.error {
+            background-color: #fef0f0;
+            color: #f56c6c;
+        }
+
+        .status.info {
+            background-color: #f4f4f5;
+            color: #909399;
+        }
+
+        .button-link {
+            background: none;
+            border: none;
+            color: #409EFF;
+            cursor: pointer;
+            padding: 4px 8px;
+            font-size: 13px;
+        }
+
+        .button-link:hover {
+            color: #66b1ff;
+            text-decoration: underline;
+        }
+
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 16px;
+        }
+
+        .pagination {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .pagination button {
+            min-width: 28px;
+            height: 28px;
+            padding: 0;
+            border: 1px solid #dcdfe6;
+            background: #fff;
+            color: #606266;
+            border-radius: 2px;
+            font-size: 13px;
+        }
+
+        .pagination button.active {
+            background: #8fd4d2;
+            border-color: #8fd4d2;
+            color: #fff;
+        }
+
+        .pagination button:hover:not(.active) {
+            color: #8fd4d2;
+            border-color: #8fd4d2;
+            background-color: #f0f9f9;
+        }
+
+        .pagination-info {
+            color: #909399;
+            font-size: 13px;
+        }
+
+        /* 弹窗样式优化 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .modal-content {
+            position: relative;
+            background-color: #fff;
+            margin: 40px auto;
+            padding: 20px;
+            width: 600px;
+            border-radius: 4px;
+            box-shadow: 0 2px 12px 0 rgba(0,0,0,0.1);
+            max-height: calc(100vh - 80px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 0 16px 0;
+            border-bottom: 1px solid #ebeef5;
+            margin-bottom: 16px;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 500;
+            color: #303133;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-close {
+            cursor: pointer;
+            font-size: 20px;
+            color: #909399;
+            width: 24px;
+            height: 24px;
+            line-height: 24px;
+            text-align: center;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            background-color: #f0f2f5;
+            color: #606266;
+        }
+
+        .modal-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 0 16px 0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #606266;
+            font-size: 14px;
+        }
+
+        .form-control {
+            width: 100%;
+            height: 36px;
+            padding: 0 12px;
+            border: 1px solid #dcdfe6;
+            border-radius: 4px;
+            color: #606266;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: #8fd4d2;
+            outline: none;
+        }
+
+        .form-control:hover {
+            border-color: #c0c4cc;
+        }
+
+        .form-control-static {
+            min-height: 36px;
+            padding: 8px 12px;
+            background-color: #f5f7fa;
+            border: 1px solid #e4e7ed;
+            border-radius: 4px;
+            color: #606266;
+            font-size: 14px;
+        }
+
+        .modal-footer {
+            padding: 16px 0 0 0;
+            border-top: 1px solid #ebeef5;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .modal-footer .btn {
+            min-width: 80px;
+        }
+
+        @media screen and (max-width: 768px) {
+            .modal-content {
+                width: 90%;
+                margin: 20px auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-industry"></i>
+                    <span>生产管理</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>生产数据采集</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-bolt"></i>
+                    <span>能耗数据采集</span>
+                </div>
+
+                <!-- 统计卡片 -->
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-title">总能耗</div>
+                            <div class="stat-value">2,450<span style="font-size: 14px; margin-left: 4px;">kWh</span></div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-temperature-high"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-title">平均温度</div>
+                            <div class="stat-value">65<span style="font-size: 14px; margin-left: 4px;">°C</span></div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-title">设备负荷率</div>
+                            <div class="stat-value">78<span style="font-size: 14px; margin-left: 4px;">%</span></div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-title">能效指标</div>
+                            <div class="stat-value">92<span style="font-size: 14px; margin-left: 4px;">分</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="standard-card">
+                    <div class="standard-card-header">
+                        <h3><i class="fas fa-list"></i> 能耗数据列表</h3>
+                    </div>
+                    
+                    <div class="standard-table">
+                        <div class="search-group">
+                            <input type="text" class="search-input" placeholder="设备编号">
+                            <select class="search-input">
+                                <option value="">能耗类型</option>
+                                <option value="1">电能消耗</option>
+                                <option value="2">水能消耗</option>
+                                <option value="3">气能消耗</option>
+                                <option value="4">热能消耗</option>
+                            </select>
+                            <input type="date" class="search-input">
+                            <div class="search-actions">
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-search"></i> 查询
+                                </button>
+                                <button class="btn">
+                                    <i class="fas fa-redo"></i> 重置
+                                </button>
+                            </div>
+                            <div class="divider"></div>
+                            <button class="btn btn-primary">
+                                <i class="fas fa-plus"></i> 新增
+                            </button>
+                            <button class="btn">
+                                <i class="fas fa-file-export"></i> 导出
+                            </button>
+                        </div>
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>设备编号</th>
+                                    <th>设备名称</th>
+                                    <th>能耗类型</th>
+                                    <th>能耗值</th>
+                                    <th>单位</th>
+                                    <th>温度(°C)</th>
+                                    <th>负荷率</th>
+                                    <th>采集时间</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>EQ202312001</td>
+                                    <td>炒茶机#1</td>
+                                    <td>电能消耗</td>
+                                    <td>125.5</td>
+                                    <td>kWh</td>
+                                    <td>68</td>
+                                    <td>85%</td>
+                                    <td>2023-12-31 10:00:00</td>
+                                    <td><span class="status success">正常</span></td>
+                                    <td>
+                                        <button class="button-link">查看</button>
+                                        <button class="button-link">编辑</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>EQ202312002</td>
+                                    <td>炒茶机#2</td>
+                                    <td>电能消耗</td>
+                                    <td>98.3</td>
+                                    <td>kWh</td>
+                                    <td>65</td>
+                                    <td>78%</td>
+                                    <td>2023-12-31 10:15:00</td>
+                                    <td><span class="status warning">异常</span></td>
+                                    <td>
+                                        <button class="button-link">查看</button>
+                                        <button class="button-link">编辑</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>EQ202312003</td>
+                                    <td>杀青机#1</td>
+                                    <td>气能消耗</td>
+                                    <td>45.2</td>
+                                    <td>m³</td>
+                                    <td>72</td>
+                                    <td>92%</td>
+                                    <td>2023-12-31 10:30:00</td>
+                                    <td><span class="status error">故障</span></td>
+                                    <td>
+                                        <button class="button-link">查看</button>
+                                        <button class="button-link">编辑</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>EQ202312004</td>
+                                    <td>揉捻机#1</td>
+                                    <td>电能消耗</td>
+                                    <td>75.8</td>
+                                    <td>kWh</td>
+                                    <td>60</td>
+                                    <td>75%</td>
+                                    <td>2023-12-31 10:45:00</td>
+                                    <td><span class="status info">维护中</span></td>
+                                    <td>
+                                        <button class="button-link">查看</button>
+                                        <button class="button-link">编辑</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="pagination-container">
+                            <div class="pagination">
+                                <button disabled><i class="fas fa-chevron-left"></i></button>
+                                <button class="active">1</button>
+                                <button>2</button>
+                                <button>3</button>
+                                <button><i class="fas fa-chevron-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增弹窗 -->
+    <div class="modal" id="addModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-plus"></i> 新增能耗数据</h3>
+                <span class="modal-close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>设备编号</label>
+                    <input type="text" class="form-control" placeholder="请输入设备编号">
+                </div>
+                <div class="form-group">
+                    <label>设备名称</label>
+                    <input type="text" class="form-control" placeholder="请输入设备名称">
+                </div>
+                <div class="form-group">
+                    <label>能耗类型</label>
+                    <select class="form-control">
+                        <option value="">请选择能耗类型</option>
+                        <option value="1">电能消耗</option>
+                        <option value="2">水能消耗</option>
+                        <option value="3">气能消耗</option>
+                        <option value="4">热能消耗</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>能耗值</label>
+                    <input type="number" class="form-control" placeholder="请输入能耗值">
+                </div>
+                <div class="form-group">
+                    <label>温度(°C)</label>
+                    <input type="number" class="form-control" placeholder="请输入温度">
+                </div>
+                <div class="form-group">
+                    <label>负荷率(%)</label>
+                    <input type="number" class="form-control" placeholder="请输入负荷率">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal('addModal')">取消</button>
+                <button class="btn btn-primary" onclick="saveData()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 查看弹窗 -->
+    <div class="modal" id="viewModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-eye"></i> 查看能耗数据</h3>
+                <span class="modal-close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>设备编号</label>
+                    <div id="viewEquipmentId" class="form-control-static"></div>
+                </div>
+                <div class="form-group">
+                    <label>设备名称</label>
+                    <div id="viewEquipmentName" class="form-control-static"></div>
+                </div>
+                <div class="form-group">
+                    <label>能耗类型</label>
+                    <div id="viewEnergyType" class="form-control-static"></div>
+                </div>
+                <div class="form-group">
+                    <label>能耗值</label>
+                    <div id="viewEnergyValue" class="form-control-static"></div>
+                </div>
+                <div class="form-group">
+                    <label>温度(°C)</label>
+                    <div id="viewTemperature" class="form-control-static"></div>
+                </div>
+                <div class="form-group">
+                    <label>负荷率</label>
+                    <div id="viewLoadRate" class="form-control-static"></div>
+                </div>
+                <div class="form-group">
+                    <label>采集时间</label>
+                    <div id="viewCollectTime" class="form-control-static"></div>
+                </div>
+                <div class="form-group">
+                    <label>状态</label>
+                    <div id="viewStatus" class="form-control-static"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal('viewModal')">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 编辑弹窗 -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> 编辑能耗数据</h3>
+                <span class="modal-close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>设备编号</label>
+                    <input type="text" class="form-control" id="editEquipmentId" readonly>
+                </div>
+                <div class="form-group">
+                    <label>设备名称</label>
+                    <input type="text" class="form-control" id="editEquipmentName">
+                </div>
+                <div class="form-group">
+                    <label>能耗类型</label>
+                    <select class="form-control" id="editEnergyType">
+                        <option value="1">电能消耗</option>
+                        <option value="2">水能消耗</option>
+                        <option value="3">气能消耗</option>
+                        <option value="4">热能消耗</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>能耗值</label>
+                    <input type="number" class="form-control" id="editEnergyValue">
+                </div>
+                <div class="form-group">
+                    <label>温度(°C)</label>
+                    <input type="number" class="form-control" id="editTemperature">
+                </div>
+                <div class="form-group">
+                    <label>负荷率(%)</label>
+                    <input type="number" class="form-control" id="editLoadRate">
+                </div>
+                <div class="form-group">
+                    <label>状态</label>
+                    <select class="form-control" id="editStatus">
+                        <option value="normal">正常</option>
+                        <option value="warning">异常</option>
+                        <option value="error">故障</option>
+                        <option value="maintenance">维护中</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal('editModal')">取消</button>
+                <button class="btn btn-primary" onclick="updateData()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/app.js"></script>
+    <script src="../../../js/collect.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            Menu.renderMenu();
+            initMenuToggle();
+            initButtonEvents();
+            initModalEvents();
+        });
+
+        function initModalEvents() {
+            // 关闭按钮事件
+            document.querySelectorAll('.modal-close').forEach(close => {
+                close.addEventListener('click', () => {
+                    const modal = close.closest('.modal');
+                    closeModal(modal.id);
+                });
+            });
+        }
+
+        function initButtonEvents() {
+            // 新增按钮点击事件
+            document.querySelector('.btn.btn-primary i.fas.fa-plus').parentElement.addEventListener('click', () => {
+                openModal('addModal');
+            });
+
+            // 查看和编辑按钮点击事件
+            document.querySelectorAll('.button-link').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const action = e.target.textContent.trim();
+                    const row = e.target.closest('tr');
+                    const data = {
+                        equipmentId: row.cells[0].textContent,
+                        equipmentName: row.cells[1].textContent,
+                        energyType: row.cells[2].textContent,
+                        energyValue: row.cells[3].textContent,
+                        unit: row.cells[4].textContent,
+                        temperature: row.cells[5].textContent,
+                        loadRate: row.cells[6].textContent,
+                        collectTime: row.cells[7].textContent,
+                        status: row.cells[8].querySelector('.status').textContent
+                    };
+                    
+                    if (action === '查看') {
+                        showViewModal(data);
+                    } else if (action === '编辑') {
+                        showEditModal(data);
+                    }
+                });
+            });
+        }
+
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function showViewModal(data) {
+            document.getElementById('viewEquipmentId').textContent = data.equipmentId;
+            document.getElementById('viewEquipmentName').textContent = data.equipmentName;
+            document.getElementById('viewEnergyType').textContent = data.energyType;
+            document.getElementById('viewEnergyValue').textContent = `${data.energyValue} ${data.unit}`;
+            document.getElementById('viewTemperature').textContent = `${data.temperature}°C`;
+            document.getElementById('viewLoadRate').textContent = data.loadRate;
+            document.getElementById('viewCollectTime').textContent = data.collectTime;
+            document.getElementById('viewStatus').textContent = data.status;
+            openModal('viewModal');
+        }
+
+        function showEditModal(data) {
+            document.getElementById('editEquipmentId').value = data.equipmentId;
+            document.getElementById('editEquipmentName').value = data.equipmentName;
+            document.getElementById('editEnergyValue').value = parseFloat(data.energyValue);
+            document.getElementById('editTemperature').value = parseFloat(data.temperature);
+            document.getElementById('editLoadRate').value = parseFloat(data.loadRate);
+            
+            // 设置状态
+            const statusMap = {
+                '正常': 'normal',
+                '异常': 'warning',
+                '故障': 'error',
+                '维护中': 'maintenance'
+            };
+            document.getElementById('editStatus').value = statusMap[data.status];
+            
+            openModal('editModal');
+        }
+
+        function saveData() {
+            // TODO: 实现保存新增数据的逻辑
+            alert('保存成功');
+            closeModal('addModal');
+        }
+
+        function updateData() {
+            // TODO: 实现更新数据的逻辑
+            alert('更新成功');
+            closeModal('editModal');
+        }
+    </script>
+</body>
+</html> 

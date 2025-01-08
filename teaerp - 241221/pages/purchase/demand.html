@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>采购需求 - TeaERP</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- 系统样式 -->
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <!-- 模块样式 -->
+    <link rel="stylesheet" href="../../css/modules/purchase.css">
+</head>
+</html> <body>
+    <div class="app-container">
+        <!-- 顶部导航 -->
+        <header class="app-header">
+            <div class="logo">TeaERP</div>
+            <nav class="top-nav">
+                <ul>
+                    <li><a href="../../index.html">首页</a></li>
+                    <li><a href="#">消息</a></li>
+                    <li><a href="#">帮助</a></li>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <span class="username">管理员</span>
+                <a href="#" class="logout">退出</a>
+            </div>
+        </header>
+
+        <!-- 主体��容 -->
+        <div class="app-main">
+            <!-- 左侧菜单 -->
+            <aside class="app-sidebar">
+                <ul class="menu-list">
+                    <li class="menu-item active">
+                        <a href="#" class="menu-link">
+                            <span class="menu-icon">📊</span>
+                            <span class="menu-text">采购管理</span>
+                            <span class="arrow">›</span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="#" class="active">采购需求</a></li>
+                            <li><a href="order.html">采购订单</a></li>
+                            <li><a href="receive.html">通知收货</a></li>
+                            <li><a href="inbound.html">采购入库</a></li>
+                            <li><a href="return-notify.html">通知退货</a></li>
+                            <li><a href="return.html">采购退货</a></li>
+                            <li><a href="reconciliation.html">供应商对账</a></li>
+                            <li><a href="analysis.html">统计分析</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" class="menu-link">
+                            <span class="menu-icon">🛒</span>
+                            <span class="menu-text">销售管理</span>
+                            <span class="arrow">›</span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="../sales/order.html">销售订单</a></li>
+                            <li><a href="../sales/delivery.html">通知发货</a></li>
+                            <li><a href="../sales/outbound.html">销售出库</a></li>
+                            <li><a href="../sales/return-notify.html">通知退货</a></li>
+                            <li><a href="../sales/return.html">销售退货</a></li>
+                            <li><a href="../sales/reconciliation.html">客户对账</a></li>
+                            <li><a href="../sales/analysis.html">统计分析</a></li>
+                        </ul>
+                    </li>
+                    <!-- 其他菜单项... -->
+                </ul>
+            </aside>
+
+            <!-- 内容区域 -->
+            <main class="app-content">
+                <!-- 面包屑导航 -->
+                <div class="breadcrumb">
+                    <span>采购管理</span>
+                    <span class="separator">/</span>
+                    <span>采购需求</span>
+                </div>
+
+                <!-- 工具栏 -->
+                <div class="toolbar">
+                    <div class="search-bar">
+                        <input type="text" placeholder="输入需求单号/申请人搜索">
+                        <button class="button">搜索</button>
+                    </div>
+                    <div class="action-bar">
+                        <button class="button" onclick="showCreateModal()">新建需求</button>
+                        <button class="button secondary">导出</button>
+                    </div>
+                </div>
+
+                <!-- 数据表格 -->
+                <div class="data-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>需求单号</th>
+                                <th>申请人</th>
+                                <th>申请日期</th>
+                                <th>期望到货日期</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>PD202403010001</td>
+                                <td>张三</td>
+                                <td>2024-03-01</td>
+                                <td>2024-03-10</td>
+                                <td><span class="status new">新建</span></td>
+                                <td>
+                                    <a href="javascript:void(0)" onclick="viewDemand('PD202403010001')" class="action-link">查看</a>
+                                    <a href="javascript:void(0)" onclick="editDemand('PD202403010001')" class="action-link">编辑</a>
+                                    <a href="javascript:void(0)" onclick="quickPurchase('PD202403010001')" class="action-link">一键采购</a>
+                                </td>
+                            </tr>
+                            <!-- 更多数据行... -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 分页器 -->
+                <div class="pagination">
+                    <a href="#" class="page-btn">&lt;</a>
+                    <a href="#" class="page-btn active">1</a>
+                    <a href="#" class="page-btn">2</a>
+                    <a href="#" class="page-btn">3</a>
+                    <span class="page-separator">...</span>
+                    <a href="#" class="page-btn">10</a>
+                    <a href="#" class="page-btn">&gt;</a>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- 新建需求弹窗 -->
+    <div class="modal" id="createModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>新建采购需求</h3>
+                <button class="close-btn" onclick="hideCreateModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form class="form">
+                    <div class="form-group">
+                        <label>期望到货日期</label>
+                        <input type="date" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>备注说明</label>
+                        <textarea class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>需求明细</label>
+                        <div class="detail-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>商品</th>
+                                        <th>数量</th>
+                                        <th>建议单价</th>
+                                        <th>推荐供应商</th>
+                                        <th>备注</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <select class="form-control" onchange="handleProductChange(this)">
+                                                <option value="">请选择商品</option>
+                                            </select>
+                                        </td>
+                                        <td><input type="number" class="form-control" min="1"></td>
+                                        <td><input type="number" class="form-control" step="0.01"></td>
+                                        <td>
+                                            <select class="form-control" name="supplier">
+                                                <option value="">请选择供应商</option>
+                                            </select>
+                                        </td>
+                                        <td><input type="text" class="form-control"></td>
+                                        <td>
+                                            <button type="button" class="button-icon" onclick="removeDetailRow(this)" title="删除">
+                                                <i class="fa-solid fa-trash-can"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <button type="button" class="button" onclick="addDetailRow()">添加明细</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideCreateModal()">取消</button>
+                <button class="button primary" onclick="saveDemand()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/common.js"></script>
+    <script src="../../js/modules/purchase/demand.js"></script>
+</body>
+</html>

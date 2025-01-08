@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>权限管理 - TeaERP</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- 系统样式 -->
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/menu.css">
+    <!-- 模块样式 -->
+    <link rel="stylesheet" href="../../css/modules/system.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 侧边栏 -->
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <!-- 主内容区 -->
+        <div class="main-content">
+            <!-- 顶部导航栏 -->
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <!-- 内容区域 -->
+            <div class="content">
+                <!-- 面包屑导航 -->
+                <div class="breadcrumb">
+                    <span>系统管理</span>
+                    <span class="separator">/</span>
+                    <span>权限管理</span>
+                </div>
+
+                <!-- 内容卡片 -->
+                <div class="card">
+                    <!-- 工具栏 -->
+                    <div class="toolbar">
+                        <div class="search-bar">
+                            <input type="text" class="form-control" placeholder="输入权限名称/标识搜索">
+                            <select class="form-control">
+                                <option value="">权限类型</option>
+                                <option value="menu">菜单权限</option>
+                                <option value="operation">操作权限</option>
+                                <option value="data">数据权限</option>
+                            </select>
+                            <button class="btn btn-primary">查询</button>
+                        </div>
+                        <div class="action-bar">
+                            <button class="btn btn-primary" onclick="createPermission()">新建权限</button>
+                            <button class="btn btn-secondary">导出Excel</button>
+                        </div>
+                    </div>
+
+                    <!-- 表格区域 -->
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>权限名称</th>
+                                    <th>权限标识</th>
+                                    <th>权限类型</th>
+                                    <th>所属菜单</th>
+                                    <th>创建时间</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>用户查看</td>
+                                    <td>system:user:view</td>
+                                    <td>操作权限</td>
+                                    <td>用户管理</td>
+                                    <td>2024-03-01 10:30:00</td>
+                                    <td><span class="badge badge-success">启用</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary">查看</button>
+                                        <button class="btn btn-sm btn-secondary">编辑</button>
+                                        <button class="btn btn-sm btn-danger">禁用</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 分页 -->
+                    <div class="pagination">
+                        <button class="btn btn-sm">&lt;</button>
+                        <button class="btn btn-sm active">1</button>
+                        <button class="btn btn-sm">2</button>
+                        <button class="btn btn-sm">3</button>
+                        <button class="btn btn-sm">&gt;</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新建/编辑权限弹窗 -->
+    <div class="modal" id="permissionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>新建权限</h3>
+                <button class="close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="permissionForm">
+                    <div class="form-group">
+                        <label class="form-label">权限名称</label>
+                        <input type="text" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">权限标识</label>
+                        <input type="text" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">权限类型</label>
+                        <select class="form-control" required onchange="handlePermissionTypeChange(this)">
+                            <option value="menu">菜单权限</option>
+                            <option value="operation">操作权限</option>
+                            <option value="data">数据权限</option>
+                        </select>
+                    </div>
+                    <div class="form-group menu-fields">
+                        <label class="form-label">所属菜单</label>
+                        <select class="form-control" required>
+                            <option value="">请选择菜单</option>
+                            <option value="1">系统管理</option>
+                            <option value="2">用户管理</option>
+                            <option value="3">角色管理</option>
+                        </select>
+                    </div>
+                    <div class="form-group operation-fields" style="display: none;">
+                        <label class="form-label">操作类型</label>
+                        <select class="form-control">
+                            <option value="view">查看</option>
+                            <option value="add">新增</option>
+                            <option value="edit">编辑</option>
+                            <option value="delete">删除</option>
+                            <option value="export">导出</option>
+                            <option value="import">导入</option>
+                        </select>
+                    </div>
+                    <div class="form-group data-fields" style="display: none;">
+                        <label class="form-label">数据范围</label>
+                        <select class="form-control">
+                            <option value="all">全部数据</option>
+                            <option value="dept">本部门数据</option>
+                            <option value="personal">个人数据</option>
+                            <option value="custom">自定义数据</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">权限描述</label>
+                        <textarea class="form-control" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">取消</button>
+                <button class="btn btn-primary" onclick="savePermission()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 加载应用脚本 -->
+    <script src="../../js/app.js"></script>
+    <script src="../../js/modules/system/permission.js"></script>
+</body>
+</html> 

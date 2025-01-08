@@ -1,0 +1,82 @@
+/* 统计卡片样式 */
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.summary-card {
+    background: #fff;
+    padding: 24px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+.summary-card h3 {
+    margin: 0 0 16px 0;
+    color: #666;
+    font-size: 16px;
+}
+
+.summary-card .number {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1890ff;
+}
+
+/* 图表容器样式 */
+.charts-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.charts-container .card {
+    margin: 0;
+}
+
+.charts-container .chart {
+    height: 300px;
+}
+
+/* 分析报告样式 */
+.analysis-section {
+    margin-bottom: 24px;
+}
+
+.analysis-section h4 {
+    margin: 0 0 12px 0;
+    color: #333;
+    font-size: 16px;
+}
+
+.analysis-section p {
+    margin: 0;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* 表格样式优化 */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+    padding: 12px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: left;
+}
+
+.data-table th {
+    background: #fafafa;
+    font-weight: 500;
+}
+
+.data-table tr:hover td {
+    background: #f5f5f5;
+} 

@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>应收账龄 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/modules/finance.css">
+    <style>
+        /* 统计卡片样式 */
+        .statistics-container {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .statistics-card {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border-left: 4px solid #8fd4d2;
+        }
+
+        .statistics-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .statistics-card i {
+            font-size: 24px;
+            margin-right: 12px;
+            color: #8fd4d2;
+        }
+
+        .statistics-content {
+            flex: 1;
+        }
+
+        .stat-title {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .statistics-card.warning {
+            border-left-color: #ff9800;
+            background-color: #fff8e1;
+        }
+
+        .statistics-card.warning i {
+            color: #ff9800;
+        }
+
+        .statistics-card.danger {
+            border-left-color: #f44336;
+            background-color: #ffebee;
+        }
+
+        .statistics-card.danger i {
+            color: #f44336;
+        }
+
+        .statistics-card.info {
+            border-left-color: #2196f3;
+            background-color: #e3f2fd;
+        }
+
+        .statistics-card.info i {
+            color: #2196f3;
+        }
+
+        /* 图表卡片样式 */
+        .card-header {
+            padding: 16px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-header h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .card-tools {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* 表格样式 */
+        .summary-row {
+            background-color: #f5f5f5;
+            font-weight: bold;
+        }
+
+        .summary-row td {
+            border-top: 2px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-money-check-alt"></i>
+                    <span>财务管理</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-chart-line"></i>
+                    <span>应收账龄</span>
+                </div>
+
+                <!-- 统计卡片 -->
+                <div class="statistics-container">
+                    <div class="statistics-card">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <div class="statistics-content">
+                            <div class="stat-title">应收总额</div>
+                            <div class="stat-value">¥1,235,678.00</div>
+                        </div>
+                    </div>
+                    <div class="statistics-card warning">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <div class="statistics-content">
+                            <div class="stat-title">逾期金额</div>
+                            <div class="stat-value">¥234,567.00</div>
+                        </div>
+                    </div>
+                    <div class="statistics-card danger">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div class="statistics-content">
+                            <div class="stat-title">高风险金额</div>
+                            <div class="stat-value">¥123,456.00</div>
+                        </div>
+                    </div>
+                    <div class="statistics-card info">
+                        <i class="fas fa-chart-line"></i>
+                        <div class="statistics-content">
+                            <div class="stat-title">平均账期</div>
+                            <div class="stat-value">45天</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 账龄分析 -->
+                <div class="card standard-card">
+                    <div class="standard-toolbar">
+                        <div class="toolbar-left">
+                            <input type="text" class="standard-input" placeholder="客户名称">
+                            <select class="standard-select">
+                                <option value="">客户类型</option>
+                                <option value="retail">零售客户</option>
+                                <option value="wholesale">批发客户</option>
+                                <option value="distributor">经销商</option>
+                            </select>
+                            <select class="standard-select">
+                                <option value="">账龄区间</option>
+                                <option value="0-30">30天以内</option>
+                                <option value="31-60">31-60天</option>
+                                <option value="61-90">61-90天</option>
+                                <option value="91-180">91-180天</option>
+                                <option value="181-365">181-365天</option>
+                                <option value="365+">365天以上</option>
+                            </select>
+                            <input type="date" class="standard-input" placeholder="截止日期">
+                            <button class="standard-button primary">
+                                <i class="fas fa-search"></i>
+                                查询
+                            </button>
+                            <button class="standard-button">
+                                <i class="fas fa-redo"></i>
+                                重置
+                            </button>
+                            <div class="toolbar-divider"></div>
+                            <button class="standard-button">
+                                <i class="fas fa-print"></i>
+                                打印
+                            </button>
+                            <button class="standard-button">
+                                <i class="fas fa-file-export"></i>
+                                导出
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="standard-table">
+                            <thead>
+                                <tr>
+                                    <th>客户名称</th>
+                                    <th>客户类型</th>
+                                    <th>应收总额</th>
+                                    <th>30天以内</th>
+                                    <th>31-60天</th>
+                                    <th>61-90天</th>
+                                    <th>91-180天</th>
+                                    <th>181-365天</th>
+                                    <th>365天以上</th>
+                                    <th width="120">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>茶叶专卖店A</td>
+                                    <td>零售客户</td>
+                                    <td>50,000.00</td>
+                                    <td>20,000.00</td>
+                                    <td>15,000.00</td>
+                                    <td>10,000.00</td>
+                                    <td>5,000.00</td>
+                                    <td>0.00</td>
+                                    <td>0.00</td>
+                                    <td>
+                                        <div class="button-group">
+                                            <button class="standard-button small" title="查看明细">
+                                                <i class="fas fa-list"></i>
+                                            </button>
+                                            <button class="standard-button small" title="账龄趋势">
+                                                <i class="fas fa-chart-line"></i>
+                                            </button>
+                                            <button class="standard-button small warning" title="催收提醒">
+                                                <i class="fas fa-bell"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="summary-row">
+                                    <td colspan="2">合计</td>
+                                    <td>50,000.00</td>
+                                    <td>20,000.00</td>
+                                    <td>15,000.00</td>
+                                    <td>10,000.00</td>
+                                    <td>5,000.00</td>
+                                    <td>0.00</td>
+                                    <td>0.00</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="standard-pagination">
+                        <button class="standard-button" disabled>
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="standard-button primary">1</button>
+                        <button class="standard-button">2</button>
+                        <button class="standard-button">3</button>
+                        <button class="standard-button">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 账龄分布图 -->
+                <div class="card standard-card">
+                    <div class="card-header">
+                        <h3>账龄分布分析</h3>
+                        <div class="card-tools">
+                            <button class="standard-button small">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="agingChart" style="width: 100%; height: 400px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 初始化菜单
+            Menu.renderMenu();
+            // 初始化菜单切换功能
+            initMenuToggle();
+            // 初始化账龄分布图
+            initAgingChart();
+        });
+
+        function initAgingChart() {
+            const chart = echarts.init(document.getElementById('agingChart'));
+            
+            const option = {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{a} <br/>{b}: {c} ({d}%)'
+                },
+                legend: {
+                    orient: 'horizontal',
+                    bottom: 'bottom'
+                },
+                series: [
+                    {
+                        name: '账龄分布',
+                        type: 'pie',
+                        radius: ['40%', '70%'],
+                        avoidLabelOverlap: false,
+                        itemStyle: {
+                            borderRadius: 10,
+                            borderColor: '#fff',
+                            borderWidth: 2
+                        },
+                        label: {
+                            show: false,
+                            position: 'center'
+                        },
+                        emphasis: {
+                            label: {
+                                show: true,
+                                fontSize: '20',
+                                fontWeight: 'bold'
+                            }
+                        },
+                        labelLine: {
+                            show: false
+                        },
+                        data: [
+                            { value: 20000, name: '30天以内', itemStyle: { color: '#81D8D0' } },
+                            { value: 15000, name: '31-60天', itemStyle: { color: '#A5E6E1' } },
+                            { value: 10000, name: '61-90天', itemStyle: { color: '#C9F0EC' } },
+                            { value: 5000, name: '91-180天', itemStyle: { color: '#FFB6B6' } },
+                            { value: 0, name: '181-365天', itemStyle: { color: '#FF8080' } },
+                            { value: 0, name: '365天以上', itemStyle: { color: '#ff6b6b' } }
+                        ]
+                    }
+                ]
+            };
+            
+            chart.setOption(option);
+            
+            // 监听窗口大小变化，调整图表大小
+            window.addEventListener('resize', () => {
+                chart.resize();
+            });
+        }
+    </script>
+</body>
+</html> 

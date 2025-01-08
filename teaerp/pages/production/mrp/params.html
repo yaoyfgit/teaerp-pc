@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MRP参数设置 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/modules/production.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="page-container standard-layout">
+            <div class="app-sidebar"></div>
+            <main class="app-content">
+                <div class="breadcrumb standard-breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>生产管理</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <span>MRP管理</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <span>参数设置</span>
+                </div>
+
+                <div class="card standard-card">
+                    <form id="mrpParamsForm" class="standard-form">
+                        <div class="form-section">
+                            <h3 class="section-title"><i class="fas fa-cog"></i> 基础参数</h3>
+                            <div class="form-group-row">
+                                <div class="form-group">
+                                    <label>计划周期(天)</label>
+                                    <input type="number" class="form-control" name="planPeriod" min="1" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>安全库存系数</label>
+                                    <input type="number" class="form-control" name="safetyFactor" step="0.1" min="0" required>
+                                </div>
+                            </div>
+                            <div class="form-group-row">
+                                <div class="form-group">
+                                    <label>提前期(天)</label>
+                                    <input type="number" class="form-control" name="leadTime" min="0" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>批量规则</label>
+                                    <select class="form-control" name="lotRule" required>
+                                        <option value="1">固定批量</option>
+                                        <option value="2">最小批量</option>
+                                        <option value="3">批量倍数</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3 class="section-title"><i class="fas fa-sliders-h"></i> 高级设置</h3>
+                            <div class="form-group-row">
+                                <div class="form-group">
+                                    <label>产能考虑</label>
+                                    <div class="switch-group">
+                                        <label class="switch">
+                                            <input type="checkbox" name="capacityCheck">
+                                            <span class="slider"></span>
+                                        </label>
+                                        <span class="switch-label">启用产能约束</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>替代料考虑</label>
+                                    <div class="switch-group">
+                                        <label class="switch">
+                                            <input type="checkbox" name="altMaterial">
+                                            <span class="slider"></span>
+                                        </label>
+                                        <span class="switch-label">启用替代料</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions standard-form-actions">
+                            <button type="submit" class="button primary">
+                                <i class="fas fa-save"></i> 保存设置
+                            </button>
+                            <button type="button" class="button secondary" onclick="resetForm()">
+                                <i class="fas fa-undo"></i> 重置
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="../../../js/common.js"></script>
+    <script src="../../../js/modules/production/mrp-config.js"></script>
+</body>
+</html> 

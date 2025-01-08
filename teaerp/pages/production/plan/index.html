@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生产计划 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/modules/production.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+        
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-industry"></i>
+                    <span>生产管理</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>生产计划</span>
+                </div>
+
+                <div class="standard-card">
+                    <div class="standard-toolbar">
+                        <div class="search-group">
+                            <select class="standard-select">
+                                <option value="">计划类型</option>
+                                <option value="1">年度计划</option>
+                                <option value="2">季度计划</option>
+                                <option value="3">月度计划</option>
+                            </select>
+                            <select class="standard-select">
+                                <option value="">计划状态</option>
+                                <option value="1">未开始</option>
+                                <option value="2">进行中</option>
+                                <option value="3">已完成</option>
+                                <option value="4">已延期</option>
+                            </select>
+                            <button class="standard-button primary" onclick="searchPlans()">
+                                <i class="fas fa-search"></i> 搜索
+                            </button>
+                            <div class="separator"></div>
+                            <button class="standard-button primary" onclick="showAddPlanModal()">
+                                <i class="fas fa-plus"></i> 新增计划
+                            </button>
+                            <button class="standard-button" onclick="exportPlans()">
+                                <i class="fas fa-file-export"></i> 导出
+                            </button>
+                    </div>
+                </div>
+
+                    <table class="standard-table">
+                        <thead>
+                            <tr>
+                                <th>计划编号</th>
+                                <th>计划名称</th>
+                                <th>计划类型</th>
+                                <th>开始时间</th>
+                                <th>结束时间</th>
+                                <th>完成率</th>
+                                <th>状态</th>
+                                <th class="operation-column">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="planTable"></tbody>
+                    </table>
+                    <div class="standard-pagination">
+                        <button class="standard-button"><i class="fas fa-chevron-left"></i></button>
+                        <button class="standard-button primary">1</button>
+                        <button class="standard-button">2</button>
+                        <button class="standard-button">3</button>
+                        <button class="standard-button"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 计划详情弹窗 -->
+    <div class="standard-modal" id="planModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle"><i class="fas fa-calendar-alt"></i> 计划详情</h3>
+                <button class="standard-button" onclick="hideModal('planModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="planForm" class="form-grid">
+                    <div class="form-group">
+                        <label>计划名称</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>计划类型</label>
+                        <select class="form-control" name="type" required>
+                            <option value="1">年度计划</option>
+                            <option value="2">季度计划</option>
+                            <option value="3">月度计划</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>开始时间</label>
+                        <input type="date" class="form-control" name="startDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>结束时间</label>
+                        <input type="date" class="form-control" name="endDate" required>
+                    </div>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>计划内容</label>
+                        <textarea class="form-control" name="content" rows="4"></textarea>
+                    </div>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>资源配置</label>
+                        <textarea class="form-control" name="resources" rows="4"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="standard-button" onclick="hideModal('planModal')">
+                    <i class="fas fa-times"></i> 取消
+                </button>
+                <button class="standard-button primary" onclick="savePlan()">
+                    <i class="fas fa-save"></i> 保存
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/app.js"></script>
+    <script>
+        // 示例数据
+        const planData = [
+            {
+                id: 'MP202401001',
+                name: '2024年度生产总计划',
+                type: '年度计划',
+                startDate: '2024-01-01',
+                endDate: '2024-12-31',
+                progress: 5,
+                status: '进行中'
+            },
+            {
+                id: 'MP202401002',
+                name: '2024年Q1生产计划',
+                type: '季度计划',
+                startDate: '2024-01-01',
+                endDate: '2024-03-31',
+                progress: 85,
+                status: '进行中'
+            },
+            {
+                id: 'MP202401003',
+                name: '1月份红茶生产计划',
+                type: '月度计划',
+                startDate: '2024-01-01',
+                endDate: '2024-01-31',
+                progress: 100,
+                status: '已完成'
+            },
+            {
+                id: 'MP202401004',
+                name: '2月份绿茶生产计划',
+                type: '月度计划',
+                startDate: '2024-02-01',
+                endDate: '2024-02-29',
+                progress: 0,
+                status: '未开始'
+            },
+            {
+                id: 'MP202401005',
+                name: '2024年Q2生产计划',
+                type: '季度计划',
+                startDate: '2024-04-01',
+                endDate: '2024-06-30',
+                progress: 0,
+                status: '未开始'
+            }
+        ];
+
+        // 渲染计划列表
+        function renderPlanList() {
+            const tbody = document.getElementById('planTable');
+            tbody.innerHTML = planData.map(plan => `
+                <tr>
+                    <td>${plan.id}</td>
+                    <td>${plan.name}</td>
+                    <td><span class="tag">${plan.type}</span></td>
+                    <td>${plan.startDate}</td>
+                    <td>${plan.endDate}</td>
+                    <td>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: ${plan.progress}%"></div>
+                            <span class="progress-text">${plan.progress}%</span>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="status-badge ${getStatusClass(plan.status)}">${plan.status}</span>
+                    </td>
+                    <td>
+                        <button class="standard-button" onclick="viewPlan('${plan.id}')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="standard-button" onclick="editPlan('${plan.id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="standard-button" onclick="deletePlan('${plan.id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // 获取状态样式类
+        function getStatusClass(status) {
+            switch (status) {
+                case '未开始': return 'pending';
+                case '进行中': return 'processing';
+                case '已完成': return 'success';
+                case '已延期': return 'error';
+                default: return '';
+            }
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            Menu.renderMenu();
+            initMenuToggle();
+            renderPlanList();
+        });
+
+        // 搜索计划
+        function searchPlans() {
+            // TODO: 实现搜索功能
+            console.log('搜索计划');
+        }
+
+        // 导出计划
+        function exportPlans() {
+            // TODO: 实现导出功能
+            console.log('导出计划');
+        }
+
+        // 显示新增计划弹窗
+        function showAddPlanModal() {
+            document.getElementById('modalTitle').innerHTML = '<i class="fas fa-plus"></i> 新增计划';
+            document.getElementById('planForm').reset();
+            document.getElementById('planModal').style.display = 'block';
+        }
+
+        // 查看计划详情
+        function viewPlan(id) {
+            // TODO: 实现查看功能
+            console.log('查看计划:', id);
+        }
+
+        // 编辑计划
+        function editPlan(id) {
+            // TODO: 实现编辑功能
+            console.log('编辑计划:', id);
+        }
+
+        // 删除计划
+        function deletePlan(id) {
+            // TODO: 实现删除功能
+            console.log('删除计划:', id);
+        }
+
+        // 隐藏弹窗
+        function hideModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // 保存计划
+        function savePlan() {
+            // TODO: 实现保存功能
+            console.log('保存计划');
+            hideModal('planModal');
+        }
+    </script>
+
+    <style>
+        /* 面包屑样式 */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            background: #fff;
+            border-radius: 4px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+        }
+
+        .breadcrumb i {
+            margin-right: 8px;
+            color: #909399;
+        }
+
+        .breadcrumb span {
+            color: #606266;
+        }
+
+        .breadcrumb .fa-angle-right {
+            margin: 0 8px;
+            color: #909399;
+        }
+
+        /* 弹窗样式 */
+        .standard-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            width: 600px;
+            max-height: 80vh;
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .modal-header {
+            padding: 16px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #303133;
+        }
+
+        .modal-body {
+            padding: 24px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .modal-footer {
+            padding: 16px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        /* 表单样式 */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 0;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #606266;
+        }
+
+        .form-control {
+            width: 100%;
+            height: 36px;
+            padding: 0 12px;
+            border: 1px solid #dcdfe6;
+            border-radius: 4px;
+            transition: all 0.3s;
+            box-sizing: border-box;
+        }
+
+        .form-control:focus {
+            border-color: #409eff;
+            outline: none;
+        }
+
+        textarea.form-control {
+            height: auto;
+            padding: 8px 12px;
+            resize: vertical;
+        }
+
+        /* 状态标签样式 */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            line-height: 1;
+        }
+
+        .status-badge.pending {
+            background: #ecf5ff;
+            color: #409eff;
+        }
+
+        .status-badge.processing {
+            background: #e1f3d8;
+            color: #67c23a;
+        }
+
+        .status-badge.success {
+            background: #f0f9eb;
+            color: #67c23a;
+        }
+
+        .status-badge.error {
+            background: #fef0f0;
+            color: #f56c6c;
+        }
+
+        /* 进度条样式 */
+        .progress-bar {
+            width: 100%;
+            height: 16px;
+            background: #ebeef5;
+            border-radius: 8px;
+            overflow: visible;
+            position: relative;
+            margin: 4px 0;
+        }
+
+        .progress {
+            height: 100%;
+            background: #409eff;
+            border-radius: 8px;
+            transition: width 0.3s ease;
+            position: relative;
+        }
+
+        .progress-text {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            color: #fff;
+            z-index: 1;
+            text-shadow: 0 0 2px rgba(0,0,0,0.2);
+        }
+
+        /* 标签样式 */
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            background: #f0f2f5;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #606266;
+        }
+    </style>
+</body>
+</html> 

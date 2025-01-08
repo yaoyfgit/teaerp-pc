@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeaERP - 首页</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/index.css">
+</head>
+
+
+        <!-- 顶部导航 -->
+        <header class="app-header">
+            <div class="logo">TeaERP</div>
+            <nav class="top-nav">
+                <ul>
+                    <li><a href="#" class="active">首页</a></li>
+                    <li><a href="#">消息</a></li>
+                    <li><a href="#">帮助</a></li>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <span class="username">管理员</span>
+                <a href="#" class="logout">退出</a>
+            </div>
+        </header>
+
+
+
+<body>
+    <div class="app-container">
+        <!-- 左侧菜单 -->
+        <div class="app-sidebar"></div>
+
+        <!-- 内容区域 -->
+        <main class="app-content">
+            <div class="dashboard">
+                <!-- 快捷入口 -->
+                <div class="quick-access">
+                    <h2>快捷入口</h2>
+                    <div class="quick-links">
+                        <a href="pages/purchase/order.html" class="quick-link">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>采购订单</span>
+                        </a>
+                        <a href="pages/sales/order.html" class="quick-link">
+                            <i class="fas fa-cash-register"></i>
+                            <span>销售订单</span>
+                        </a>
+                        <a href="pages/stock/stock-query.html" class="quick-link">
+                            <i class="fas fa-box"></i>
+                            <span>库存查询</span>
+                        </a>
+                        <a href="pages/production/progress/monitor.html" class="quick-link">
+                            <i class="fas fa-industry"></i>
+                            <span>生产监控</span>
+                        </a>
+                        <a href="pages/barcode/barcode-generate.html" class="quick-link">
+                            <i class="fas fa-barcode"></i>
+                            <span>条码生成</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 数据概览 -->
+                <div class="data-overview">
+                    <h2>数据概览</h2>
+                    <div class="overview-cards">
+                        <div class="overview-card">
+                            <div class="card-header">
+                                <h3>采购统计</h3>
+                                <span class="more">更多</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="data-item">
+                                    <span class="label">待收货订单</span>
+                                    <span class="value">12</span>
+                                </div>
+                                <div class="data-item">
+                                    <span class="label">待入库订单</span>
+                                    <span class="value">8</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="overview-card">
+                            <div class="card-header">
+                                <h3>销售统计</h3>
+                                <span class="more">更多</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="data-item">
+                                    <span class="label">待发货订单</span>
+                                    <span class="value">15</span>
+                                </div>
+                                <div class="data-item">
+                                    <span class="label">待出库订单</span>
+                                    <span class="value">10</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="overview-card">
+                            <div class="card-header">
+                                <h3>库存预警</h3>
+                                <span class="more">更多</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="data-item">
+                                    <span class="label">库存不足</span>
+                                    <span class="value warning">5</span>
+                                </div>
+                                <div class="data-item">
+                                    <span class="label">库存积压</span>
+                                    <span class="value danger">3</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="overview-card">
+                            <div class="card-header">
+                                <h3>生产进度</h3>
+                                <span class="more">更多</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="data-item">
+                                    <span class="label">进行中</span>
+                                    <span class="value">8</span>
+                                </div>
+                                <div class="data-item">
+                                    <span class="label">延期预警</span>
+                                    <span class="value warning">2</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 图表展示 -->
+                <div class="chart-section">
+                    <div class="chart-card">
+                        <div class="card-header">
+                            <h3>销售趋势</h3>
+                            <div class="chart-tools">
+                                <select class="form-control">
+                                    <option value="week">本周</option>
+                                    <option value="month">本月</option>
+                                    <option value="quarter">本季度</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="salesChart" class="chart"></div>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="card-header">
+                            <h3>库存分析</h3>
+                            <div class="chart-tools">
+                                <select class="form-control">
+                                    <option value="category">按分类</option>
+                                    <option value="warehouse">按仓库</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="stockChart" class="chart"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/index.js"></script>
+</body>
+</html>

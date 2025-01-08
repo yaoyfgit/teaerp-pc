@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOM结构管理 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/modules/production.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb">
+                <span>生产管理</span>
+                <span class="separator">/</span>
+                <span>BOM管理</span>
+                <span class="separator">/</span>
+                <span>BOM结构管理</span>
+            </div>
+
+            <div class="card">
+                <div class="toolbar">
+                    <div class="search-bar">
+                        <input type="text" class="form-control" placeholder="输入产品编码/名称搜索">
+                        <select class="form-control">
+                            <option value="">BOM版本</option>
+                            <option value="1">V1.0</option>
+                            <option value="2">V2.0</option>
+                        </select>
+                        <select class="form-control">
+                            <option value="">状态</option>
+                            <option value="1">启用</option>
+                            <option value="0">停用</option>
+                        </select>
+                        <button class="button" onclick="searchBOM()">搜索</button>
+                    </div>
+                    <div class="action-bar">
+                        <button class="button" onclick="showAddBOMModal()">新增BOM</button>
+                        <button class="button secondary" onclick="exportBOM()">导出</button>
+                    </div>
+                </div>
+
+                <div class="data-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>产品编码</th>
+                                <th>产品名称</th>
+                                <th>BOM版本</th>
+                                <th>创建人</th>
+                                <th>创建时间</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bomTable"></tbody>
+                    </table>
+                </div>
+                <div class="pagination" id="pagination"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- BOM结构弹窗 -->
+    <div class="modal" id="bomModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">BOM结构</h3>
+                <button class="close-btn" onclick="hideModal('bomModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="bom-tree" id="bomTree"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideModal('bomModal')">关闭</button>
+                <button class="button" onclick="saveBOM()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/common.js"></script>
+    <script src="../../../js/modules/production/bom.js"></script>
+</body>
+</html> 

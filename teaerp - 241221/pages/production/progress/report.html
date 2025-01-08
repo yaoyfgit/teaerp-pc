@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>进度报告 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/modules/production.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb">
+                <span>生产管理</span>
+                <span class="separator">/</span>
+                <span>生产进度管理</span>
+                <span class="separator">/</span>
+                <span>进度报告</span>
+            </div>
+
+            <div class="card">
+                <div class="toolbar">
+                    <div class="search-bar">
+                        <select class="form-control">
+                            <option value="">报告类型</option>
+                            <option value="1">日报</option>
+                            <option value="2">周报</option>
+                            <option value="3">月报</option>
+                        </select>
+                        <input type="date" class="form-control">
+                        <button class="button" onclick="searchReports()">搜索</button>
+                    </div>
+                    <div class="action-bar">
+                        <button class="button" onclick="showAddReportModal()">新增报告</button>
+                        <button class="button secondary" onclick="exportReports()">导出</button>
+                    </div>
+                </div>
+
+                <div class="data-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>报告编号</th>
+                                <th>报告类型</th>
+                                <th>报告日期</th>
+                                <th>完成情况</th>
+                                <th>异常数</th>
+                                <th>创建人</th>
+                                <th>创建时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportTable"></tbody>
+                    </table>
+                </div>
+                <div class="pagination" id="pagination"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 新增/编辑报告弹窗 -->
+    <div class="modal" id="reportModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">新增报告</h3>
+                <button class="close-btn" onclick="hideModal('reportModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="reportForm" class="form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>报告类型</label>
+                            <select class="form-control" name="type" required>
+                                <option value="1">日报</option>
+                                <option value="2">周报</option>
+                                <option value="3">月报</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>报告日期</label>
+                            <input type="date" class="form-control" name="reportDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>生产完成情况</label>
+                            <textarea class="form-control" name="completion" rows="4" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>异常问题</label>
+                            <textarea class="form-control" name="issues" rows="4"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>解决方案</label>
+                            <textarea class="form-control" name="solutions" rows="4"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>下一步计划</label>
+                            <textarea class="form-control" name="nextPlan" rows="4" required></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideModal('reportModal')">取消</button>
+                <button class="button" onclick="saveReport()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/common.js"></script>
+    <script src="../../../js/modules/production/report.js"></script>
+</body>
+</html> 

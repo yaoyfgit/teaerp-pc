@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>库存报表 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/menu.css">
+    <link rel="stylesheet" href="../../css/modules/stock.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb standard-breadcrumb">
+                <i class="fas fa-warehouse"></i>
+                <span>库存管理</span>
+                <i class="fas fa-angle-right separator"></i>
+                <span>库存报表</span>
+            </div>
+
+            <!-- 报表统计 -->
+            <div class="standard-card">
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <i class="stat-icon fas fa-boxes"></i>
+                        <div class="stat-title">总库存</div>
+                        <div class="stat-value">1,234</div>
+                        <div class="stat-unit">件</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="stat-icon fas fa-dollar-sign"></i>
+                        <div class="stat-title">库存金额</div>
+                        <div class="stat-value">123.4</div>
+                        <div class="stat-unit">万</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="stat-icon fas fa-chart-line"></i>
+                        <div class="stat-title">周转率</div>
+                        <div class="stat-value">3.5</div>
+                        <div class="stat-trend">较上月 +0.2</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="stat-icon fas fa-percentage"></i>
+                        <div class="stat-title">库存利用率</div>
+                        <div class="stat-value">85.2</div>
+                        <div class="stat-unit">%</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 报表内容 -->
+            <div class="standard-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-chart-bar"></i> 库存报表</h3>
+                </div>
+                <div class="card-body">
+                    <!-- 报表类型选择 -->
+                    <div class="standard-toolbar">
+                        <div class="tab-header">
+                            <span class="tab-item active" data-tab="daily">
+                                <i class="fas fa-calendar-day"></i> 库存日报
+                            </span>
+                            <span class="tab-item" data-tab="monthly">
+                                <i class="fas fa-calendar-alt"></i> 库存月报
+                            </span>
+                            <span class="tab-item" data-tab="yearly">
+                                <i class="fas fa-calendar"></i> 库存年报
+                            </span>
+                            <span class="tab-item" data-tab="warning">
+                                <i class="fas fa-exclamation-triangle"></i> 预警报表
+                            </span>
+                            <span class="tab-item" data-tab="analysis">
+                                <i class="fas fa-chart-pie"></i> 分析报表
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- 报表筛选条件 -->
+                    <div class="standard-toolbar">
+                        <div class="search-bar">
+                            <input type="date" class="standard-input" name="reportDate">
+                            <select class="standard-select" name="warehouseId">
+                                <option value="">所有仓库</option>
+                                <option value="1">主仓库</option>
+                                <option value="2">次仓库</option>
+                            </select>
+                            <select class="standard-select" name="categoryId">
+                                <option value="">所有分类</option>
+                                <option value="1">茶叶</option>
+                                <option value="2">茶具</option>
+                            </select>
+                            <button class="standard-button primary" onclick="generateReport()">
+                                <i class="fas fa-sync"></i> 生成报表
+                            </button>
+                        </div>
+                        <div class="action-bar">
+                            <button class="standard-button" onclick="exportReport()">
+                                <i class="fas fa-file-export"></i> 导出报表
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 报表内容区 -->
+                    <div class="tab-content">
+                        <!-- 库存日报 -->
+                        <div class="tab-pane active" id="dailyReport">
+                            <div class="chart-container">
+                                <div id="stockTrendChart"></div>
+                            </div>
+                            <div class="standard-table">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>商品编码</th>
+                                            <th>商品名称</th>
+                                            <th>规格型号</th>
+                                            <th>单位</th>
+                                            <th>期初库存</th>
+                                            <th>入库数量</th>
+                                            <th>出库数量</th>
+                                            <th>期末库存</th>
+                                            <th>库存金额</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="dailyReportTable"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 库存月报 -->
+                        <div class="tab-pane" id="monthlyReport">
+                            <div class="chart-container">
+                                <div id="monthlyStockChart"></div>
+                            </div>
+                            <div class="standard-table">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>日期</th>
+                                            <th>期初库存</th>
+                                            <th>入库数量</th>
+                                            <th>出库数量</th>
+                                            <th>期末库存</th>
+                                            <th>库存金额</th>
+                                            <th>周转率</th>
+                                            <th>周转天数</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="monthlyReportTable"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 库存年报 -->
+                        <div class="tab-pane" id="yearlyReport">
+                            <div class="chart-container">
+                                <div id="yearlyStockChart"></div>
+                            </div>
+                            <div class="standard-table">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>月份</th>
+                                            <th>期初库存</th>
+                                            <th>入库数量</th>
+                                            <th>出库数量</th>
+                                            <th>期末库存</th>
+                                            <th>库存金额</th>
+                                            <th>周转率</th>
+                                            <th>周转天数</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="yearlyReportTable"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 预警报表 -->
+                        <div class="tab-pane" id="warningReport">
+                            <div class="warning-stats">
+                                <div class="stat-card warning">
+                                    <i class="stat-icon fas fa-exclamation-triangle"></i>
+                                    <div class="stat-title">库存不足</div>
+                                    <div class="stat-value">15</div>
+                                    <div class="stat-unit">种</div>
+                                </div>
+                                <div class="stat-card danger">
+                                    <i class="stat-icon fas fa-battery-empty"></i>
+                                    <div class="stat-title">库存告急</div>
+                                    <div class="stat-value">5</div>
+                                    <div class="stat-unit">种</div>
+                                </div>
+                                <div class="stat-card info">
+                                    <i class="stat-icon fas fa-battery-full"></i>
+                                    <div class="stat-title">库存积压</div>
+                                    <div class="stat-value">8</div>
+                                    <div class="stat-unit">种</div>
+                                </div>
+                            </div>
+                            <div class="standard-table">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>商品编码</th>
+                                            <th>商品名称</th>
+                                            <th>预警类型</th>
+                                            <th>当前库存</th>
+                                            <th>最小库存</th>
+                                            <th>最大库存</th>
+                                            <th>建议操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="warningReportTable"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 分析报表 -->
+                        <div class="tab-pane" id="analysisReport">
+                            <div class="chart-container">
+                                <div class="chart-row">
+                                    <div class="chart-item">
+                                        <div class="chart-title">ABC分类分析</div>
+                                        <div id="abcAnalysisChart"></div>
+                                    </div>
+                                    <div class="chart-item">
+                                        <div class="chart-title">周转率分析</div>
+                                        <div id="turnoverAnalysisChart"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="standard-table">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>分类</th>
+                                            <th>商品数量</th>
+                                            <th>库存金额</th>
+                                            <th>金额占比</th>
+                                            <th>周转率</th>
+                                            <th>周转天数</th>
+                                            <th>建议策略</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="analysisReportTable"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="../../js/common.js"></script>
+    <script src="../../js/modules/stock/report.js"></script>
+</body>
+</html> 

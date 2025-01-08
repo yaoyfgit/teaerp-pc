@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>物料需求计划 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/modules/production.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-industry"></i>
+                    <span>生产管理</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-boxes"></i>
+                    <span>物料需求计划</span>
+                </div>
+
+                <!-- 物料统计 -->
+                <div class="standard-card">
+                    <div class="overview-grid">
+                        <div class="overview-item">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <div class="info">
+                                <h4>待采购物料</h4>
+                                <div class="number">15<span class="unit">种</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item">
+                            <i class="fas fa-truck-loading"></i>
+                            <div class="info">
+                                <h4>在途物料</h4>
+                                <div class="number">8<span class="unit">种</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item">
+                            <i class="fas fa-warehouse"></i>
+                            <div class="info">
+                                <h4>库存不足</h4>
+                                <div class="number">5<span class="unit">种</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item">
+                            <i class="fas fa-check-double"></i>
+                            <div class="info">
+                                <h4>库存充足</h4>
+                                <div class="number">42<span class="unit">种</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 物料需求列表 -->
+                <div class="standard-card">
+                    <div class="standard-card-header">
+                        <h3><i class="fas fa-list"></i> 物料需求列表</h3>
+                        <div class="action-bar">
+                            <div class="search-group">
+                                <input type="text" class="standard-input" placeholder="物料编码/名称">
+                                <select class="standard-select">
+                                    <option value="">物料类型</option>
+                                    <option value="raw">原材料</option>
+                                    <option value="auxiliary">辅料</option>
+                                    <option value="packing">包装材料</option>
+                                </select>
+                                <select class="standard-select">
+                                    <option value="">需求状态</option>
+                                    <option value="urgent">紧急</option>
+                                    <option value="normal">正常</option>
+                                    <option value="sufficient">充足</option>
+                                </select>
+                                <div class="date-range-group">
+                                    <input type="date" class="standard-input" placeholder="开始日期">
+                                    <span class="separator">至</span>
+                                    <input type="date" class="standard-input" placeholder="结束日期">
+                                </div>
+                                <button class="standard-button primary" onclick="searchMaterials()">
+                                    <i class="fas fa-search"></i> 查询
+                                </button>
+                                <button class="standard-button primary" onclick="runMRP()">
+                                    <i class="fas fa-calculator"></i> MRP运算
+                                </button>
+                                <button class="standard-button" onclick="exportMRP()">
+                                    <i class="fas fa-file-export"></i> 导出
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="standard-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>物料编码</th>
+                                    <th>物料名称</th>
+                                    <th>规格型号</th>
+                                    <th>物料类型</th>
+                                    <th>需求数量</th>
+                                    <th>库存数量</th>
+                                    <th>在途数量</th>
+                                    <th>缺口数量</th>
+                                    <th>需求状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="materialTable">
+                                <!-- 示例数据 -->
+                                <tr>
+                                    <td>M202403200001</td>
+                                    <td>茶叶原料A</td>
+                                    <td>特级</td>
+                                    <td>原材料</td>
+                                    <td>1000</td>
+                                    <td>300</td>
+                                    <td>500</td>
+                                    <td>200</td>
+                                    <td><span class="status urgent">紧急</span></td>
+                                    <td>
+                                        <button class="button-link" onclick="viewMaterial('M202403200001')">查看</button>
+                                        <button class="button-link" onclick="createPurchase('M202403200001')">生成采购</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="standard-pagination" id="pagination"></div>
+                    </div>
+                </div>
+
+                <!-- MRP参数设置 -->
+                <div class="standard-card">
+                    <div class="standard-card-header">
+                        <h3><i class="fas fa-cog"></i> MRP参数设置</h3>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>安全库存系数</label>
+                            <input type="number" class="form-control" value="1.2" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label>提前期（天）</label>
+                            <input type="number" class="form-control" value="7">
+                        </div>
+                        <div class="form-group">
+                            <label>批量规则</label>
+                            <select class="form-control">
+                                <option value="lot">固定批量</option>
+                                <option value="period">固定周期</option>
+                                <option value="min">最小批量</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>计算周期</label>
+                            <select class="form-control">
+                                <option value="day">按天</option>
+                                <option value="week">按周</option>
+                                <option value="month">按月</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/app.js"></script>
+    <script src="../../../js/modules/production/material-plan.js"></script>
+</body>
+</html> 

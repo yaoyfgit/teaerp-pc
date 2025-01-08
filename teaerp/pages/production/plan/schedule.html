@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生产调度 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/modules/production.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-industry"></i>
+                    <span>生产管理</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>生产调度</span>
+                </div>
+
+                <!-- 调度统计 -->
+                <div class="standard-card">
+                    <div class="overview-grid">
+                        <div class="overview-item">
+                            <i class="fas fa-tasks"></i>
+                            <div class="info">
+                                <h4>待调度任务</h4>
+                                <div class="number">10<span class="unit">个</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item">
+                            <i class="fas fa-users"></i>
+                            <div class="info">
+                                <h4>可用人员</h4>
+                                <div class="number">45<span class="unit">人</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item">
+                            <i class="fas fa-cogs"></i>
+                            <div class="info">
+                                <h4>可用设备</h4>
+                                <div class="number">8<span class="unit">台</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item">
+                            <i class="fas fa-clock"></i>
+                            <div class="info">
+                                <h4>平均工时</h4>
+                                <div class="number">6.5<span class="unit">小时</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 调度列表 -->
+                <div class="standard-card">
+                    <div class="standard-card-header">
+                        <h3><i class="fas fa-list"></i> 调度列表</h3>
+                        <div class="action-bar">
+                            <div class="search-group">
+                                <input type="text" class="standard-input" placeholder="任务编号/名称">
+                                <select class="standard-select">
+                                    <option value="">任务类型</option>
+                                    <option value="production">生产任务</option>
+                                    <option value="maintenance">设备维护</option>
+                                    <option value="quality">质量检验</option>
+                                </select>
+                                <select class="standard-select">
+                                    <option value="">优先级</option>
+                                    <option value="high">高</option>
+                                    <option value="medium">中</option>
+                                    <option value="low">低</option>
+                                </select>
+                                <select class="standard-select">
+                                    <option value="">调度状态</option>
+                                    <option value="pending">待调度</option>
+                                    <option value="scheduled">已调度</option>
+                                    <option value="executing">执行中</option>
+                                    <option value="completed">已完成</option>
+                                </select>
+                                <div class="date-range-group">
+                                    <input type="date" class="standard-input" placeholder="开始日期">
+                                    <span class="separator">至</span>
+                                    <input type="date" class="standard-input" placeholder="结束日期">
+                                </div>
+                                <button class="standard-button primary" onclick="searchSchedule()">
+                                    <i class="fas fa-search"></i> 查询
+                                </button>
+                                <button class="standard-button primary" onclick="showScheduleModal()">
+                                    <i class="fas fa-plus"></i> 新建调度
+                                </button>
+                                <button class="standard-button" onclick="exportSchedule()">
+                                    <i class="fas fa-file-export"></i> 导出
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="standard-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>任务编号</th>
+                                    <th>任务名称</th>
+                                    <th>任务类型</th>
+                                    <th>优先级</th>
+                                    <th>计划开始</th>
+                                    <th>计划结束</th>
+                                    <th>负责人</th>
+                                    <th>所需设备</th>
+                                    <th>调度状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="scheduleTable">
+                                <!-- 示例数据 -->
+                                <tr>
+                                    <td>TS202403200001</td>
+                                    <td>茶叶加工任务A</td>
+                                    <td>生产任务</td>
+                                    <td><span class="priority high">高</span></td>
+                                    <td>2024-03-20 08:00</td>
+                                    <td>2024-03-20 17:00</td>
+                                    <td>张三</td>
+                                    <td>加工设备01</td>
+                                    <td><span class="status executing">执行中</span></td>
+                                    <td>
+                                        <button class="button-link" onclick="viewSchedule('TS202403200001')">查看</button>
+                                        <button class="button-link" onclick="editSchedule('TS202403200001')">编辑</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="standard-pagination" id="pagination"></div>
+                    </div>
+                </div>
+
+                <!-- 资源日历 -->
+                <div class="standard-card">
+                    <div class="standard-card-header">
+                        <h3><i class="fas fa-calendar"></i> 资源日历</h3>
+                    </div>
+                    <div class="calendar-container">
+                        <!-- 日历内容将由JavaScript动态生成 -->
+                        <div id="resourceCalendar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/app.js"></script>
+    <script src="../../../js/modules/production/schedule.js"></script>
+</body>
+</html> 

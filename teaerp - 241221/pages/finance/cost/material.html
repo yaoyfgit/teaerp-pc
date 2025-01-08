@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>直接材料成本 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/modules/finance.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb">
+                <span>财务管理</span>
+                <span class="separator">/</span>
+                <span>成本管理</span>
+                <span class="separator">/</span>
+                <span>直接材料</span>
+            </div>
+
+            <!-- 材料领用 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>材料领用</h3>
+                    <div class="card-tools">
+                        <button class="button" onclick="showMaterialModal()">新增领用</button>
+                        <button class="button" onclick="batchConfirm()">批量确认</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="search-bar">
+                        <div class="form-group">
+                            <label>材料类型</label>
+                            <select class="form-control">
+                                <option value="">全部</option>
+                                <option value="raw">原料</option>
+                                <option value="auxiliary">辅料</option>
+                                <option value="package">包装材料</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>领用部门</label>
+                            <select class="form-control">
+                                <option value="">全部</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>日期范围</label>
+                            <input type="date" class="form-control">
+                            <span>至</span>
+                            <input type="date" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>状态</label>
+                            <select class="form-control">
+                                <option value="">全部</option>
+                                <option value="pending">待确认</option>
+                                <option value="confirmed">已确认</option>
+                                <option value="rejected">已驳回</option>
+                            </select>
+                        </div>
+                        <button class="button" onclick="searchMaterials()">搜索</button>
+                    </div>
+
+                    <div class="data-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" onclick="toggleSelectAll(this)"></th>
+                                    <th>领用单号</th>
+                                    <th>材料类型</th>
+                                    <th>材料名称</th>
+                                    <th>领用数量</th>
+                                    <th>单价</th>
+                                    <th>金额</th>
+                                    <th>领用部门</th>
+                                    <th>领用日期</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="materialTable"></tbody>
+                        </table>
+                    </div>
+                    <div class="pagination" id="pagination"></div>
+                </div>
+            </div>
+
+            <!-- 材料退库 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>材料退库</h3>
+                    <div class="card-tools">
+                        <button class="button" onclick="showReturnModal()">新增退库</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="data-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>退库单号</th>
+                                    <th>材料类型</th>
+                                    <th>材料名称</th>
+                                    <th>退库数量</th>
+                                    <th>单价</th>
+                                    <th>金额</th>
+                                    <th>退库原因</th>
+                                    <th>退库日期</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="returnTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 材料损耗 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>材料损耗</h3>
+                    <div class="card-tools">
+                        <button class="button" onclick="showLossModal()">新增损耗</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="data-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>损耗单号</th>
+                                    <th>材料类型</th>
+                                    <th>材料名称</th>
+                                    <th>损耗数量</th>
+                                    <th>单价</th>
+                                    <th>金额</th>
+                                    <th>损耗类型</th>
+                                    <th>损耗原因</th>
+                                    <th>发生日期</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lossTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 成本分析 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>成本分析</h3>
+                </div>
+                <div class="card-body">
+                    <div class="analysis-grid">
+                        <div class="analysis-card">
+                            <h4>材料成本趋势</h4>
+                            <div id="trendChart" class="chart"></div>
+                        </div>
+                        <div class="analysis-card">
+                            <h4>材料成本构成</h4>
+                            <div id="structureChart" class="chart"></div>
+                        </div>
+                        <div class="analysis-card">
+                            <h4>材料损耗��析</h4>
+                            <div id="lossChart" class="chart"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 材料领用弹窗 -->
+    <div class="modal" id="materialModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>材料领用</h3>
+                <button class="close-btn" onclick="hideModal('materialModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="materialForm" class="form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>材料类型</label>
+                            <select class="form-control" name="type" required>
+                                <option value="raw">原料</option>
+                                <option value="auxiliary">辅料</option>
+                                <option value="package">包装材料</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>材料名称</label>
+                            <select class="form-control" name="material" required>
+                                <option value="">请选择材料</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>领用数量</label>
+                            <input type="number" class="form-control" name="quantity" required>
+                        </div>
+                        <div class="form-group">
+                            <label>领用部门</label>
+                            <select class="form-control" name="department" required>
+                                <option value="">请选择部门</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>领用日期</label>
+                            <input type="date" class="form-control" name="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label>用途说明</label>
+                            <textarea class="form-control" name="purpose" rows="3"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideModal('materialModal')">取消</button>
+                <button class="button" onclick="saveMaterial()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 材料退库弹窗 -->
+    <div class="modal" id="returnModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>材料退库</h3>
+                <button class="close-btn" onclick="hideModal('returnModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="returnForm" class="form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>材料类型</label>
+                            <select class="form-control" name="type" required>
+                                <option value="raw">原料</option>
+                                <option value="auxiliary">辅料</option>
+                                <option value="package">包装材料</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>材料名称</label>
+                            <select class="form-control" name="material" required>
+                                <option value="">请选择材料</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>退库数量</label>
+                            <input type="number" class="form-control" name="quantity" required>
+                        </div>
+                        <div class="form-group">
+                            <label>退库日期</label>
+                            <input type="date" class="form-control" name="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label>退库原因</label>
+                            <textarea class="form-control" name="reason" rows="3" required></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideModal('returnModal')">取消</button>
+                <button class="button" onclick="saveReturn()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 材料损耗弹窗 -->
+    <div class="modal" id="lossModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>材料损耗</h3>
+                <button class="close-btn" onclick="hideModal('lossModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="lossForm" class="form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>材料类型</label>
+                            <select class="form-control" name="type" required>
+                                <option value="raw">原料</option>
+                                <option value="auxiliary">辅料</option>
+                                <option value="package">包装材料</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>材料名称</label>
+                            <select class="form-control" name="material" required>
+                                <option value="">请选择材料</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>损耗数量</label>
+                            <input type="number" class="form-control" name="quantity" required>
+                        </div>
+                        <div class="form-group">
+                            <label>损耗类型</label>
+                            <select class="form-control" name="lossType" required>
+                                <option value="normal">正常损耗</option>
+                                <option value="quality">质量问题</option>
+                                <option value="process">工艺损耗</option>
+                                <option value="other">其他损耗</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>发生日期</label>
+                            <input type="date" class="form-control" name="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label>损耗原因</label>
+                            <textarea class="form-control" name="reason" rows="3" required></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideModal('lossModal')">取消</button>
+                <button class="button" onclick="saveLoss()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="../../../js/common.js"></script>
+    <script src="../../../js/modules/finance/material-cost.js"></script>
+</body>
+</html> 

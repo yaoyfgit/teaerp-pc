@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成本标准 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../../../../css/common.css">
+    <link rel="stylesheet" href="../../../../../../css/layout.css">
+    <link rel="stylesheet" href="../../../../../../css/modules/finance.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb">
+                <span>财务管理</span>
+                <span class="separator">/</span>
+                <span>成本分析</span>
+                <span class="separator">/</span>
+                <span>产品成本分析</span>
+                <span class="separator">/</span>
+                <span>成本标准</span>
+            </div>
+
+            <!-- 标准列表 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>成本标准</h3>
+                    <div class="card-tools">
+                        <button class="button" onclick="showModal('standardModal')">
+                            <i class="fas fa-plus"></i> 新增标准
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="search-bar">
+                        <div class="form-group">
+                            <label>产品类别</label>
+                            <select class="form-control" id="productCategory">
+                                <option value="">全部</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>成本类型</label>
+                            <select class="form-control" id="costType">
+                                <option value="">全部</option>
+                                <option value="material">材料成本</option>
+                                <option value="labor">人工成本</option>
+                                <option value="manufacturing">制造费用</option>
+                            </select>
+                        </div>
+                        <button class="button" onclick="searchStandards()">
+                            <i class="fas fa-search"></i> 搜索
+                        </button>
+                    </div>
+                    <div id="standardTable"></div>
+                    <div id="pagination"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 标准编辑弹窗 -->
+    <div class="modal" id="standardModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>成本标准</h3>
+                <button class="close-btn" onclick="hideModal('standardModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="standardForm">
+                    <div class="form-group">
+                        <label>产品类别</label>
+                        <select class="form-control" name="categoryId" required>
+                            <option value="">请选择</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>成本类型</label>
+                        <select class="form-control" name="costType" required>
+                            <option value="material">材料成本</option>
+                            <option value="labor">人工成本</option>
+                            <option value="manufacturing">制造费用</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>标准值</label>
+                        <input type="number" class="form-control" name="value" required>
+                    </div>
+                    <div class="form-group">
+                        <label>计量单位</label>
+                        <input type="text" class="form-control" name="unit" required>
+                    </div>
+                    <div class="form-group">
+                        <label>备注说明</label>
+                        <textarea class="form-control" name="remark" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideModal('standardModal')">取消</button>
+                <button class="button" onclick="saveStandard()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../../../../js/common.js"></script>
+    <script src="../../../../../../js/modules/finance/cost/analysis/product/standard.js"></script>
+</body>
+</html> 

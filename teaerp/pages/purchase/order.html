@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>采购订单 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/menu.css">
+    <style>
+        /* 统计卡片样式 */
+        .statistics-cards {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .statistics-card {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            background: linear-gradient(135deg, #f6f8fc 0%, #f0f4f8 100%);
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border-left: 4px solid #8fd4d2;
+        }
+
+        .statistics-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(135deg, #f0f4f8 0%, #e9eff5 100%);
+        }
+
+        .statistics-card i {
+            font-size: 24px;
+            margin-right: 12px;
+            color: #8fd4d2;
+        }
+
+        .statistics-content {
+            flex: 1;
+        }
+
+        .stat-title {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* 工具栏样式 */
+        .toolbar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+            background: #fff;
+            padding: 16px;
+            border-radius: 4px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-input {
+            width: 300px;
+            margin-right: 8px;
+        }
+
+        .toolbar-divider {
+            width: 1px;
+            height: 24px;
+            background-color: #dcdfe6;
+            margin: 0 8px;
+        }
+
+        .button-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* 表格样式 */
+        .standard-table td,
+        .standard-table th {
+            vertical-align: middle;
+            text-align: left;
+            padding: 12px 16px;
+        }
+
+        .standard-table th.text-right,
+        .standard-table td.text-right {
+            text-align: right;
+        }
+
+        .standard-table th.text-center,
+        .standard-table td.text-center {
+            text-align: center;
+        }
+
+        /* 状态标签样式 */
+        .status-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: #fff;
+        }
+
+        .status-badge.draft {
+            background-color: #909399;
+        }
+
+        .status-badge.pending {
+            background-color: #e6a23c;
+        }
+
+        .status-badge.approved {
+            background-color: #67c23a;
+        }
+
+        .status-badge.rejected {
+            background-color: #f56c6c;
+        }
+
+        .status-badge.completed {
+            background-color: #409EFF;
+        }
+
+        /* 金额单元格样式 */
+        .amount-cell {
+            text-align: right;
+            font-family: Monaco, Consolas, monospace;
+        }
+
+        /* 弹窗样式 */
+        .dialog-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .dialog {
+            width: 800px;
+            max-width: 90%;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .dialog-header {
+            padding: 16px;
+            border-bottom: 1px solid #dcdfe6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dialog-header h3 {
+            margin: 0;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .close-button {
+            border: none;
+            background: none;
+            cursor: pointer;
+            color: #909399;
+        }
+
+        .dialog-content {
+            padding: 16px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .dialog-footer {
+            padding: 16px;
+            border-top: 1px solid #dcdfe6;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #606266;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .form-row .form-group:last-child {
+            margin-right: 0;
+        }
+
+        .table-container {
+            margin-bottom: 8px;
+            overflow-x: auto;
+        }
+
+        .standard-table {
+            min-width: 800px;
+        }
+
+        .standard-table td {
+            white-space: nowrap;
+        }
+
+        .standard-table input,
+        .standard-table select {
+            min-width: 120px;
+        }
+
+        .link-button {
+            color: #409EFF;
+            text-decoration: underline;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            font: inherit;
+        }
+
+        .link-button:hover {
+            color: #66b1ff;
+        }
+
+        .demand-list {
+            margin-top: 8px;
+            padding: 8px;
+            background: #f5f7fa;
+            border-radius: 4px;
+        }
+
+        .demand-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 0;
+        }
+
+        .demand-item .remove-btn {
+            color: #f56c6c;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>采购管理</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-file-invoice"></i>
+                    <span>采购订单</span>
+                </div>
+
+                <!-- 统计卡片 -->
+                <div class="statistics-cards">
+                    <div class="statistics-card">
+                        <i class="fas fa-file-invoice"></i>
+                        <div class="statistics-content">
+                            <div class="stat-title">本月订单总数</div>
+                            <div class="stat-value">156</div>
+                        </div>
+                    </div>
+                    <div class="statistics-card">
+                        <i class="fas fa-yen-sign"></i>
+                        <div class="statistics-content">
+                            <div class="stat-title">采购总金额</div>
+                            <div class="stat-value">¥568,234</div>
+                        </div>
+                    </div>
+                    <div class="statistics-card">
+                        <i class="fas fa-clock"></i>
+                        <div class="statistics-content">
+                            <div class="stat-title">待审批</div>
+                            <div class="stat-value">18</div>
+                        </div>
+                    </div>
+                    <div class="statistics-card">
+                        <i class="fas fa-truck"></i>
+                        <div class="statistics-content">
+                            <div class="stat-title">待收货</div>
+                            <div class="stat-value">32</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 工具栏 -->
+                <div class="toolbar">
+                    <div class="search-box">
+                        <input type="text" class="standard-input search-input" placeholder="搜索订单号/供应商">
+                        <button class="standard-button primary">
+                            <i class="fas fa-search"></i>
+                            查询
+                        </button>
+                        <div class="toolbar-divider"></div>
+                        <div class="button-group">
+                            <button class="standard-button primary" onclick="showAddOrderDialog()">
+                                <i class="fas fa-plus"></i>
+                                新增订单
+                            </button>
+                            <button class="standard-button">
+                                <i class="fas fa-file-export"></i>
+                                导出
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 数据表格 -->
+                <div class="table-container">
+                    <table class="standard-table">
+                        <thead>
+                            <tr>
+                                <th>订单号</th>
+                                <th>供应商</th>
+                                <th class="text-right">订单金额</th>
+                                <th>采购员</th>
+                                <th>创建日期</th>
+                                <th>预计到货日期</th>
+                                <th class="text-center">状态</th>
+                                <th class="text-center">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>PO202401010001</td>
+                                <td>杭州茶叶有限公司</td>
+                                <td class="text-right amount-cell">¥125,800.00</td>
+                                <td>张三</td>
+                                <td>2024-01-01</td>
+                                <td>2024-01-10</td>
+                                <td class="text-center"><span class="status-badge pending">待审批</span></td>
+                                <td class="text-center">
+                                    <div class="button-group">
+                                        <button class="standard-button small">查看</button>
+                                        <button class="standard-button small">编辑</button>
+                                        <button class="standard-button small danger">删除</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>PO202401010002</td>
+                                <td>苏州茶具制造厂</td>
+                                <td class="text-right amount-cell">¥86,500.00</td>
+                                <td>李四</td>
+                                <td>2024-01-01</td>
+                                <td>2024-01-15</td>
+                                <td class="text-center"><span class="status-badge approved">已审批</span></td>
+                                <td class="text-center">
+                                    <div class="button-group">
+                                        <button class="standard-button small">查看</button>
+                                        <button class="standard-button small">收货</button>
+                                        <button class="standard-button small">打印</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 初始化菜单
+            Menu.renderMenu();
+            // 初始化菜单切换功能
+            initMenuToggle();
+        });
+
+        // 显示新增订单弹窗
+        function showAddOrderDialog() {
+            // 创建弹窗容器
+            const dialog = document.createElement('div');
+            dialog.className = 'dialog-overlay';
+            dialog.innerHTML = `
+                <div class="dialog">
+                    <div class="dialog-header">
+                        <h3>新增订单</h3>
+                        <button class="close-button" onclick="this.closest('.dialog-overlay').remove()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="dialog-content">
+                        <form id="addOrderForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>供应商</label>
+                                    <select class="standard-select" required>
+                                        <option value="">请选择供应商</option>
+                                        <option value="1">杭州茶叶有限公司</option>
+                                        <option value="2">苏州茶具制造厂</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>采购员</label>
+                                    <input type="text" class="standard-input" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>预计到货日期</label>
+                                    <input type="date" class="standard-input" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>联系电话</label>
+                                    <input type="tel" class="standard-input">
+                                </div>
+                                <div class="form-group">
+                                    <label>付款方式</label>
+                                    <select class="standard-select" required>
+                                        <option value="cash">现金</option>
+                                        <option value="credit">账期</option>
+                                        <option value="transfer">转账</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>币种</label>
+                                    <select class="standard-select" required>
+                                        <option value="CNY">人民币</option>
+                                        <option value="USD">美元</option>
+                                        <option value="EUR">欧元</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group" style="flex: 2;">
+                                    <label>备注</label>
+                                    <textarea class="standard-input" rows="2"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>关联需求</label>
+                                <button type="button" class="link-button" onclick="showDemandSelector()">
+                                    <i class="fas fa-plus"></i> 选择需求单
+                                </button>
+                                <div class="demand-list" id="selectedDemands">
+                                    <!-- 已选择的需求单会显示在这里 -->
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>订单明细</label>
+                                <div class="table-container">
+                                    <table class="standard-table">
+                                        <thead>
+                                            <tr>
+                                                <th>物料名称</th>
+                                                <th>规格型号</th>
+                                                <th>采购数量</th>
+                                                <th>单价</th>
+                                                <th>金额</th>
+                                                <th>需求单号</th>
+                                                <th>操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <select class="standard-select" required>
+                                                        <option value="">选择物料</option>
+                                                        <option value="1">特级碧螺春</option>
+                                                        <option value="2">特级龙井</option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="standard-input" readonly>
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="standard-input" min="1" required>
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="standard-input" step="0.01" required>
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="standard-input" readonly>
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="standard-input" readonly>
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="standard-button small danger">删除</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <button type="button" class="standard-button" onclick="addOrderItem()">
+                                    <i class="fas fa-plus"></i> 添加明细
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="dialog-footer">
+                        <button class="standard-button" onclick="this.closest('.dialog-overlay').remove()">取消</button>
+                        <button class="standard-button primary" onclick="submitAddOrder()">确定</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(dialog);
+        }
+
+        // 显示需求单选择器
+        function showDemandSelector() {
+            // 创建需求单选择弹窗
+            const dialog = document.createElement('div');
+            dialog.className = 'dialog-overlay';
+            dialog.innerHTML = `
+                <div class="dialog">
+                    <div class="dialog-header">
+                        <h3>选择需求单</h3>
+                        <button class="close-button" onclick="this.closest('.dialog-overlay').remove()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="dialog-content">
+                        <div class="table-container">
+                            <table class="standard-table">
+                                <thead>
+                                    <tr>
+                                        <th>选择</th>
+                                        <th>需求单号</th>
+                                        <th>物料名称</th>
+                                        <th>需求数量</th>
+                                        <th>需求部门</th>
+                                        <th>申请人</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><input type="checkbox"></td>
+                                        <td>PR202401010001</td>
+                                        <td>特级碧螺春</td>
+                                        <td>100</td>
+                                        <td>生产部</td>
+                                        <td>张三</td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox"></td>
+                                        <td>PR202401010002</td>
+                                        <td>特级龙井</td>
+                                        <td>150</td>
+                                        <td>生产部</td>
+                                        <td>李四</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="dialog-footer">
+                        <button class="standard-button" onclick="this.closest('.dialog-overlay').remove()">取消</button>
+                        <button class="standard-button primary" onclick="confirmSelectedDemands()">确定</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(dialog);
+        }
+
+        // 确认选择的需求单
+        function confirmSelectedDemands() {
+            // 获取选中的需求单
+            const selectedDemands = [];
+            document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
+                const row = checkbox.closest('tr');
+                selectedDemands.push({
+                    id: row.cells[1].textContent,
+                    material: row.cells[2].textContent,
+                    quantity: row.cells[3].textContent,
+                    department: row.cells[4].textContent,
+                    applicant: row.cells[5].textContent
+                });
+            });
+
+            // 添加到已选择列表
+            const demandList = document.getElementById('selectedDemands');
+            selectedDemands.forEach(demand => {
+                const demandItem = document.createElement('div');
+                demandItem.className = 'demand-item';
+                demandItem.innerHTML = `
+                    <span>${demand.id} - ${demand.material} (${demand.quantity})</span>
+                    <i class="fas fa-times remove-btn" onclick="this.closest('.demand-item').remove()"></i>
+                `;
+                demandList.appendChild(demandItem);
+            });
+
+            // 关闭选择弹窗
+            document.querySelector('.dialog-overlay:last-child').remove();
+        }
+
+        // 添加订单明细行
+        function addOrderItem() {
+            const tbody = document.querySelector('#addOrderForm table tbody');
+            const newRow = tbody.insertRow();
+            newRow.innerHTML = `
+                <td>
+                    <select class="standard-select" required>
+                        <option value="">选择物料</option>
+                        <option value="1">特级碧螺春</option>
+                        <option value="2">特级龙井</option>
+                    </select>
+                </td>
+                <td>
+                    <input type="text" class="standard-input" readonly>
+                </td>
+                <td>
+                    <input type="number" class="standard-input" min="1" required>
+                </td>
+                <td>
+                    <input type="number" class="standard-input" step="0.01" required>
+                </td>
+                <td>
+                    <input type="text" class="standard-input" readonly>
+                </td>
+                <td>
+                    <button type="button" class="standard-button small danger">删除</button>
+                </td>
+            `;
+        }
+
+        // 提交新增订单
+        function submitAddOrder() {
+            // TODO: 实现提交逻辑
+            alert('订单提交成功！');
+            document.querySelector('.dialog-overlay').remove();
+        }
+    </script>
+</body>
+</html>

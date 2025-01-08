@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生产分析报告 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/modules/production.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 左侧菜单 -->
+        <aside class="main-sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <img src="../../../assets/images/logo.png" alt="TeaERP Logo">
+                    <span>TeaERP</span>
+                </div>
+            </div>
+            <div class="sidebar-menu">
+                <ul class="menu-list">
+                    <li class="menu-item">
+                        <a href="../../../index.html">
+                            <i class="fas fa-home"></i>
+                            <span>首页</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="../../stock/stock-warning.html">
+                            <i class="fas fa-boxes"></i>
+                            <span>库存管理</span>
+                        </a>
+                    </li>
+                    <li class="menu-item active">
+                        <a href="../report/daily.html">
+                            <i class="fas fa-industry"></i>
+                            <span>生产管理</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="../../purchase/order.html">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>采购管理</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="../../sales/order.html">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span>销售管理</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="../../finance/expense.html">
+                            <i class="fas fa-money-bill"></i>
+                            <span>财务管理</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="../../hr/employee.html">
+                            <i class="fas fa-users"></i>
+                            <span>人事管理</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="../../settings/company.html">
+                            <i class="fas fa-cog"></i>
+                            <span>系统设置</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <div class="main-content">
+            <!-- 顶部导航栏 -->
+            <header class="main-header">
+                <div class="nav-left">
+                    <button class="menu-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+                <div class="nav-right">
+                    <div class="user-info">
+                        <img src="../../../assets/images/avatar.jpg" alt="User Avatar" class="avatar">
+                        <span class="username">管理员</span>
+                    </div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-bell"></i>
+                            <span class="badge">3</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </a>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content">
+            <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right separator"></i>
+                <i class="fas fa-industry"></i>
+                <span>生产管理</span>
+                <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-chart-line"></i>
+                    <span>生产分析</span>
+                <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-file-alt"></i>
+                    <span>分析报告</span>
+            </div>
+
+            <div class="standard-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-chart-bar"></i> 报表选择</h3>
+                </div>
+                <div class="card-body">
+                    <div class="standard-tabs">
+                        <div class="tab-header">
+                            <span class="tab-item active" data-tab="daily"><i class="fas fa-calendar-day"></i> 生产日报</span>
+                            <span class="tab-item" data-tab="monthly"><i class="fas fa-calendar-alt"></i> 生产月报</span>
+                            <span class="tab-item" data-tab="yearly"><i class="fas fa-calendar"></i> 生产年报</span>
+                            <span class="tab-item" data-tab="abnormal"><i class="fas fa-exclamation-triangle"></i> 异常分析</span>
+                        </div>
+                        <div class="tab-content">
+                            <!-- 生产日报 -->
+                            <div class="tab-pane active" id="dailyReport">
+                                <div class="search-bar standard-form">
+                                    <div class="form-group">
+                                        <label><i class="fas fa-calendar"></i> 日期</label>
+                                        <input type="date" class="standard-input" onchange="loadDailyReport(this.value)">
+                                    </div>
+                                    <button class="standard-button" onclick="exportDailyReport()"><i class="fas fa-download"></i> 导出</button>
+                                </div>
+                                <div class="report-content">
+                                    <div class="report-section">
+                                        <h4>当日生产情况</h4>
+                                        <div class="data-table">
+                                            <table>
+                                                <thead>
+                                                    <tr>
+                                                        <th>产品</th>
+                                                        <th>计划产量</th>
+                                                        <th>实际产量</th>
+                                                        <th>完成率</th>
+                                                        <th>合格率</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="dailyProductionTable"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="report-section">
+                                        <h4>当日异常问题</h4>
+                                        <div class="issue-list" id="dailyIssueList"></div>
+                                    </div>
+                                    <div class="report-section">
+                                        <h4>当日解决方案</h4>
+                                        <div class="solution-list" id="dailySolutionList"></div>
+                                    </div>
+                                    <div class="report-section">
+                                        <h4>次日生产计划</h4>
+                                        <div class="plan-list" id="nextDayPlanList"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 生产月报 -->
+                            <div class="tab-pane" id="monthlyReport">
+                                <div class="search-bar standard-form">
+                                    <div class="form-group">
+                                        <label><i class="fas fa-calendar-alt"></i> 月份</label>
+                                        <input type="month" class="standard-input" onchange="loadMonthlyReport(this.value)">
+                                    </div>
+                                    <button class="standard-button" onclick="exportMonthlyReport()"><i class="fas fa-download"></i> 导出</button>
+                                </div>
+                                <div class="report-content">
+                                    <div class="report-section">
+                                        <h4>月度生产总结</h4>
+                                        <div id="monthlyProductionChart" class="chart"></div>
+                                    </div>
+                                    <div class="report-section">
+                                        <h4>月度问题分析</h4>
+                                        <div id="monthlyIssueChart" class="chart"></div>
+                                    </div>
+                                    <div class="report-section">
+                                        <h4>月度改进措施</h4>
+                                        <div class="improvement-list" id="monthlyImprovementList"></div>
+                                    </div>
+                                    <div class="report-section">
+                                        <h4>下月生产计划</h4>
+                                        <div class="plan-list" id="nextMonthPlanList"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 生产年报 -->
+                            <div class="tab-pane" id="yearlyReport">
+                                <div class="search-bar standard-form">
+                                    <div class="form-group">
+                                        <label><i class="fas fa-calendar"></i> 年份</label>
+                                        <select class="standard-input" onchange="loadYearlyReport(this.value)">
+                                            <option value="2024">2024年</option>
+                                            <option value="2023">2023年</option>
+                                        </select>
+                                    </div>
+                                    <button class="standard-button" onclick="exportYearlyReport()"><i class="fas fa-download"></i> 导出</button>
+                                </div>
+                                <div class="report-content">
+                                    <div class="report-section">
+                                        <h4>年度生产总结</h4>
+                                        <div id="yearlyProductionChart" class="chart"></div>
+                                    </div>
+                                    <div class="report-section">
+                                        <h4>年度绩效分析</h4>
+                                        <div id="yearlyPerformanceChart" class="chart"></div>
+                                    </div>
+                                    <div class="report-section">
+                                        <h4>年度经验总结</h4>
+                                        <div class="experience-list" id="yearlyExperienceList"></div>
+                                    </div>
+                                    <div class="report-section">
+                                        <h4>下年度规划</h4>
+                                        <div class="plan-list" id="nextYearPlanList"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 异常分析 -->
+                            <div class="tab-pane" id="abnormalReport">
+                                <div class="search-bar standard-form">
+                                    <div class="form-group">
+                                        <label><i class="fas fa-calendar"></i> 时间范围</label>
+                                        <select class="standard-input" onchange="loadAbnormalReport(this.value)">
+                                            <option value="week">最近一周</option>
+                                            <option value="month">最近一月</option>
+                                            <option value="quarter">最近一季</option>
+                                            <option value="year">最近一年</option>
+                                        </select>
+                                    </div>
+                                    <button class="standard-button" onclick="exportAbnormalReport()"><i class="fas fa-download"></i> 导出</button>
+                                </div>
+                                <div class="report-content">
+                                    <div class="report-section">
+                                        <h4>异常类型分布</h4>
+                                        <div id="abnormalTypeChart" class="chart"></div>
+                                    </div>
+                                    <div class="report-section">
+                                        <h4>异常原因分析</h4>
+                                        <div id="abnormalReasonChart" class="chart"></div>
+                                    </div>
+                                    <div class="report-section">
+                                        <h4>异常处理情况</h4>
+                                        <div id="abnormalHandlingChart" class="chart"></div>
+                                    </div>
+                                    <div class="report-section">
+                                        <h4>改进措施追踪</h4>
+                                        <div class="improvement-tracking" id="abnormalImprovementList"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="../../../js/common.js"></script>
+    <script src="../../../js/modules/production/report.js"></script>
+    <script src="../../../js/app.js"></script>
+    <script>
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', () => {
+            // 初始化菜单
+            Menu.renderMenu();
+            // 初始化菜单切换功能
+            initMenuToggle();
+        });
+    </script>
+</body>
+</html> 

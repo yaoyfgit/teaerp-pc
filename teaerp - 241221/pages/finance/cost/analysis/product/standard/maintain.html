@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>标准维护 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../../../../css/common.css">
+    <link rel="stylesheet" href="../../../../../../css/layout.css">
+    <link rel="stylesheet" href="../../../../../../css/modules/finance.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb">
+                <span>财务管理</span>
+                <span class="separator">/</span>
+                <span>成本分析</span>
+                <span class="separator">/</span>
+                <span>产品成本分析</span>
+                <span class="separator">/</span>
+                <span>标准维护</span>
+            </div>
+
+            <!-- 维护记录 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>维护记录</h3>
+                    <div class="card-tools">
+                        <button class="button" onclick="showModal('maintainModal')">
+                            <i class="fas fa-plus"></i> 新增维护
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="search-bar">
+                        <div class="form-group">
+                            <label>产品类别</label>
+                            <select class="form-control" id="productCategory">
+                                <option value="">全部</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>维护类型</label>
+                            <select class="form-control" id="maintainType">
+                                <option value="">全部</option>
+                                <option value="review">定期审核</option>
+                                <option value="update">数据更新</option>
+                                <option value="correct">错误修正</option>
+                            </select>
+                        </div>
+                        <button class="button" onclick="searchRecords()">
+                            <i class="fas fa-search"></i> 搜索
+                        </button>
+                    </div>
+                    <div id="maintainTable"></div>
+                    <div id="pagination"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 维护记录弹窗 -->
+    <div class="modal" id="maintainModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>维护记录</h3>
+                <button class="close-btn" onclick="hideModal('maintainModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="maintainForm">
+                    <div class="form-group">
+                        <label>产品类别</label>
+                        <select class="form-control" name="categoryId" required>
+                            <option value="">请选择</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>维护类型</label>
+                        <select class="form-control" name="type" required>
+                            <option value="review">定期审核</option>
+                            <option value="update">数据更新</option>
+                            <option value="correct">错误修正</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>维护内容</label>
+                        <textarea class="form-control" name="content" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>处理结果</label>
+                        <select class="form-control" name="result" required>
+                            <option value="normal">正常</option>
+                            <option value="warning">需要关注</option>
+                            <option value="error">存在问题</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>处理建议</label>
+                        <textarea class="form-control" name="suggestion" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideModal('maintainModal')">取消</button>
+                <button class="button" onclick="saveMaintain()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../../../../js/common.js"></script>
+    <script src="../../../../../../js/modules/finance/cost/analysis/product/maintain.js"></script>
+</body>
+</html> 

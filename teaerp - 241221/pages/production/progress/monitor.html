@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>进度监控 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/modules/production.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb">
+                <span>生产管理</span>
+                <span class="separator">/</span>
+                <span>生产进度管理</span>
+                <span class="separator">/</span>
+                <span>进度监控</span>
+            </div>
+
+            <!-- 状态概览 -->
+            <div class="status-overview">
+                <div class="status-card">
+                    <h3>总计划数</h3>
+                    <div class="number">12</div>
+                </div>
+                <div class="status-card">
+                    <h3>进行中</h3>
+                    <div class="number">5</div>
+                </div>
+                <div class="status-card warning">
+                    <h3>延期计划</h3>
+                    <div class="number">2</div>
+                </div>
+                <div class="status-card success">
+                    <h3>已完成</h3>
+                    <div class="number">5</div>
+                </div>
+            </div>
+
+            <!-- 进度图表 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>进度趋势</h3>
+                    <div class="card-tools">
+                        <select class="form-control">
+                            <option value="week">本周</option>
+                            <option value="month">本月</option>
+                            <option value="quarter">本季度</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="progressChart" class="chart"></div>
+                </div>
+            </div>
+
+            <!-- 延期预警 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>延期预警</h3>
+                </div>
+                <div class="data-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>计划编号</th>
+                                <th>计划名称</th>
+                                <th>计划类型</th>
+                                <th>原定完成时间</th>
+                                <th>预计完成时间</th>
+                                <th>延期天数</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="warningTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 调整计划弹窗 -->
+    <div class="modal" id="adjustModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>调整计划</h3>
+                <button class="close-btn" onclick="hideModal('adjustModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="adjustForm" class="form">
+                    <div class="form-group">
+                        <label>调��原因</label>
+                        <textarea class="form-control" name="reason" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>新完成时间</label>
+                        <input type="date" class="form-control" name="newEndDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>补救措施</label>
+                        <textarea class="form-control" name="measures" rows="3" required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideModal('adjustModal')">取消</button>
+                <button class="button" onclick="saveAdjustment()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="../../../js/common.js"></script>
+    <script src="../../../js/modules/production/monitor.js"></script>
+</body>
+</html> 

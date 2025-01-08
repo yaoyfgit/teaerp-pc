@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>标准制定 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../../../../css/common.css">
+    <link rel="stylesheet" href="../../../../../../css/layout.css">
+    <link rel="stylesheet" href="../../../../../../css/modules/finance.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb">
+                <span>财务管理</span>
+                <span class="separator">/</span>
+                <span>成本分析</span>
+                <span class="separator">/</span>
+                <span>产品成本分析</span>
+                <span class="separator">/</span>
+                <span>标准制定</span>
+            </div>
+
+            <!-- 标准制定表单 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>标准制定</h3>
+                </div>
+                <div class="card-body">
+                    <form id="formulateForm">
+                        <div class="form-section">
+                            <h4>基本信息</h4>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>产品类别</label>
+                                    <select class="form-control" name="categoryId" required>
+                                        <option value="">请选择</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>生效日期</label>
+                                    <input type="date" class="form-control" name="effectiveDate" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h4>材料成本</h4>
+                            <div class="cost-items" id="materialCosts">
+                                <div class="cost-item">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>材料名称</label>
+                                            <input type="text" class="form-control" name="materials[0].name" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>单价</label>
+                                            <input type="number" class="form-control" name="materials[0].price" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>用量</label>
+                                            <input type="number" class="form-control" name="materials[0].quantity" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>单位</label>
+                                            <input type="text" class="form-control" name="materials[0].unit" required>
+                                        </div>
+                                        <button type="button" class="button" onclick="addMaterialItem()">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h4>人工成本</h4>
+                            <div class="cost-items" id="laborCosts">
+                                <div class="cost-item">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>工序名称</label>
+                                            <input type="text" class="form-control" name="labors[0].name" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>工时单价</label>
+                                            <input type="number" class="form-control" name="labors[0].price" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>标准工时</label>
+                                            <input type="number" class="form-control" name="labors[0].hours" required>
+                                        </div>
+                                        <button type="button" class="button" onclick="addLaborItem()">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h4>制造费用</h4>
+                            <div class="cost-items" id="manufacturingCosts">
+                                <div class="cost-item">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>费用项目</label>
+                                            <input type="text" class="form-control" name="manufacturing[0].name" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>分配标准</label>
+                                            <input type="text" class="form-control" name="manufacturing[0].standard" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>分配金额</label>
+                                            <input type="number" class="form-control" name="manufacturing[0].amount" required>
+                                        </div>
+                                        <button type="button" class="button" onclick="addManufacturingItem()">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h4>制定说明</h4>
+                            <div class="form-group">
+                                <textarea class="form-control" name="remark" rows="3"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="button secondary" onclick="saveDraft()">保存草稿</button>
+                            <button type="submit" class="button">提交审核</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../../../../../js/common.js"></script>
+    <script src="../../../../../../js/modules/finance/cost/analysis/product/formulate.js"></script>
+</body>
+</html> 

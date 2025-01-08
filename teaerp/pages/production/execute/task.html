@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生产执行 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/modules/production.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-industry"></i>
+                    <span>生产管理</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-tasks"></i>
+                    <span>生产执行</span>
+                </div>
+
+                <div class="standard-card">
+                    <div class="standard-toolbar">
+                        <div class="search-group">
+                            <select class="standard-select">
+                                <option value="">工单类型</option>
+                                <option value="1">生产工单</option>
+                                <option value="2">返工工单</option>
+                                <option value="3">维修工单</option>
+                            </select>
+                            <select class="standard-select">
+                                <option value="">执行状态</option>
+                                <option value="1">待执行</option>
+                                <option value="2">执行中</option>
+                                <option value="3">已完成</option>
+                                <option value="4">已暂停</option>
+                            </select>
+                            <button class="standard-button primary" onclick="searchTasks()">
+                                <i class="fas fa-search"></i> 搜索
+                            </button>
+                            <div class="separator"></div>
+                            <button class="standard-button primary" onclick="showAddTaskModal()">
+                                <i class="fas fa-plus"></i> 新建任务
+                            </button>
+                            <button class="standard-button" onclick="exportTasks()">
+                                <i class="fas fa-file-export"></i> 导出
+                            </button>
+                        </div>
+                    </div>
+
+                    <table class="standard-table">
+                            <thead>
+                                <tr>
+                                <th>工单编号</th>
+                                <th>工单名称</th>
+                                <th>工单类型</th>
+                                <th>计划开始</th>
+                                <th>计划结束</th>
+                                <th>执行进度</th>
+                                    <th>状态</th>
+                                <th class="operation-column">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="taskTable"></tbody>
+                        </table>
+                    <div class="standard-pagination">
+                        <button class="standard-button"><i class="fas fa-chevron-left"></i></button>
+                        <button class="standard-button primary">1</button>
+                        <button class="standard-button">2</button>
+                        <button class="standard-button">3</button>
+                        <button class="standard-button"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 任务详情弹窗 -->
+    <div class="standard-modal" id="taskModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle"><i class="fas fa-tasks"></i> 任务详情</h3>
+                <button class="standard-button" onclick="hideModal('taskModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="taskForm" class="form-grid">
+                        <div class="form-group">
+                        <label>工单名称</label>
+                            <input type="text" class="form-control" name="name" required>
+                        </div>
+                        <div class="form-group">
+                        <label>工单类型</label>
+                        <select class="form-control" name="type" required>
+                            <option value="1">生产工单</option>
+                            <option value="2">返工工单</option>
+                            <option value="3">维修工单</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                        <label>计划开始时间</label>
+                            <input type="datetime-local" class="form-control" name="startTime" required>
+                        </div>
+                        <div class="form-group">
+                        <label>计划结束时间</label>
+                            <input type="datetime-local" class="form-control" name="endTime" required>
+                    </div>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>工艺要求</label>
+                        <textarea class="form-control" name="requirements" rows="4"></textarea>
+                    </div>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>质量标准</label>
+                        <textarea class="form-control" name="standards" rows="4"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="standard-button" onclick="hideModal('taskModal')">
+                    <i class="fas fa-times"></i> 取消
+                </button>
+                <button class="standard-button primary" onclick="saveTask()">
+                    <i class="fas fa-save"></i> 保存
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/app.js"></script>
+    <script>
+        // 示例数据
+        const taskData = [
+            {
+                id: 'T202401001',
+                name: '红茶初制加工',
+                type: '生产工单',
+                startTime: '2024-01-15 08:00',
+                endTime: '2024-01-15 17:00',
+                progress: 75,
+                status: '执行中'
+            },
+            {
+                id: 'T202401002',
+                name: '绿茶精制包装',
+                type: '生产工单',
+                startTime: '2024-01-15 09:00',
+                endTime: '2024-01-15 18:00',
+                progress: 100,
+                status: '已完成'
+            },
+            {
+                id: 'T202401003',
+                name: '乌龙茶返工处理',
+                type: '返工工单',
+                startTime: '2024-01-16 08:00',
+                endTime: '2024-01-16 12:00',
+                progress: 0,
+                status: '待执行'
+            },
+            {
+                id: 'T202401004',
+                name: '设备维护保养',
+                type: '维修工单',
+                startTime: '2024-01-16 14:00',
+                endTime: '2024-01-16 16:00',
+                progress: 30,
+                status: '已暂停'
+            },
+            {
+                id: 'T202401005',
+                name: '普洱茶压制',
+                type: '生产工单',
+                startTime: '2024-01-17 08:00',
+                endTime: '2024-01-17 17:00',
+                progress: 0,
+                status: '待执行'
+            }
+        ];
+
+        // 渲染任务列表
+        function renderTaskList() {
+            const tbody = document.getElementById('taskTable');
+            tbody.innerHTML = taskData.map(task => `
+                <tr>
+                    <td>${task.id}</td>
+                    <td>${task.name}</td>
+                    <td><span class="tag">${task.type}</span></td>
+                    <td>${task.startTime}</td>
+                    <td>${task.endTime}</td>
+                    <td>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: ${task.progress}%"></div>
+                            <span class="progress-text">${task.progress}%</span>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="status-badge ${getStatusClass(task.status)}">${task.status}</span>
+                    </td>
+                    <td>
+                        <button class="standard-button" onclick="viewTask('${task.id}')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="standard-button" onclick="editTask('${task.id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="standard-button" onclick="deleteTask('${task.id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // 获取状态样式类
+        function getStatusClass(status) {
+            switch (status) {
+                case '待执行': return 'pending';
+                case '执行中': return 'processing';
+                case '已完成': return 'success';
+                case '已暂停': return 'warning';
+                default: return '';
+            }
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            Menu.renderMenu();
+            initMenuToggle();
+            renderTaskList();
+        });
+
+        // 搜索任务
+        function searchTasks() {
+            // TODO: 实现搜索功能
+            console.log('搜索任务');
+        }
+
+        // 导出任务
+        function exportTasks() {
+            // TODO: 实现导出功能
+            console.log('导出任务');
+        }
+
+        // 显示新增任务弹窗
+        function showAddTaskModal() {
+            document.getElementById('modalTitle').innerHTML = '<i class="fas fa-plus"></i> 新增任务';
+            document.getElementById('taskForm').reset();
+            document.getElementById('taskModal').style.display = 'block';
+        }
+
+        // 查看任务详情
+        function viewTask(id) {
+            // TODO: 实现查看功能
+            console.log('查看任务:', id);
+        }
+
+        // 编辑任务
+        function editTask(id) {
+            // TODO: 实现编辑功能
+            console.log('编辑任务:', id);
+        }
+
+        // 删除任务
+        function deleteTask(id) {
+            // TODO: 实现删除功能
+            console.log('删除任务:', id);
+        }
+
+        // 隐藏弹窗
+        function hideModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // 保存任务
+        function saveTask() {
+            // TODO: 实现保存功能
+            console.log('保存任务');
+            hideModal('taskModal');
+        }
+    </script>
+</body>
+</html> 

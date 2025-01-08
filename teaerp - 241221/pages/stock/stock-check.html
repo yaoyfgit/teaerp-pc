@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>库存盘点 - TeaERP</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- 系统样式 -->
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <!-- 模块样式 -->
+    <link rel="stylesheet" href="../../css/modules/inventory.css">
+</head>
+</html> <body>
+    <div class="app-container">
+        <!-- 顶部导航 -->
+        <header class="app-header">
+            <div class="logo">TeaERP</div>
+            <nav class="top-nav">
+                <ul>
+                    <li><a href="../../index.html">首页</a></li>
+                    <li><a href="#">消息</a></li>
+                    <li><a href="#">帮助</a></li>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <span class="username">管理员</span>
+                <a href="#" class="logout">退出</a>
+            </div>
+        </header>
+
+        <!-- 主体内容 -->
+        <div class="app-main">
+            <!-- 左侧菜单 -->
+            <aside class="app-sidebar">
+                <ul class="menu-list">
+                    <li class="menu-item">
+                        <a href="#" class="menu-link">
+                            <span class="menu-icon"></span>
+                            <span class="menu-text">采购管理</span>
+                            <span class="arrow">›</span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="../purchase/demand.html">采购需求</a></li>
+                            <li><a href="../purchase/order.html">采购订单</a></li>
+                            <li><a href="../purchase/receive.html">通知收货</a></li>
+                            <li><a href="../purchase/inbound.html">采购入库</a></li>
+                            <li><a href="../purchase/return-notify.html">通知退货</a></li>
+                            <li><a href="../purchase/return.html">采购退货</a></li>
+                            <li><a href="../purchase/reconciliation.html">供应商对账</a></li>
+                            <li><a href="../purchase/analysis.html">统计分析</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" class="menu-link">
+                            <span class="menu-icon"></span>
+                            <span class="menu-text">销售管理</span>
+                            <span class="arrow">›</span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="../sales/order.html">销售订单</a></li>
+                            <li><a href="../sales/delivery.html">通知发货</a></li>
+                            <li><a href="../sales/outbound.html">销售出库</a></li>
+                            <li><a href="../sales/return-notify.html">通知退货</a></li>
+                            <li><a href="../sales/return.html">销售退货</a></li>
+                            <li><a href="../sales/reconciliation.html">客户对账</a></li>
+                            <li><a href="../sales/analysis.html">统计分析</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item active">
+                        <a href="#" class="menu-link">
+                            <span class="menu-icon"></span>
+                            <span class="menu-text">库存管理</span>
+                            <span class="arrow">›</span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="stock-query.html">库存查询</a></li>
+                            <li><a href="stock-transfer.html">库存调拨</a></li>
+                            <li><a href="#" class="active">库存盘点</a></li>
+                            <li><a href="stock-warning.html">库存预警</a></li>
+                            <li><a href="stock-analysis.html">库存分析</a></li>
+                        </ul>
+                    </li>
+                    <!-- 其他菜单项... -->
+                </ul>
+            </aside>
+
+            <!-- 内容区域 -->
+            <main class="app-content">
+                <!-- 面包屑导航 -->
+                <div class="breadcrumb">
+                    <span>库存管理</span>
+                    <span class="separator">/</span>
+                    <span>库存盘点</span>
+                </div>
+
+                <!-- 工具栏 -->
+                <div class="toolbar">
+                    <div class="search-bar">
+                        <input type="text" placeholder="输入盘点单号搜索" class="form-control">
+                        <select class="form-control">
+                            <option value="">盘点状态</option>
+                            <option value="draft">草稿</option>
+                            <option value="ongoing">盘点中</option>
+                            <option value="pending">待审核</option>
+                            <option value="completed">已完成</option>
+                        </select>
+                        <button class="button">搜索</button>
+                    </div>
+                    <div class="action-bar">
+                        <button class="button" onclick="window.showCreateModal()">新建盘点</button>
+                        <button class="button secondary">导出</button>
+                    </div>
+                </div>
+
+                <!-- 数据表格 -->
+                <div class="data-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>盘点单号</th>
+                                <th>盘点仓库</th>
+                                <th>盘点范围</th>
+                                <th>开始日期</th>
+                                <th>结束日期</th>
+                                <th>盘点人</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>SC202403010001</td>
+                                <td>主仓库</td>
+                                <td>全部商品</td>
+                                <td>2024-03-01</td>
+                                <td>2024-03-02</td>
+                                <td>张三</td>
+                                <td><span class="status draft">草稿</span></td>
+                                <td>
+                                    <a href="javascript:void(0)" class="action-link" onclick="showCheckDetail(this)">查看</a>
+                                    <a href="javascript:void(0)" class="action-link" onclick="startCheck(this)">开始盘点</a>
+                                    <a href="javascript:void(0)" class="action-link" onclick="showReviewModal(this)">盘点复核</a>
+                                    <a href="javascript:void(0)" class="action-link" onclick="showDiffAnalysisModal(this)">差异分析</a>
+                                    <a href="javascript:void(0)" class="action-link" onclick="showDiffHandleModal(this)">差异处理</a>
+                                    <a href="javascript:void(0)" class="action-link" onclick="deleteCheck(this)">删除</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 分页器 -->
+                <div class="pagination">
+                    <a href="#" class="page-btn">&lt;</a>
+                    <a href="#" class="page-btn active">1</a>
+                    <a href="#" class="page-btn">2</a>
+                    <a href="#" class="page-btn">3</a>
+                    <span class="page-separator">...</span>
+                    <a href="#" class="page-btn">10</a>
+                    <a href="#" class="page-btn">&gt;</a>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- 新建盘点弹窗 -->
+    <div class="modal" id="createModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>新建库存盘点</h3>
+                <button class="close-btn" onclick="hideModal('createModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form class="form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>盘点仓库</label>
+                            <select class="form-control" name="warehouse" required>
+                                <option value="">请选择仓库</option>
+                                <option value="1">主仓库</option>
+                                <option value="2">次仓库</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>盘点范围</label>
+                            <select class="form-control" name="range" required>
+                                <option value="all">全部商品</option>
+                                <option value="category">按分类</option>
+                                <option value="location">按库位</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group range-selector" style="display: none;">
+                        <label>选择范围</label>
+                        <div class="checkbox-group">
+                            <!-- 动态加载选项 -->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>盘点说明</label>
+                        <textarea class="form-control" name="remark" placeholder="请输入盘点说明"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="button secondary" onclick="hideModal('createModal')">取消</button>
+                <button type="button" class="button" onclick="createAndStartCheck()">开始盘点</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 盘点操作弹窗 -->
+    <div class="modal" id="checkModal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3>库存盘点</h3>
+                <button class="close-btn" onclick="hideModal('checkModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="stock-info">
+                    <div class="info-item">
+                        <label>盘点单号：</label>
+                        <span>SC202403010001</span>
+                    </div>
+                    <div class="info-item">
+                        <label>盘点仓库：</label>
+                        <span>主仓库</span>
+                    </div>
+                </div>
+                <!-- 添加商品工具栏 -->
+                <div class="check-toolbar">
+                    <div class="scan-input">
+                        <input type="text" class="form-control" placeholder="扫描商品条码" id="scanInput">
+                        <button class="button primary" onclick="handleScan()">
+                            <i class="icon-scan"></i>扫码
+                        </button>
+                    </div>
+                    <button class="button" onclick="showProductSelector()">
+                        <i class="icon-plus"></i>添加商品
+                    </button>
+                </div>
+                <div class="detail-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>商品</th>
+                                <th>规格型号</th>
+                                <th>库位</th>
+                                <th>批次</th>
+                                <th>系统库存</th>
+                                <th>实盘数量</th>
+                                <th>差异</th>
+                                <th>备注</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 盘点商品列表 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideModal('checkModal')">取消</button>
+                <button class="button secondary" onclick="saveDraft()">保存草稿</button>
+                <button class="button" onclick="submitCheck()">提交审核</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 盘点明细弹窗 -->
+    <div class="modal" id="checkDetailModal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3>盘点明细</h3>
+                <button class="close-btn" onclick="hideModal('checkDetailModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="detail-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>商品编码</th>
+                                <th>商品名称</th>
+                                <th>规格型号</th>
+                                <th>单位</th>
+                                <th>系统库存</th>
+                                <th>实际库存</th>
+                                <th>差异数量</th>
+                                <th>备注</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="button secondary" onclick="hideModal('checkDetailModal')">关闭</button>
+                <button type="button" class="button" onclick="saveCheckDetail()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加商品选择弹窗 -->
+    <div class="modal" id="productSelectorModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>选择商品</h3>
+                <button class="close-btn" onclick="hideModal('productSelectorModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="search-bar">
+                    <input type="text" class="form-control" placeholder="输入商品名称/编码搜索">
+                    <button class="button">搜索</button>
+                </div>
+                <div class="product-list">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>选择</th>
+                                <th>商品编码</th>
+                                <th>商品名称</th>
+                                <th>规格型号</th>
+                                <th>库位</th>
+                                <th>系统库存</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 商品列表 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideModal('productSelectorModal')">取消</button>
+                <button class="button primary" onclick="addSelectedProducts()">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 盘点复核弹窗 -->
+    <div class="modal" id="reviewModal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3>盘点复核</h3>
+                <button class="close-btn" onclick="hideModal('reviewModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="stock-info">
+                    <div class="info-item">
+                        <label>盘点单号：</label>
+                        <span>SC202403010001</span>
+                    </div>
+                    <div class="info-item">
+                        <label>盘点仓库：</label>
+                        <span>主仓库</span>
+                    </div>
+                </div>
+                <!-- 复核操作区 -->
+                <div class="review-actions">
+                    <button class="button" onclick="startRecheck()">
+                        <i class="icon-recheck"></i>差异复查
+                    </button>
+                    <button class="button" onclick="confirmDiff()">
+                        <i class="icon-confirm"></i>差异确认
+                    </button>
+                    <button class="button" onclick="showReviewHistory()">
+                        <i class="icon-history"></i>复核记录
+                    </button>
+                </div>
+                <!-- 差异商品列表 -->
+                <div class="detail-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>商品</th>
+                                <th>规格型号</th>
+                                <th>库位</th>
+                                <th>系统库存</th>
+                                <th>实盘数量</th>
+                                <th>差异数量</th>
+                                <th>复核数量</th>
+                                <th>复核结果</th>
+                                <th>备注</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 差异商品列表 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideModal('reviewModal')">关闭</button>
+                <button class="button primary" onclick="submitReview()">提交复核</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 差异分析弹窗 -->
+    <div class="modal" id="diffAnalysisModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>差异分析</h3>
+                <button class="close-btn" onclick="hideModal('diffAnalysisModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- 差异分析表单 -->
+                <div class="form">
+                    <div class="form-group">
+                        <label>差异原因分析</label>
+                        <select class="form-control" name="diffReason">
+                            <option value="">请选择差异原因</option>
+                            <option value="1">商品丢失</option>
+                            <option value="2">商品损坏</option>
+                            <option value="3">入库错误</option>
+                            <option value="4">出库错误</option>
+                            <option value="5">其他原因</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>责任认定</label>
+                        <div class="form-row">
+                            <select class="form-control" name="responsibleDept">
+                                <option value="">责任部门</option>
+                            </select>
+                            <select class="form-control" name="responsiblePerson">
+                                <option value="">责任人</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>处理建议</label>
+                        <textarea class="form-control" name="suggestion" rows="4"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideModal('diffAnalysisModal')">关闭</button>
+                <button class="button primary" onclick="submitDiffAnalysis()">提交分析</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 差异处理弹窗 -->
+    <div class="modal" id="diffHandleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>差异处理</h3>
+                <button class="close-btn" onclick="hideModal('diffHandleModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="tab-nav">
+                    <div class="tab active" data-tab="handlePlan">处理方案</div>
+                    <div class="tab" data-tab="handleTrack">处理跟踪</div>
+                </div>
+                <!-- 处理方案 -->
+                <div class="tab-content" id="handlePlan">
+                    <div class="form">
+                        <div class="form-group">
+                            <label>盘盈处理</label>
+                            <select class="form-control" name="overageHandle">
+                                <option value="1">入库调整</option>
+                                <option value="2">账务冲销</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>盘亏处理</label>
+                            <select class="form-control" name="shortageHandle">
+                                <option value="1">出库调整</option>
+                                <option value="2">赔偿处理</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>账务处理建议</label>
+                            <textarea class="form-control" name="accountingSuggestion" rows="4"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <!-- 处理跟踪 -->
+                <div class="tab-content" id="handleTrack" style="display: none;">
+                    <div class="form">
+                        <div class="form-group">
+                            <label>处理状态</label>
+                            <select class="form-control" name="handleStatus">
+                                <option value="pending">待处理</option>
+                                <option value="processing">处理中</option>
+                                <option value="completed">已完成</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>处理结果</label>
+                            <textarea class="form-control" name="handleResult" rows="4"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>处理总结</label>
+                            <textarea class="form-control" name="handleSummary" rows="4"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideModal('diffHandleModal')">关闭</button>
+                <button class="button primary" onclick="submitDiffHandle()">提交处理</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/common.js"></script>
+    <script src="../../js/modules/stock.js"></script>
+    <script src="../../js/modules/stock/stock-check.js"></script>
+</body>
+</html> 

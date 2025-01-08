@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{页面标题} - TeaERP</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- 系统样式 -->
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/menu.css">
+    <!-- 模块样式 -->
+    <link rel="stylesheet" href="../../css/modules/{模块名}.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 侧边栏 -->
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <!-- 主内容区 -->
+        <div class="main-content">
+            <!-- 顶部导航栏 -->
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <!-- 内容区域 -->
+            <div class="content">
+                <!-- 面包屑导航 -->
+                <div class="breadcrumb">
+                    <span>{一级导航}</span>
+                    <span class="separator">/</span>
+                    <span>{二级导航}</span>
+                </div>
+
+                <!-- 内容卡片 -->
+                <div class="card">
+                    <!-- 工具栏 -->
+                    <div class="toolbar">
+                        <div class="search-bar">
+                            <input type="text" class="form-control" placeholder="{搜索提示}">
+                            <button class="btn btn-primary">搜索</button>
+                        </div>
+                        <div class="action-bar">
+                            <button class="btn btn-primary" onclick="{新建方法}">{新建按钮文本}</button>
+                            <button class="btn btn-secondary">导出</button>
+                        </div>
+                    </div>
+
+                    <!-- 数据表格 -->
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <!-- 表格列头 -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <!-- 表格数据行 -->
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 分页器 -->
+                    <div class="toolbar">
+                        <div class="pagination">
+                            <button class="btn btn-secondary">&lt;</button>
+                            <button class="btn btn-primary">1</button>
+                            <button class="btn btn-secondary">2</button>
+                            <button class="btn btn-secondary">3</button>
+                            <span>...</span>
+                            <button class="btn btn-secondary">10</button>
+                            <button class="btn btn-secondary">&gt;</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 弹窗模板 -->
+    <div class="modal" id="{弹窗ID}">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>{弹窗标题}</h3>
+                <button class="close-btn" onclick="{关闭方法}">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form class="form">
+                    <!-- 表单字段 -->
+                    <div class="form-group">
+                        <label class="form-label">{字段标签}</label>
+                        <input type="{输入类型}" class="form-control">
+                    </div>
+                    
+                    <!-- 明细表格 -->
+                    <div class="form-group">
+                        <label class="form-label">{明细标签}</label>
+                        <div class="table-container">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <!-- 明细表格列头 -->
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <!-- 明细表格数据行 -->
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="toolbar">
+                                <button type="button" class="btn btn-secondary" onclick="{添加明细方法}">添加明细</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="{取消方法}">取消</button>
+                <button class="btn btn-primary" onclick="{保存方法}">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 加载应用脚本 -->
+    <script src="../../js/app.js"></script>
+    <script src="../../js/modules/{模块名}/{页面名}.js"></script>
+</body>
+</html> 

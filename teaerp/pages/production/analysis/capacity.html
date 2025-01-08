@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>产能分析 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/modules/production.css">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-industry"></i>
+                    <span>生产管理</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-chart-bar"></i>
+                    <span>生产分析</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-industry"></i>
+                    <span>产能分析</span>
+                </div>
+
+                <!-- 统计卡片 -->
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: rgba(129, 216, 208, 0.1); color: #81D8D0;">
+                            <i class="fas fa-industry"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-title">总产能利用率</div>
+                            <div class="stat-value">85.6<span class="stat-unit">%</span></div>
+                            <div class="stat-trend positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>2.3%</span>
+                                <span class="trend-label">同比上月</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: rgba(255, 159, 67, 0.1); color: #FF9F43;">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-title">设备运行效率</div>
+                            <div class="stat-value">92.8<span class="stat-unit">%</span></div>
+                            <div class="stat-trend positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>1.5%</span>
+                                <span class="trend-label">环比变化</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: rgba(40, 199, 111, 0.1); color: #28C76F;">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-title">日均产量</div>
+                            <div class="stat-value">2,580<span class="stat-unit">kg</span></div>
+                            <div class="stat-trend positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>4.2%</span>
+                                <span class="trend-label">同比上月</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: rgba(234, 84, 85, 0.1); color: #EA5455;">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-title">产能预警</div>
+                            <div class="stat-value">3<span class="stat-unit">项</span></div>
+                            <div class="stat-trend negative">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>1项</span>
+                                <span class="trend-label">较上月</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 图表区域 -->
+                <div class="chart-container">
+                    <div class="standard-card">
+                        <div class="standard-card-header">
+                            <h3><i class="fas fa-chart-line"></i> 产能趋势分析</h3>
+                            <div class="action-bar">
+                                <div class="search-group">
+                                    <div class="search-item">
+                                        <label>时间范围</label>
+                                        <select class="standard-select" style="width: 180px;">
+                                            <option value="1">近7天</option>
+                                            <option value="2">近30天</option>
+                                            <option value="3">近3个月</option>
+                                            <option value="4">近6个月</option>
+                                        </select>
+                                    </div>
+                                    <div class="search-item">
+                                        <label>产品类型</label>
+                                        <select class="standard-select" style="width: 180px;">
+                                            <option value="">全部类型</option>
+                                            <option value="1">红茶</option>
+                                            <option value="2">绿茶</option>
+                                            <option value="3">乌龙茶</option>
+                                            <option value="4">普洱茶</option>
+                                        </select>
+                                    </div>
+                                    <div class="search-actions">
+                                        <button class="standard-button primary">
+                                            <i class="fas fa-sync"></i> 更新
+                                        </button>
+                                        <button class="standard-button">
+                                            <i class="fas fa-file-export"></i> 导出
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="capacityTrendChart" style="width: 100%; height: 400px;"></div>
+                    </div>
+                </div>
+
+                <div class="chart-grid">
+                    <div class="standard-card">
+                        <div class="standard-card-header">
+                            <h3><i class="fas fa-chart-pie"></i> 产能分布分析</h3>
+                        </div>
+                        <div id="capacityDistributionChart" style="width: 100%; height: 300px;"></div>
+                    </div>
+                    <div class="standard-card">
+                        <div class="standard-card-header">
+                            <h3><i class="fas fa-chart-bar"></i> 设备产能排名</h3>
+                        </div>
+                        <div id="equipmentCapacityChart" style="width: 100%; height: 300px;"></div>
+                    </div>
+                </div>
+
+                <style>
+                    /* 复用统一样式 */
+                    .stats-cards {
+                        display: grid;
+                        grid-template-columns: repeat(4, 1fr);
+                        gap: 24px;
+                        margin-bottom: 24px;
+                    }
+                    
+                    .stat-card {
+                        background: #fff;
+                        border-radius: 8px;
+                        padding: 24px;
+                        display: flex;
+                        align-items: flex-start;
+                        gap: 16px;
+                        box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+                        transition: all 0.3s ease;
+                    }
+                    
+                    .stat-card:hover {
+                        transform: translateY(-2px);
+                        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+                    }
+                    
+                    .stat-icon {
+                        width: 48px;
+                        height: 48px;
+                        border-radius: 8px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 24px;
+                    }
+                    
+                    .stat-info {
+                        flex: 1;
+                    }
+                    
+                    .stat-title {
+                        color: #6E6B7B;
+                        font-size: 14px;
+                        margin-bottom: 8px;
+                    }
+                    
+                    .stat-value {
+                        font-size: 24px;
+                        font-weight: 600;
+                        color: #5E5873;
+                        margin-bottom: 8px;
+                        display: flex;
+                        align-items: baseline;
+                    }
+                    
+                    .stat-unit {
+                        font-size: 14px;
+                        color: #6E6B7B;
+                        margin-left: 4px;
+                    }
+                    
+                    .stat-trend {
+                        font-size: 13px;
+                        display: flex;
+                        align-items: center;
+                        gap: 4px;
+                    }
+                    
+                    .stat-trend.positive {
+                        color: #28C76F;
+                    }
+                    
+                    .stat-trend.negative {
+                        color: #EA5455;
+                    }
+                    
+                    .trend-label {
+                        color: #6E6B7B;
+                        margin-left: 4px;
+                    }
+                    
+                    .breadcrumb {
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                        padding: 16px;
+                        background: #fff;
+                        border-radius: 8px;
+                        margin-bottom: 24px;
+                        box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+                    }
+                    
+                    .breadcrumb i {
+                        font-size: 14px;
+                        color: #6E6B7B;
+                    }
+                    
+                    .breadcrumb span {
+                        color: #5E5873;
+                        font-size: 14px;
+                    }
+                    
+                    .breadcrumb i.fa-angle-right {
+                        color: #D0D2D6;
+                        font-size: 12px;
+                    }
+
+                    .search-group {
+                        display: flex;
+                        align-items: center;
+                        gap: 24px;
+                    }
+                    
+                    .search-item {
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                    }
+                    
+                    .search-item label {
+                        color: #6E6B7B;
+                        font-size: 14px;
+                    }
+                    
+                    .standard-select {
+                        height: 36px;
+                        padding: 0 12px;
+                        border: 1px solid #D8D6DE;
+                        border-radius: 4px;
+                        color: #5E5873;
+                        font-size: 14px;
+                        background-color: #fff;
+                        transition: all 0.3s ease;
+                    }
+                    
+                    .standard-select:hover {
+                        border-color: #81D8D0;
+                    }
+                    
+                    .standard-select:focus {
+                        outline: none;
+                        border-color: #81D8D0;
+                        box-shadow: 0 0 0 2px rgba(129, 216, 208, 0.2);
+                    }
+                    
+                    .standard-button {
+                        height: 36px;
+                        padding: 0 16px;
+                        border: 1px solid #D8D6DE;
+                        border-radius: 4px;
+                        background-color: #fff;
+                        color: #6E6B7B;
+                        font-size: 14px;
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                    }
+                    
+                    .standard-button:hover {
+                        background-color: #F8F8F8;
+                        border-color: #81D8D0;
+                        color: #81D8D0;
+                    }
+                    
+                    .standard-button.primary {
+                        background-color: #81D8D0;
+                        border-color: #81D8D0;
+                        color: #fff;
+                    }
+                    
+                    .standard-button.primary:hover {
+                        background-color: #6ECEC5;
+                        border-color: #6ECEC5;
+                    }
+                    
+                    .search-actions {
+                        display: flex;
+                        gap: 12px;
+                    }
+
+                    .chart-grid {
+                        display: grid;
+                        grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+                        gap: 24px;
+                        margin-bottom: 24px;
+                    }
+                </style>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            Menu.renderMenu();
+            initMenuToggle();
+            initCharts();
+        });
+
+        function initCharts() {
+            // 产能趋势图
+            const trendChart = echarts.init(document.getElementById('capacityTrendChart'));
+            trendChart.setOption({
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['计划产能', '实际产能', '产能利用率']
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: '产能(kg)',
+                        position: 'left'
+                    },
+                    {
+                        type: 'value',
+                        name: '利用率(%)',
+                        position: 'right',
+                        max: 100
+                    }
+                ],
+                series: [
+                    {
+                        name: '计划产能',
+                        type: 'line',
+                        data: [3000, 3000, 3000, 3000, 3000, 3000, 3000],
+                        itemStyle: { color: '#81D8D0' }
+                    },
+                    {
+                        name: '实际产能',
+                        type: 'line',
+                        data: [2580, 2650, 2800, 2750, 2900, 2800, 2700],
+                        itemStyle: { color: '#A5E6E1' }
+                    },
+                    {
+                        name: '产能利用率',
+                        type: 'line',
+                        yAxisIndex: 1,
+                        data: [86, 88, 93, 92, 97, 93, 90],
+                        itemStyle: { color: '#C9F0EC' }
+                    }
+                ]
+            });
+
+            // 产能分布分析图
+            const distributionChart = echarts.init(document.getElementById('capacityDistributionChart'));
+            distributionChart.setOption({
+                tooltip: {
+                    trigger: 'item'
+                },
+                legend: {
+                    orient: 'horizontal',
+                    bottom: 'bottom'
+                },
+                series: [{
+                    name: '产能分布',
+                    type: 'pie',
+                    radius: '50%',
+                    data: [
+                        { value: 1048, name: '红茶', itemStyle: { color: '#81D8D0' } },
+                        { value: 735, name: '绿茶', itemStyle: { color: '#A5E6E1' } },
+                        { value: 580, name: '乌龙茶', itemStyle: { color: '#C9F0EC' } },
+                        { value: 484, name: '普洱茶', itemStyle: { color: '#D8F5F2' } }
+                    ],
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }]
+            });
+
+            // 设备产能排名图
+            const equipmentChart = echarts.init(document.getElementById('equipmentCapacityChart'));
+            equipmentChart.setOption({
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'value',
+                    name: '产能利用率(%)'
+                },
+                yAxis: {
+                    type: 'category',
+                    data: ['炒茶机#1', '炒茶机#2', '杀青机#1', '烘干机#1', '包装机#1']
+                },
+                series: [{
+                    name: '产能利用率',
+                    type: 'bar',
+                    data: [
+                        { value: 95, itemStyle: { color: '#81D8D0' } },
+                        { value: 92, itemStyle: { color: '#A5E6E1' } },
+                        { value: 88, itemStyle: { color: '#C9F0EC' } },
+                        { value: 85, itemStyle: { color: '#D8F5F2' } },
+                        { value: 82, itemStyle: { color: '#E8F9F7' } }
+                    ]
+                }]
+            });
+
+            // 监听窗口大小变化，调整图表大小
+            window.addEventListener('resize', () => {
+                trendChart.resize();
+                distributionChart.resize();
+                equipmentChart.resize();
+            });
+        }
+    </script>
+</body>
+</html> 

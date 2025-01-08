@@ -1,0 +1,146 @@
+/* 重置样式 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 根变量 */
+:root {
+  /* 主题色 */
+  --primary-color: #1976d2;
+  --primary-light: #63a4ff;
+  --primary-dark: #004ba0;
+  
+  /* 文字颜色 */
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --text-disabled: #999999;
+  
+  /* 背景色 */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-disabled: #cccccc;
+  
+  /* 边框颜色 */
+  --border-color: #e8e8e8;
+  
+  /* 状态颜色 */
+  --success: #43a047;
+  --warning: #ef6c00;
+  --error: #d32f2f;
+  --info: #1976d2;
+
+  /* 状态背景色 */
+  --success-bg: #e8f5e9;
+  --warning-bg: #fff3e0;
+  --error-bg: #ffebee;
+  --info-bg: #e3f2fd;
+
+  /* 字体大小 */
+  --font-size-xs: 10px;
+  --font-size-sm: 12px;
+  --font-size-md: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
+  
+  /* 字体粗细 */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 600;
+
+  /* 间距 */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 24px;
+}
+
+/* 基础样式 */
+html {
+  font-size: 37.5px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-size: var(--font-size-md);
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 响应式设计 */
+@media screen and (max-width: 320px) {
+  html {
+    font-size: 32px;
+  }
+}
+
+@media screen and (min-width: 321px) and (max-width: 375px) {
+  html {
+    font-size: 37.5px;
+  }
+}
+
+@media screen and (min-width: 376px) {
+  html {
+    font-size: 42px;
+  }
+}
+
+/* Vant 组件主题定制 */
+:root:root {
+  --van-primary-color: var(--primary-color);
+  --van-success-color: var(--success);
+  --van-warning-color: var(--warning);
+  --van-danger-color: var(--error);
+  --van-text-color: var(--text-primary);
+  --van-text-color-2: var(--text-secondary);
+  --van-text-color-3: var(--text-disabled);
+  --van-border-color: var(--border-color);
+  --van-active-color: var(--bg-secondary);
+  --van-background: var(--bg-secondary);
+  --van-background-2: var(--bg-primary);
+}
+
+/* 通用样式类 */
+.tea-card {
+  background: var(--bg-primary);
+  border-radius: 8px;
+  padding: var(--spacing-lg);
+  margin: var(--spacing-md);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.tea-list {
+  background: var(--bg-primary);
+}
+
+.tea-list-item {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.tea-button {
+  height: 40px;
+  padding: 0 var(--spacing-lg);
+  border-radius: 4px;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+}
+
+.tea-button--primary {
+  background: var(--primary-color);
+  color: white;
+}
+
+.tea-button--small {
+  height: 32px;
+  padding: 0 var(--spacing-md);
+  font-size: var(--font-size-sm);
+} 

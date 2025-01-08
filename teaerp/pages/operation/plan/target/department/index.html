@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>部门目标制定 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../../../css/common.css">
+    <link rel="stylesheet" href="../../../../../css/layout.css">
+    <link rel="stylesheet" href="../../../../../css/modules/operation.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb">
+                <span>经营管理</span>
+                <span class="separator">/</span>
+                <span>计划管理</span>
+                <span class="separator">/</span>
+                <span>目标制定</span>
+                <span class="separator">/</span>
+                <span>部门目标</span>
+            </div>
+
+            <!-- 目标列表 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>目标列表</h3>
+                    <div class="card-tools">
+                        <button class="button" onclick="showModal('targetModal')">
+                            <i class="fas fa-plus"></i> 新建目标
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="search-bar">
+                        <div class="form-group">
+                            <label>部门</label>
+                            <select class="form-control" id="searchDepartment">
+                                <option value="">全部</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>年度</label>
+                            <select class="form-control" id="searchYear">
+                                <option value="2024">2024年</option>
+                                <option value="2023">2023年</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>目标类型</label>
+                            <select class="form-control" id="searchType">
+                                <option value="">全部</option>
+                                <option value="sales">销售额目标</option>
+                                <option value="profit">利润目标</option>
+                                <option value="cost">成本控制目标</option>
+                                <option value="satisfaction">客户满意度目标</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>状态</label>
+                            <select class="form-control" id="searchStatus">
+                                <option value="">全部</option>
+                                <option value="draft">草稿</option>
+                                <option value="pending">待审批</option>
+                                <option value="approved">已审批</option>
+                                <option value="rejected">已驳回</option>
+                            </select>
+                        </div>
+                        <button class="button" onclick="searchTargets()">
+                            <i class="fas fa-search"></i> 搜索
+                        </button>
+                    </div>
+                    <div id="targetTable"></div>
+                    <div id="pagination"></div>
+                </div>
+            </div>
+
+            <!-- 目标编辑弹窗 -->
+            <div class="modal" id="targetModal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>目标编辑</h3>
+                        <button class="close" onclick="hideModal('targetModal')">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="targetForm">
+                            <div class="form-group">
+                                <label>部门</label>
+                                <select class="form-control" name="departmentId" required>
+                                    <option value="">请选择</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>目标年度</label>
+                                <select class="form-control" name="year" required>
+                                    <option value="2024">2024年</option>
+                                    <option value="2023">2023年</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>目标类型</label>
+                                <select class="form-control" name="type" required>
+                                    <option value="sales">销售额目标</option>
+                                    <option value="profit">利润目标</option>
+                                    <option value="cost">成本控制目标</option>
+                                    <option value="satisfaction">客户满意度目标</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>目标名称</label>
+                                <input type="text" class="form-control" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label>目标描述</label>
+                                <textarea class="form-control" name="description" rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>目标值</label>
+                                <input type="number" class="form-control" name="value" required>
+                            </div>
+                            <div class="form-group">
+                                <label>计量单位</label>
+                                <input type="text" class="form-control" name="unit" required>
+                            </div>
+                            <div class="form-group">
+                                <label>开始日期</label>
+                                <input type="date" class="form-control" name="startDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label>结束日期</label>
+                                <input type="date" class="form-control" name="endDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label>分解方式</label>
+                                <select class="form-control" name="breakdownType" required>
+                                    <option value="team">团队目标</option>
+                                    <option value="personal">个人目标</option>
+                                    <option value="project">项目目标</option>
+                                    <option value="timeline">时间节点目标</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>责任人</label>
+                                <select class="form-control" name="managerId" required>
+                                    <option value="">请选择</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>上级目标</label>
+                                <select class="form-control" name="parentId">
+                                    <option value="">请选择</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="button secondary" onclick="hideModal('targetModal')">取消</button>
+                        <button class="button" onclick="saveTarget()">保存</button>
+                        <button class="button" onclick="submitTarget()">提交审批</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../../../../js/common.js"></script>
+    <script src="../../../../../js/modules/operation/plan/target/department/index.js"></script>
+</body>
+</html> 

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>主生产计划 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/modules/production.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-industry"></i>
+                    <span>生产管理</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-tasks"></i>
+                    <span>主生产计划</span>
+                </div>
+
+                <!-- 计划统计 -->
+                <div class="standard-card">
+                    <div class="overview-grid">
+                        <div class="overview-item">
+                            <i class="fas fa-clipboard-list"></i>
+                            <div class="info">
+                                <h4>待审核计划</h4>
+                                <div class="number">5<span class="unit">个</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item">
+                            <i class="fas fa-hourglass-half"></i>
+                            <div class="info">
+                                <h4>执行中计划</h4>
+                                <div class="number">8<span class="unit">个</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item">
+                            <i class="fas fa-check-circle"></i>
+                            <div class="info">
+                                <h4>已完成计划</h4>
+                                <div class="number">12<span class="unit">个</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item">
+                            <i class="fas fa-percentage"></i>
+                            <div class="info">
+                                <h4>计划完成率</h4>
+                                <div class="number">85<span class="unit">%</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 计划列表 -->
+                <div class="standard-card">
+                    <div class="standard-card-header">
+                        <h3><i class="fas fa-list"></i> 计划列表</h3>
+                        <div class="action-bar">
+                            <div class="search-group">
+                                <input type="text" class="standard-input" placeholder="计划编号/名称">
+                                <select class="standard-select">
+                                    <option value="">计划来源</option>
+                                    <option value="mrp">MRP运算</option>
+                                    <option value="manual">手工制定</option>
+                                </select>
+                                <select class="standard-select">
+                                    <option value="">计划周期</option>
+                                    <option value="day">日计划</option>
+                                    <option value="week">周计划</option>
+                                    <option value="month">月计划</option>
+                                </select>
+                                <select class="standard-select">
+                                    <option value="">计划状态</option>
+                                    <option value="draft">草稿</option>
+                                    <option value="confirmed">已确认</option>
+                                    <option value="executing">执行中</option>
+                                    <option value="completed">已完成</option>
+                                </select>
+                                <div class="date-range-group">
+                                    <input type="date" class="standard-input" placeholder="开始日期">
+                                    <span class="separator">至</span>
+                                    <input type="date" class="standard-input" placeholder="结束日期">
+                                </div>
+                                <button class="standard-button primary" onclick="searchPlans()">
+                                    <i class="fas fa-search"></i> 查询
+                                </button>
+                                <button class="standard-button primary" onclick="showAddPlanModal()">
+                                    <i class="fas fa-plus"></i> 新增计划
+                                </button>
+                                <button class="standard-button" onclick="importPlan()">
+                                    <i class="fas fa-file-import"></i> 导入
+                                </button>
+                                <button class="standard-button" onclick="exportPlan()">
+                                    <i class="fas fa-file-export"></i> 导出
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="standard-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>计划编号</th>
+                                    <th>计划名称</th>
+                                    <th>计划来源</th>
+                                    <th>计划周期</th>
+                                    <th>开始日期</th>
+                                    <th>结束日期</th>
+                                    <th>计划产量</th>
+                                    <th>完成率</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="planTable">
+                                <!-- 示例数据 -->
+                                <tr>
+                                    <td>MP202403200001</td>
+                                    <td>3月第3周生产计划</td>
+                                    <td>MRP运算</td>
+                                    <td>周计划</td>
+                                    <td>2024-03-18</td>
+                                    <td>2024-03-24</td>
+                                    <td>1000</td>
+                                    <td>85%</td>
+                                    <td><span class="status executing">执行中</span></td>
+                                    <td>
+                                        <button class="button-link" onclick="viewPlan('MP202403200001')">查看</button>
+                                        <button class="button-link" onclick="editPlan('MP202403200001')">编辑</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="standard-pagination" id="pagination"></div>
+                    </div>
+                </div>
+
+                <!-- 资源配置 -->
+                <div class="standard-card">
+                    <div class="standard-card-header">
+                        <h3><i class="fas fa-cogs"></i> 资源配置</h3>
+                    </div>
+                    <div class="resource-grid">
+                        <div class="resource-card">
+                            <h4>人力资源</h4>
+                            <div class="resource-stats">
+                                <div class="stat-item">
+                                    <span class="label">计划人数</span>
+                                    <span class="value">50</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="label">实际人数</span>
+                                    <span class="value">45</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="label">缺口人数</span>
+                                    <span class="value warning">5</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="resource-card">
+                            <h4>设备资源</h4>
+                            <div class="resource-stats">
+                                <div class="stat-item">
+                                    <span class="label">计划设备</span>
+                                    <span class="value">10</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="label">可用设备</span>
+                                    <span class="value">8</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="label">维修中</span>
+                                    <span class="value warning">2</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="resource-card">
+                            <h4>物料资源</h4>
+                            <div class="resource-stats">
+                                <div class="stat-item">
+                                    <span class="label">物料种类</span>
+                                    <span class="value">15</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="label">库存充足</span>
+                                    <span class="value success">12</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="label">库存不足</span>
+                                    <span class="value error">3</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增计划弹窗 -->
+    <div class="standard-modal" id="planModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-plus-circle"></i> 新增生产计划</h3>
+                <button class="standard-close-btn" onclick="hideModal('planModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="planForm" class="standard-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>计划名称</label>
+                            <input type="text" class="form-control" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>计划来源</label>
+                            <select class="form-control" name="source" required>
+                                <option value="mrp">MRP运算</option>
+                                <option value="manual">手工制定</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>计划周期</label>
+                            <select class="form-control" name="period" required>
+                                <option value="day">日计划</option>
+                                <option value="week">周计划</option>
+                                <option value="month">月计划</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>开始日期</label>
+                            <input type="date" class="form-control" name="startDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>结束日期</label>
+                            <input type="date" class="form-control" name="endDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>计划产量</label>
+                            <input type="number" class="form-control" name="quantity" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>计划目标</label>
+                        <textarea class="form-control" name="target" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>资源需求</label>
+                        <textarea class="form-control" name="resources" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="standard-button" onclick="hideModal('planModal')">取消</button>
+                <button class="standard-button primary" onclick="savePlan()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/app.js"></script>
+    <script src="../../../js/modules/production/master-plan.js"></script>
+</body>
+</html> 

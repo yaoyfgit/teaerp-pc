@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人员排班 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/modules/production.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb">
+                <span>生产管理</span>
+                <span class="separator">/</span>
+                <span>生产计划管理</span>
+                <span class="separator">/</span>
+                <span>人员排班</span>
+            </div>
+
+            <!-- 排班日历 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>排班日历</h3>
+                    <div class="card-tools">
+                        <button class="button" onclick="prevWeek()"><i class="fas fa-chevron-left"></i></button>
+                        <span id="currentWeek">2024年第2周 (1.8-1.14)</span>
+                        <button class="button" onclick="nextWeek()"><i class="fas fa-chevron-right"></i></button>
+                        <button class="button" onclick="showScheduleModal()">排班</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="schedule-calendar">
+                        <div class="calendar-header">
+                            <div class="time-column">班次/时间</div>
+                            <div class="day-column">周一<br>1.8</div>
+                            <div class="day-column">周二<br>1.9</div>
+                            <div class="day-column">周三<br>1.10</div>
+                            <div class="day-column">周四<br>1.11</div>
+                            <div class="day-column">周五<br>1.12</div>
+                            <div class="day-column">周六<br>1.13</div>
+                            <div class="day-column">周日<br>1.14</div>
+                        </div>
+                        <div class="calendar-body" id="scheduleGrid">
+                            <!-- 排班内容 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 考勤统计 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>考勤统计</h3>
+                </div>
+                <div class="card-body">
+                    <div class="data-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>员工编号</th>
+                                    <th>员工姓名</th>
+                                    <th>部门</th>
+                                    <th>岗位</th>
+                                    <th>应出勤</th>
+                                    <th>实际出勤</th>
+                                    <th>迟到</th>
+                                    <th>早退</th>
+                                    <th>请假</th>
+                                    <th>加班</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendanceTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 排班弹窗 -->
+    <div class="modal" id="scheduleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>排班设置</h3>
+                <button class="close-btn" onclick="hideModal('scheduleModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="scheduleForm" class="form">
+                    <div class="form-group">
+                        <label>班次</label>
+                        <select class="form-control" name="shift" required>
+                            <option value="morning">早班(8:00-16:00)</option>
+                            <option value="middle">中班(16:00-24:00)</option>
+                            <option value="night">夜班(0:00-8:00)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>日期</label>
+                        <input type="date" class="form-control" name="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>员工</label>
+                        <select class="form-control" name="employee" multiple required>
+                            <!-- 员工列表 -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>备注</label>
+                        <textarea class="form-control" name="remark" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideModal('scheduleModal')">取消</button>
+                <button class="button" onclick="saveSchedule()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/common.js"></script>
+    <script src="../../../js/modules/production/schedule.js"></script>
+</body>
+</html> 

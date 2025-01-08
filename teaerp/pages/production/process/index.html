@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生产过程 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/modules/production.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-industry"></i>
+                    <span>生产管理</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-cogs"></i>
+                    <span>生产过程</span>
+                </div>
+
+                <!-- 生产过程统计 -->
+                <div class="standard-card">
+                    <div class="overview-grid">
+                        <div class="overview-item" style="background: #f5f7fa; border-left-color: #909399;">
+                            <i class="fas fa-tasks" style="color: #909399;"></i>
+                            <div class="info">
+                                <h4>总工单数</h4>
+                                <div class="number">125<span class="unit">个</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item success" style="background: #e8f5e9; border-left-color: #4caf50;">
+                            <i class="fas fa-play-circle" style="color: #4caf50;"></i>
+                            <div class="info">
+                                <h4>进行中</h4>
+                                <div class="number">45<span class="unit">个</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item warning" style="background: #fff8e1; border-left-color: #ff9800;">
+                            <i class="fas fa-pause-circle" style="color: #ff9800;"></i>
+                            <div class="info">
+                                <h4>已暂停</h4>
+                                <div class="number">8<span class="unit">个</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item info" style="background: #e3f2fd; border-left-color: #2196f3;">
+                            <i class="fas fa-check-circle" style="color: #2196f3;"></i>
+                            <div class="info">
+                                <h4>已完成</h4>
+                                <div class="number">72<span class="unit">个</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="standard-card">
+                    <div class="standard-toolbar">
+                        <div class="search-group">
+                            <input type="text" class="standard-input" placeholder="输入工单号/产品名称搜索">
+                            <select class="standard-select">
+                                <option value="">生产状态</option>
+                                <option value="processing">进行中</option>
+                                <option value="paused">已暂停</option>
+                                <option value="completed">已完成</option>
+                            </select>
+                            <button class="standard-button primary" onclick="searchProcess()">
+                                <i class="fas fa-search"></i> 查询
+                            </button>
+                        </div>
+                        <div class="button-group">
+                            <button class="standard-button" onclick="exportProcess()">
+                                <i class="fas fa-file-export"></i> 导出
+                            </button>
+                        </div>
+                    </div>
+
+                    <table class="standard-table">
+                        <thead>
+                            <tr>
+                                <th>工单号</th>
+                                <th>产品名称</th>
+                                <th>计划数量</th>
+                                <th>已完成数量</th>
+                                <th>开始时间</th>
+                                <th>预计完成时间</th>
+                                <th>生产状态</th>
+                                <th>当前工序</th>
+                                <th class="operation-column">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>WO202403250001</td>
+                                <td>特级铁观音</td>
+                                <td>1000</td>
+                                <td>450</td>
+                                <td>2024-03-25 08:00</td>
+                                <td>2024-03-26 17:00</td>
+                                <td><span class="status-badge success">进行中</span></td>
+                                <td>发酵</td>
+                                <td>
+                                    <button class="standard-button" onclick="viewProcess('WO202403250001')">查看</button>
+                                    <button class="standard-button warning" onclick="pauseProcess('WO202403250001')">暂停</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>WO202403250002</td>
+                                <td>特级大红袍</td>
+                                <td>800</td>
+                                <td>200</td>
+                                <td>2024-03-25 09:30</td>
+                                <td>2024-03-26 15:30</td>
+                                <td><span class="status-badge warning">已暂停</span></td>
+                                <td>压花</td>
+                                <td>
+                                    <button class="standard-button" onclick="viewProcess('WO202403250002')">查看</button>
+                                    <button class="standard-button success" onclick="resumeProcess('WO202403250002')">恢复</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>WO202403250003</td>
+                                <td>特级金骏眉</td>
+                                <td>500</td>
+                                <td>500</td>
+                                <td>2024-03-25 08:30</td>
+                                <td>2024-03-25 16:30</td>
+                                <td><span class="status-badge info" style="background: #e3f2fd; color: #2196f3;">已完成</span></td>
+                                <td>分装</td>
+                                <td>
+                                    <button class="standard-button" onclick="viewProcess('WO202403250003')">查看</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="standard-pagination">
+                        <button><i class="fas fa-chevron-left"></i></button>
+                        <button class="active">1</button>
+                        <button>2</button>
+                        <button>3</button>
+                        <button><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 查看工单弹窗 -->
+    <div class="modal" id="viewProcessModal">
+        <div class="modal-content" style="width: 90%; max-width: 1200px;">
+            <div class="modal-header">
+                <h3><i class="fas fa-eye"></i> 查看工单详情</h3>
+                <button class="standard-close-btn" onclick="hideModal('viewProcessModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-section">
+                    <div class="form-section-title">基本信息</div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>工单号</label>
+                            <div class="form-text" id="viewWorkOrderId"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>产品名称</label>
+                            <div class="form-text" id="viewProductName"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>计划数量</label>
+                            <div class="form-text" id="viewPlanQuantity"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>已完成数量</label>
+                            <div class="form-text" id="viewCompletedQuantity"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>开始时间</label>
+                            <div class="form-text" id="viewStartTime"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>预计完成时间</label>
+                            <div class="form-text" id="viewExpectedEndTime"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="form-section-title">工序进度</div>
+                    <div class="process-steps" id="viewProcessSteps">
+                        <!-- 工序步骤将通过JavaScript动态添加 -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="standard-button secondary" onclick="hideModal('viewProcessModal')">
+                    <i class="fas fa-times"></i> 关闭
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* 统计卡片样式 */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            padding: 16px;
+        }
+
+        .overview-item {
+            border-radius: 4px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-left: 4px solid;
+        }
+
+        .overview-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .overview-item i {
+            font-size: 24px;
+            margin-right: 16px;
+        }
+
+        .overview-item .info h4 {
+            margin: 0;
+            font-size: 14px;
+            color: #606266;
+        }
+
+        .overview-item .info .number {
+            font-size: 24px;
+            color: #303133;
+            margin-top: 8px;
+        }
+
+        .overview-item .info .unit {
+            font-size: 14px;
+            color: #909399;
+            margin-left: 4px;
+        }
+
+        /* 状态标签样式 */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        /* 弹窗样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            padding: 16px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            padding: 24px;
+            max-height: calc(85vh - 120px);
+            overflow-y: auto;
+        }
+
+        .modal-footer {
+            padding: 16px;
+            border-top: 1px solid #eee;
+            text-align: right;
+        }
+
+        .form-section {
+            background: #f8f9fa;
+            border-radius: 4px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .form-section-title {
+            font-size: 14px;
+            color: #606266;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .form-text {
+            padding: 6px 0;
+            color: #303133;
+        }
+
+        /* 工序进度样式 */
+        .process-step {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            background: #409eff;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+    </style>
+
+    <script src="../../../js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            Menu.renderMenu();
+            initMenuToggle();
+        });
+
+        function searchProcess() {
+            // 实现查询功能
+            console.log('执行查询');
+        }
+
+        function exportProcess() {
+            // 实现导出功能
+            console.log('执行导出');
+        }
+
+        function viewProcess(workOrderId) {
+            // 模拟获取工单数据
+            const processData = {
+                workOrderId: workOrderId,
+                productName: '特级铁观音',
+                planQuantity: '1000',
+                completedQuantity: '450',
+                startTime: '2024-03-25 08:00',
+                expectedEndTime: '2024-03-26 17:00',
+                steps: [
+                    { name: '窨花', status: '已完成', time: '45分钟' },
+                    { name: '压花', status: '已完成', time: '60分钟' },
+                    { name: '提花', status: '进行中', time: '30分钟' },
+                    { name: '发酵', status: '待开始', time: '120分钟' },
+                    { name: '分装', status: '待开始', time: '90分钟' }
+                ]
+            };
+
+            // 填充基本信息
+            document.getElementById('viewWorkOrderId').textContent = processData.workOrderId;
+            document.getElementById('viewProductName').textContent = processData.productName;
+            document.getElementById('viewPlanQuantity').textContent = processData.planQuantity;
+            document.getElementById('viewCompletedQuantity').textContent = processData.completedQuantity;
+            document.getElementById('viewStartTime').textContent = processData.startTime;
+            document.getElementById('viewExpectedEndTime').textContent = processData.expectedEndTime;
+
+            // 填充工序步骤
+            const stepsContainer = document.getElementById('viewProcessSteps');
+            stepsContainer.innerHTML = processData.steps.map((step, index) => `
+                <div class="process-step">
+                    <div class="step-number">${index + 1}</div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: bold;">${step.name}</div>
+                        <div style="color: #666; font-size: 12px;">
+                            <span>标准工时：${step.time}</span>
+                            <span style="margin-left: 16px;">状态：${step.status}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // 显示弹窗
+            document.getElementById('viewProcessModal').style.display = 'flex';
+        }
+
+        function pauseProcess(workOrderId) {
+            // 实现暂停功能
+            console.log('暂停工单:', workOrderId);
+        }
+
+        function resumeProcess(workOrderId) {
+            // 实现恢复功能
+            console.log('恢复工单:', workOrderId);
+        }
+
+        function hideModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+    </script>
+</body>
+</html> 

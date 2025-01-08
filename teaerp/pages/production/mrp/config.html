@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MRP运算配置 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/modules/production.css">
+    <link rel="stylesheet" href="../../../css/modules/production/mrp.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="breadcrumb standard-breadcrumb">
+                    <i class="fas fa-industry"></i>
+                    <span>生产管理</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <span>MRP运算管理</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <span>运算配置</span>
+                </div>
+
+                <div class="standard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-clock"></i> 定时运算设置</h3>
+                    </div>
+                    <div class="card-body">
+                        <form class="standard-form">
+                            <div class="form-group">
+                                <label>运算时间点</label>
+                                <input type="time" class="form-control" name="executeTime" value="23:00">
+                            </div>
+                            <div class="form-group">
+                                <label>运算频率</label>
+                                <select class="form-control" name="frequency">
+                                    <option value="daily">每天</option>
+                                    <option value="weekly">每周</option>
+                                    <option value="monthly">每月</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>运算范围(天)</label>
+                                <input type="number" class="form-control" name="range" value="30" min="1" max="365">
+                            </div>
+                            <div class="form-group">
+                                <label>触发方式</label>
+                                <div class="radio-group">
+                                    <label>
+                                        <input type="radio" name="triggerType" value="auto" checked>
+                                        自动触发
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="triggerType" value="manual">
+                                        手动触发
+                                    </label>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="standard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-cogs"></i> 运算参数设置</h3>
+                    </div>
+                    <div class="card-body">
+                        <form class="standard-form">
+                            <div class="form-group">
+                                <label>提前期设置(天)</label>
+                                <input type="number" class="form-control" name="leadTime" value="7" min="1">
+                            </div>
+                            <div class="form-group">
+                                <label>安全库存系数</label>
+                                <input type="number" class="form-control" name="safetyStock" value="1.2" step="0.1" min="1">
+                            </div>
+                            <div class="form-group">
+                                <label>最小批量</label>
+                                <input type="number" class="form-control" name="minBatch" value="100" min="1">
+                            </div>
+                            <div class="form-group">
+                                <label>批量倍数</label>
+                                <input type="number" class="form-control" name="batchMultiple" value="50" min="1">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="standard-form-actions">
+                    <button class="standard-button secondary" onclick="resetConfig()">
+                        <i class="fas fa-undo"></i> 重置
+                    </button>
+                    <button class="standard-button primary" onclick="saveConfig()">
+                        <i class="fas fa-save"></i> 保存配置
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/common.js"></script>
+    <script src="../../../js/modules/production/mrp/mock-data.js"></script>
+    <script src="../../../js/modules/production/mrp/config.js"></script>
+    <script src="../../../js/app.js"></script>
+    <script>
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', () => {
+            // 初始化菜单
+            Menu.renderMenu();
+            // 初始化菜单切换功能
+            initMenuToggle();
+        });
+    </script>
+</body>
+</html> 

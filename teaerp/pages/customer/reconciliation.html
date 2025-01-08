@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>客户对账 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/menu.css">
+    <link rel="stylesheet" href="../../css/modules/customer.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+            <div class="logo">TeaERP</div>
+            <nav class="top-nav">
+                <ul>
+                    <li><a href="../../index.html">首页</a></li>
+                    <li><a href="#">消息</a></li>
+                    <li><a href="#">帮助</a></li>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <span class="username">管理员</span>
+                <a href="#" class="logout">退出</a>
+            </div>
+            </div>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-users"></i>
+                    <span>客户管理</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-balance-scale"></i>
+                    <span>客户对账</span>
+                </div>
+
+                <!-- 统计卡片 -->
+                <div class="stats-cards">
+                    <div class="stat-card warning">
+                        <div class="info">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <div class="label">待对账</div>
+                            <div class="value">15<span>笔</span></div>
+                        </div>
+                    </div>
+                    <div class="stat-card danger">
+                        <div class="info">
+                            <i class="fas fa-clock"></i>
+                            <div class="label">逾期应收</div>
+                            <div class="value">8<span>笔</span></div>
+                </div>
+                    </div>
+                    <div class="stat-card info">
+                        <div class="info">
+                            <i class="fas fa-sync"></i>
+                            <div class="label">对账中</div>
+                            <div class="value">12<span>笔</span></div>
+                    </div>
+                    </div>
+                    <div class="stat-card success">
+                        <div class="info">
+                            <i class="fas fa-check-circle"></i>
+                            <div class="label">已完成</div>
+                            <div class="value">245<span>笔</span></div>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- 对账列表 -->
+                <div class="card standard-card">
+                    <div class="toolbar">
+                        <div class="search-area">
+                            <div class="search-bar">
+                                <select class="form-control search-input" style="width: 180px;">
+                                    <option value="">对账状态</option>
+                                    <option value="pending">待对账</option>
+                                    <option value="processing">对账中</option>
+                                    <option value="completed">已完成</option>
+                                </select>
+                                <select class="form-control search-input" style="width: 180px;">
+                                    <option value="">账期</option>
+                                    <option value="current">本月</option>
+                                    <option value="last">上月</option>
+                                    <option value="quarter">本季度</option>
+                                </select>
+                                <input type="text" class="form-control search-input" style="width: 180px;" placeholder="输入客户名称/编号">
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-search"></i> 查询
+                                </button>
+                                <button class="btn btn-secondary">
+                                    <i class="fas fa-redo"></i> 重置
+                                </button>
+                                <div class="divider"></div>
+                                <button class="btn btn-primary" onclick="createReconciliation()">
+                                    <i class="fas fa-plus"></i> 新建对账
+                                </button>
+                                <button class="btn btn-secondary" onclick="exportReconciliation()">
+                                    <i class="fas fa-file-export"></i> 导出
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>对账单号</th>
+                                    <th>客户名称</th>
+                                    <th>账期</th>
+                                    <th>应收金额</th>
+                                    <th>实收金额</th>
+                                    <th>差异金额</th>
+                                    <th>对账状态</th>
+                                    <th>创建时间</th>
+                                    <th style="min-width: 120px;">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>RC202403010001</td>
+                                    <td>茶叶专卖店A</td>
+                                    <td>2024-02</td>
+                                    <td>¥50,000.00</td>
+                                    <td>¥48,000.00</td>
+                                    <td class="text-danger">-¥2,000.00</td>
+                                    <td><span class="badge warning">待确认</span></td>
+                                    <td>2024-03-01</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button class="btn btn-secondary btn-xs" onclick="viewReconciliation(1)">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-secondary btn-xs" onclick="editReconciliation(1)">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-secondary btn-xs" onclick="downloadReconciliation(1)">
+                                                <i class="fas fa-download"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>RC202403010002</td>
+                                    <td>茶叶批发商B</td>
+                                    <td>2024-02</td>
+                                    <td>¥100,000.00</td>
+                                    <td>¥100,000.00</td>
+                                    <td class="text-success">¥0.00</td>
+                                    <td><span class="badge success">已完成</span></td>
+                                    <td>2024-03-01</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button class="btn btn-secondary btn-xs" onclick="viewReconciliation(2)">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-secondary btn-xs" onclick="editReconciliation(2)">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-secondary btn-xs" onclick="downloadReconciliation(2)">
+                                                <i class="fas fa-download"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>RC202403010003</td>
+                                    <td>茶叶经销商C</td>
+                                    <td>2024-02</td>
+                                    <td>¥30,000.00</td>
+                                    <td>¥20,000.00</td>
+                                    <td class="text-danger">-¥10,000.00</td>
+                                    <td><span class="badge info">对账中</span></td>
+                                    <td>2024-03-01</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button class="btn btn-secondary btn-xs" onclick="viewReconciliation(3)">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-secondary btn-xs" onclick="editReconciliation(3)">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-secondary btn-xs" onclick="downloadReconciliation(3)">
+                                                <i class="fas fa-download"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>RC202403010004</td>
+                                    <td>茶叶专卖店D</td>
+                                    <td>2024-02</td>
+                                    <td>¥80,000.00</td>
+                                    <td>¥80,000.00</td>
+                                    <td class="text-success">¥0.00</td>
+                                    <td><span class="badge primary">待对账</span></td>
+                                    <td>2024-03-01</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button class="btn btn-secondary btn-xs" onclick="viewReconciliation(4)">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-secondary btn-xs" onclick="editReconciliation(4)">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-secondary btn-xs" onclick="downloadReconciliation(4)">
+                                                <i class="fas fa-download"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 分页器 -->
+                    <div class="pagination-toolbar">
+                        <div class="pagination">
+                            <button class="btn btn-secondary" disabled>
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="btn btn-primary">1</button>
+                            <button class="btn btn-secondary">2</button>
+                            <button class="btn btn-secondary">3</button>
+                            <button class="btn btn-secondary">4</button>
+                            <button class="btn btn-secondary">5</button>
+                            <span>...</span>
+                            <button class="btn btn-secondary">10</button>
+                            <button class="btn btn-secondary">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 对账单详情弹窗 -->
+    <div class="modal" id="reconciliationModal">
+        <div class="dialog-overlay">
+            <div class="dialog">
+                <div class="dialog-header">
+                    <h3><i class="fas fa-balance-scale"></i> 对账单信息</h3>
+                    <button class="close-button" onclick="closeReconciliationModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="dialog-content">
+                    <form id="reconciliationForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>对账单号</label>
+                                <input type="text" class="form-control" name="reconciliationCode" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label>客户名称<span class="required">*</span></label>
+                                <select class="form-control" name="customerId" required>
+                                    <option value="">请选择客户</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>账期<span class="required">*</span></label>
+                                <input type="month" class="form-control" name="period" required>
+                            </div>
+                            <div class="form-group">
+                                <label>对账日期<span class="required">*</span></label>
+                                <input type="date" class="form-control" name="reconciliationDate" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>应收金额<span class="required">*</span></label>
+                                <input type="number" class="form-control" name="receivable" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label>实收金额<span class="required">*</span></label>
+                                <input type="number" class="form-control" name="received" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label>对账状态</label>
+                                <select class="form-control" name="status">
+                                    <option value="pending">待对账</option>
+                                    <option value="processing">对账中</option>
+                                    <option value="completed">已完成</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>差异说明</label>
+                            <textarea class="form-control" name="description" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>对账明细</label>
+                            <div class="table-container">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>单据类型</th>
+                                            <th>单据编号</th>
+                                            <th>单据日期</th>
+                                            <th>金额</th>
+                                            <th>状态</th>
+                                            <th>备注</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>销售单</td>
+                                            <td>SO202403010001</td>
+                                            <td>2024-03-01</td>
+                                            <td>¥20,000.00</td>
+                                            <td><span class="badge success">已收款</span></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>销售单</td>
+                                            <td>SO202403010002</td>
+                                            <td>2024-03-01</td>
+                                            <td>¥30,000.00</td>
+                                            <td><span class="badge warning">部分收款</span></td>
+                                            <td>已收款28,000元</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>附件</label>
+                            <input type="file" class="form-control" name="attachments" multiple>
+                        </div>
+                    </form>
+                </div>
+                <div class="dialog-footer">
+                    <button class="btn btn-secondary" onclick="closeReconciliationModal()">取消</button>
+                    <button class="btn btn-primary" onclick="submitReconciliation()">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* 统计卡片样式 */
+        .stats-cards {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+            flex-wrap: nowrap;
+        }
+        
+        .stat-card {
+            flex: 1;
+            padding: 16px;
+            border-radius: 4px;
+            background: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .stat-card .info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .stat-card i {
+            font-size: 24px;
+        }
+        
+        .stat-card .label {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .stat-card .value {
+            font-size: 24px;
+            font-weight: bold;
+            margin-left: auto;
+        }
+        
+        .stat-card .value span {
+            font-size: 14px;
+            margin-left: 4px;
+            color: #666;
+        }
+        
+        .stat-card.warning {
+            border-left: 4px solid #ff9800;
+            background: #fff8e1;
+        }
+        
+        .stat-card.warning i,
+        .stat-card.warning .value {
+            color: #ff9800;
+        }
+        
+        .stat-card.danger {
+            border-left: 4px solid #f44336;
+            background: #ffebee;
+        }
+        
+        .stat-card.danger i,
+        .stat-card.danger .value {
+            color: #f44336;
+        }
+        
+        .stat-card.info {
+            border-left: 4px solid #2196f3;
+            background: #e3f2fd;
+        }
+        
+        .stat-card.info i,
+        .stat-card.info .value {
+            color: #2196f3;
+        }
+        
+        .stat-card.success {
+            border-left: 4px solid #4caf50;
+            background: #e8f5e9;
+        }
+        
+        .stat-card.success i,
+        .stat-card.success .value {
+            color: #4caf50;
+        }
+        
+        /* 搜索区域样式 */
+        .search-area {
+            padding: 16px;
+            background: #fff;
+            border-radius: 4px;
+        }
+        
+        .search-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .search-input {
+            width: 180px;
+            height: 32px;
+            padding: 4px 8px;
+            font-size: 14px;
+        }
+        
+        .divider {
+            width: 1px;
+            height: 24px;
+            background: #eee;
+            margin: 0 8px;
+        }
+        
+        /* 按钮样式 */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            height: 32px;
+            padding: 0 12px;
+            font-size: 14px;
+            border-radius: 4px;
+            border: 1px solid #dcdfe6;
+            background: #fff;
+            color: #606266;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            color: #8fd4d2;
+            border-color: #8fd4d2;
+        }
+        
+        .btn-primary {
+            background: #8fd4d2;
+            border-color: #8fd4d2;
+            color: #fff;
+        }
+        
+        .btn-primary:hover {
+            background: #a8e0de;
+            border-color: #a8e0de;
+            color: #fff;
+        }
+        
+        .btn-secondary {
+            background: #fff;
+            border-color: #dcdfe6;
+            color: #606266;
+        }
+        
+        .btn-secondary:hover {
+            border-color: #8fd4d2;
+            color: #8fd4d2;
+        }
+        
+        .btn-xs {
+            height: 24px;
+            padding: 0 8px;
+            font-size: 12px;
+        }
+        
+        /* 表格样式 */
+        .table td {
+            padding: 8px;
+            vertical-align: middle;
+        }
+        
+        .text-danger {
+            color: #f56c6c;
+        }
+        
+        /* 分页样式 */
+        .pagination-toolbar {
+            margin-top: 16px;
+            padding: 16px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: center;
+        }
+
+        .pagination {
+            display: flex;
+            gap: 8px;
+        }
+
+        .pagination button {
+            min-width: 32px;
+            height: 32px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pagination button.btn-primary {
+            background: #8fd4d2;
+            border-color: #8fd4d2;
+        }
+
+        .pagination button.btn-primary:hover {
+            background: #a8e0de;
+            border-color: #a8e0de;
+        }
+
+        .pagination button:disabled {
+            background: #f5f5f5;
+            border-color: #d9d9d9;
+            color: #d9d9d9;
+            cursor: not-allowed;
+        }
+
+        /* 按钮样式调整 */
+        .btn-primary {
+            background: #8fd4d2;
+            border-color: #8fd4d2;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #a8e0de;
+            border-color: #a8e0de;
+            color: #fff;
+        }
+
+        .btn-secondary {
+            background: #fff;
+            border-color: #d9d9d9;
+            color: #666;
+        }
+
+        .btn-secondary:hover {
+            border-color: #8fd4d2;
+            color: #8fd4d2;
+        }
+
+        /* 金额文字样式 */
+        .text-danger {
+            color: #f56c6c;
+        }
+
+        .text-success {
+            color: #67c23a;
+        }
+
+        /* 弹窗样式 */
+        .dialog-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .dialog {
+            width: 800px;
+            max-width: 90%;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .dialog-header {
+            padding: 16px;
+            border-bottom: 1px solid #dcdfe6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dialog-header h3 {
+            margin: 0;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .close-button {
+            border: none;
+            background: none;
+            cursor: pointer;
+            color: #909399;
+        }
+
+        .dialog-content {
+            padding: 16px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .dialog-footer {
+            padding: 16px;
+            border-top: 1px solid #dcdfe6;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #606266;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .form-row .form-group:last-child {
+            margin-right: 0;
+        }
+
+        .form-control {
+            width: 100%;
+            height: 36px;
+            padding: 0 12px;
+            font-size: 14px;
+            border: 1px solid #dcdfe6;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: #8fd4d2;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(143, 212, 210, 0.2);
+        }
+
+        textarea.form-control {
+            height: auto;
+            min-height: 80px;
+            padding: 8px 12px;
+            line-height: 1.5;
+        }
+
+        .required {
+            color: #f56c6c;
+            margin-left: 4px;
+        }
+
+        /* 修改弹窗HTML结构 */
+        .modal {
+            display: none;
+        }
+
+        .modal.show {
+            display: block;
+        }
+
+        /* 表格样式 */
+        .table-container {
+            margin-top: 8px;
+            border: 1px solid #dcdfe6;
+            border-radius: 4px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ebeef5;
+        }
+
+        .table th {
+            background-color: #f5f7fa;
+            color: #606266;
+            font-weight: 500;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f5f7fa;
+        }
+
+        .table tbody tr:last-child td {
+            border-bottom: none;
+        }
+    </style>
+
+    <script src="../../js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            Menu.renderMenu();
+            initMenuToggle();
+        });
+
+        function createReconciliation() {
+            document.getElementById('reconciliationModal').classList.add('show');
+        }
+
+        function closeReconciliationModal() {
+            document.getElementById('reconciliationModal').classList.remove('show');
+            document.getElementById('reconciliationForm').reset();
+        }
+
+        function submitReconciliation() {
+            const form = document.getElementById('reconciliationForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            // TODO: 处理表单提交
+            alert('对账单创建成功！');
+            closeReconciliationModal();
+        }
+
+        function viewReconciliation(id) {
+            document.getElementById('reconciliationModal').classList.add('show');
+            // TODO: 加载对账单详情
+            setFormReadOnly(true);
+        }
+
+        function editReconciliation(id) {
+            document.getElementById('reconciliationModal').classList.add('show');
+            // TODO: 加载对账单详情
+            setFormReadOnly(false);
+        }
+
+        function setFormReadOnly(readonly) {
+            const form = document.getElementById('reconciliationForm');
+            const inputs = form.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                if (input.name !== 'reconciliationCode') {
+                    input.readOnly = readonly;
+                    if (input.tagName === 'SELECT') {
+                        input.disabled = readonly;
+                    }
+                }
+            });
+        }
+
+        function downloadReconciliation(id) {
+            alert('下载对账单功能开发中...');
+        }
+
+        function exportReconciliation() {
+            alert('导出功能开发中...');
+        }
+    </script>
+</body>
+</html> 

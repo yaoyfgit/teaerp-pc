@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>账簿查询 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../../../css/common.css">
+    <link rel="stylesheet" href="../../../../../css/layout.css">
+    <link rel="stylesheet" href="../../../../../css/menu.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../../../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-money-bill-wave"></i>
+                    <span>财务管理</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-book"></i>
+                    <span>总账管理</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-book-open"></i>
+                    <span>账簿查询</span>
+                </div>
+
+                <div class="dashboard">
+                    <div class="dashboard-item">
+                        <div class="title">
+                            <i class="fas fa-book"></i>
+                            <h3>总账</h3>
+                        </div>
+                        <p>查询各会计科目的总账记录，包括期初余额、本期发生额、期末余额等。</p>
+                        <a href="general.html" class="btn btn-primary">
+                            <i class="fas fa-arrow-right"></i>
+                            查看总账
+                        </a>
+                    </div>
+
+                    <div class="dashboard-item">
+                        <div class="title">
+                            <i class="fas fa-list-alt"></i>
+                            <h3>明细账</h3>
+                        </div>
+                        <p>查看会计科目的明细账目记录，包括每笔业务的具体发生情况。</p>
+                        <a href="detail.html" class="btn btn-primary">
+                            <i class="fas fa-arrow-right"></i>
+                            查看明细
+                        </a>
+                    </div>
+
+                    <div class="dashboard-item">
+                        <div class="title">
+                            <i class="fas fa-calendar-alt"></i>
+                            <h3>日记账</h3>
+                        </div>
+                        <p>按日期查看账务记录，包括现金日记账、银行日记账等。</p>
+                        <a href="daily.html" class="btn btn-primary">
+                            <i class="fas fa-arrow-right"></i>
+                            查看日记账
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../../../js/common.js"></script>
+    <script type="module" src="../../../../../js/app.js"></script>
+    <script>
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', () => {
+            // 初始化菜单
+            Menu.renderMenu();
+            // 初始化菜单切换功能
+            initMenuToggle();
+        });
+    </script>
+</body>
+</html> 

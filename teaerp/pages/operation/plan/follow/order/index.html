@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>销售订单关联 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../../../css/common.css">
+    <link rel="stylesheet" href="../../../../../css/layout.css">
+    <link rel="stylesheet" href="../../../../../css/modules/operation.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb">
+                <span>经营管理</span>
+                <span class="separator">/</span>
+                <span>计划管理</span>
+                <span class="separator">/</span>
+                <span>目标跟进</span>
+                <span class="separator">/</span>
+                <span>销售订单关联</span>
+            </div>
+
+            <!-- 订单列表 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>订单列表</h3>
+                    <div class="card-tools">
+                        <button class="button" onclick="showModal('orderModal')">
+                            <i class="fas fa-plus"></i> 新建订单
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="search-bar">
+                        <div class="form-group">
+                            <label>订单编号</label>
+                            <input type="text" class="form-control" id="searchCode">
+                        </div>
+                        <div class="form-group">
+                            <label>客户名称</label>
+                            <input type="text" class="form-control" id="searchCustomer">
+                        </div>
+                        <div class="form-group">
+                            <label>销售员</label>
+                            <select class="form-control" id="searchSalesperson">
+                                <option value="">全部</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>订单状态</label>
+                            <select class="form-control" id="searchStatus">
+                                <option value="">全部</option>
+                                <option value="pending">待处理</option>
+                                <option value="processing">处理中</option>
+                                <option value="completed">已完成</option>
+                                <option value="cancelled">已取消</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>日期范围</label>
+                            <input type="date" class="form-control" id="searchStartDate">
+                            <span>至</span>
+                            <input type="date" class="form-control" id="searchEndDate">
+                        </div>
+                        <button class="button" onclick="searchOrders()">
+                            <i class="fas fa-search"></i> 搜索
+                        </button>
+                    </div>
+                    <div id="orderTable"></div>
+                    <div id="pagination"></div>
+                </div>
+            </div>
+
+            <!-- 订单编辑弹窗 -->
+            <div class="modal" id="orderModal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>订单编辑</h3>
+                        <button class="close" onclick="hideModal('orderModal')">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="orderForm">
+                            <div class="form-group">
+                                <label>客户名称</label>
+                                <select class="form-control" name="customerId" required>
+                                    <option value="">请选择</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>销售员</label>
+                                <select class="form-control" name="salespersonId" required>
+                                    <option value="">请选择</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>关联目标</label>
+                                <select class="form-control" name="targetId" required>
+                                    <option value="">请选择</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>订单日期</label>
+                                <input type="date" class="form-control" name="orderDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label>预计交付日期</label>
+                                <input type="date" class="form-control" name="deliveryDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label>订单备注</label>
+                                <textarea class="form-control" name="remarks" rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>产品明细</label>
+                                <div class="table-container">
+                                    <table class="table" id="productTable">
+                                        <thead>
+                                            <tr>
+                                                <th>产品名称</th>
+                                                <th>规格</th>
+                                                <th>单价</th>
+                                                <th>数量</th>
+                                                <th>金额</th>
+                                                <th>操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- 产品明细行 -->
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="6">
+                                                    <button type="button" class="button small" onclick="addProductRow()">
+                                                        <i class="fas fa-plus"></i> 添加产品
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>订单总额</label>
+                                <input type="number" class="form-control" name="totalAmount" readonly>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="button secondary" onclick="hideModal('orderModal')">取消</button>
+                        <button class="button" onclick="saveOrder()">保存</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 跟踪记录弹窗 -->
+            <div class="modal" id="trackingModal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>跟踪记录</h3>
+                        <button class="close" onclick="hideModal('trackingModal')">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="trackingList"></div>
+                        <form id="trackingForm">
+                            <div class="form-group">
+                                <label>跟踪内容</label>
+                                <textarea class="form-control" name="content" rows="3" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>跟踪类型</label>
+                                <select class="form-control" name="type" required>
+                                    <option value="progress">进度更新</option>
+                                    <option value="problem">问题反馈</option>
+                                    <option value="adjustment">调整建议</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="button secondary" onclick="hideModal('trackingModal')">关闭</button>
+                        <button class="button" onclick="addTracking()">添加记录</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../../../../js/common.js"></script>
+    <script src="../../../../../js/modules/operation/plan/follow/order/index.js"></script>
+</body>
+</html> 

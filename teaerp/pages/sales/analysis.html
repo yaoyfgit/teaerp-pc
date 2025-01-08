@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>销售分析 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/menu.css">
+    <link rel="stylesheet" href="../../css/modules/sales.css">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <span>销售管理</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <span>销售分析</span>
+                </div>
+
+                <!-- 销售概览 -->
+                <div class="standard-card">
+                    <div class="overview-grid">
+                        <div class="overview-item">
+                            <i class="fas fa-shopping-cart"></i>
+                            <div class="info">
+                                <h4>销售总额</h4>
+                                <div class="number">1,580<span class="unit">万</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item">
+                            <i class="fas fa-chart-line"></i>
+                            <div class="info">
+                                <h4>订单数量</h4>
+                                <div class="number">256<span class="unit">笔</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item">
+                            <i class="fas fa-yen-sign"></i>
+                            <div class="info">
+                                <h4>平均客单价</h4>
+                                <div class="number">6.2<span class="unit">万</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item">
+                            <i class="fas fa-chart-pie"></i>
+                            <div class="info">
+                                <h4>退货率</h4>
+                                <div class="number">2.5<span class="unit">%</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item">
+                            <i class="fas fa-clock"></i>
+                            <div class="info">
+                                <h4>及时率</h4>
+                                <div class="number">98<span class="unit">%</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 分析图表 -->
+                <div class="standard-card">
+                    <div class="standard-card-header">
+                        <h3><i class="fas fa-chart-line"></i> 销售分析</h3>
+                        <div class="action-bar">
+                            <div class="date-range">
+                                <select class="standard-select" onchange="updateCharts()">
+                                    <option value="month">月度分析</option>
+                                    <option value="quarter">季度分析</option>
+                                    <option value="year">年度分析</option>
+                                </select>
+                                <div class="date-range-group">
+                                    <input type="date" class="standard-input" onchange="updateCharts()">
+                                    <span class="date-separator">至</span>
+                                    <input type="date" class="standard-input" onchange="updateCharts()">
+                                </div>
+                            </div>
+                            <button class="standard-button primary" onclick="exportReport()">
+                                <i class="fas fa-download"></i> 导出报表
+                            </button>
+                        </div>
+                    </div>
+                    <div class="standard-card-body">
+                        <div class="chart-grid">
+                            <div class="chart-card">
+                                <h3 class="chart-title">销售趋势分析</h3>
+                                <div class="chart" id="trendChart"></div>
+                            </div>
+                            <div class="chart-card">
+                                <h3 class="chart-title">客户销售额占比</h3>
+                                <div class="chart" id="customerPieChart"></div>
+                            </div>
+                            <div class="chart-card">
+                                <h3 class="chart-title">商品销售额占比</h3>
+                                <div class="chart" id="productPieChart"></div>
+                            </div>
+                            <div class="chart-card">
+                                <h3 class="chart-title">商品销售排名</h3>
+                                <div class="chart" id="productRankChart"></div>
+                            </div>
+                            <div class="chart-card">
+                                <h3 class="chart-title">销售退货率分析</h3>
+                                <div class="chart" id="returnRateChart"></div>
+                            </div>
+                            <div class="chart-card">
+                                <h3 class="chart-title">销售及时率分析</h3>
+                                <div class="chart" id="onTimeRateChart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/app.js"></script>
+    <script src="../../js/modules/sales/analysis.js"></script>
+</body>
+</html> 

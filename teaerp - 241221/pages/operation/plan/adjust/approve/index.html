@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>目标调整审批 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../../../css/common.css">
+    <link rel="stylesheet" href="../../../../../css/layout.css">
+    <link rel="stylesheet" href="../../../../../css/modules/operation.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb">
+                <span>经营管理</span>
+                <span class="separator">/</span>
+                <span>计划管理</span>
+                <span class="separator">/</span>
+                <span>目标调整</span>
+                <span class="separator">/</span>
+                <span>调整审批</span>
+            </div>
+
+            <!-- 审批列表 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>审批列表</h3>
+                </div>
+                <div class="card-body">
+                    <div class="search-bar">
+                        <div class="form-group">
+                            <label>目标类型</label>
+                            <select class="form-control" id="searchType">
+                                <option value="">全部</option>
+                                <option value="company">公司目标</option>
+                                <option value="department">部门目标</option>
+                                <option value="employee">员工目标</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>申请人</label>
+                            <input type="text" class="form-control" id="searchApplicant">
+                        </div>
+                        <div class="form-group">
+                            <label>审批状态</label>
+                            <select class="form-control" id="searchStatus">
+                                <option value="">全部</option>
+                                <option value="pending">待审批</option>
+                                <option value="approved">已通过</option>
+                                <option value="rejected">已驳回</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>日期范围</label>
+                            <input type="date" class="form-control" id="searchStartDate">
+                            <span>至</span>
+                            <input type="date" class="form-control" id="searchEndDate">
+                        </div>
+                        <button class="button" onclick="searchApprovals()">
+                            <i class="fas fa-search"></i> 搜索
+                        </button>
+                    </div>
+                    <div id="approvalTable"></div>
+                    <div id="pagination"></div>
+                </div>
+            </div>
+
+            <!-- 审批弹窗 -->
+            <div class="modal" id="approvalModal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>审批详情</h3>
+                        <button class="close" onclick="hideModal('approvalModal')">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="approval-info">
+                            <div class="info-group">
+                                <label>申请编号</label>
+                                <span id="approvalCode"></span>
+                            </div>
+                            <div class="info-group">
+                                <label>申请人</label>
+                                <span id="approvalApplicant"></span>
+                            </div>
+                            <div class="info-group">
+                                <label>申请时间</label>
+                                <span id="approvalTime"></span>
+                            </div>
+                            <div class="info-group">
+                                <label>目标类型</label>
+                                <span id="approvalTargetType"></span>
+                            </div>
+                            <div class="info-group">
+                                <label>目标名称</label>
+                                <span id="approvalTargetName"></span>
+                            </div>
+                            <div class="info-group">
+                                <label>调整类型</label>
+                                <span id="approvalAdjustType"></span>
+                            </div>
+                            <div class="info-group">
+                                <label>调整前</label>
+                                <span id="approvalBeforeValue"></span>
+                            </div>
+                            <div class="info-group">
+                                <label>调整后</label>
+                                <span id="approvalAfterValue"></span>
+                            </div>
+                            <div class="info-group">
+                                <label>调整原因</label>
+                                <p id="approvalReason"></p>
+                            </div>
+                            <div class="info-group">
+                                <label>支撑材料</label>
+                                <div id="approvalFiles"></div>
+                            </div>
+                        </div>
+                        <form id="approvalForm">
+                            <div class="form-group">
+                                <label>审批意见</label>
+                                <textarea class="form-control" name="comment" rows="3" required></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="button secondary" onclick="hideModal('approvalModal')">关闭</button>
+                        <button class="button danger" onclick="handleApproval('reject')">驳回</button>
+                        <button class="button success" onclick="handleApproval('approve')">通过</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../../../../js/common.js"></script>
+    <script src="../../../../../js/modules/operation/plan/adjust/approve/index.js"></script>
+</body>
+</html> 

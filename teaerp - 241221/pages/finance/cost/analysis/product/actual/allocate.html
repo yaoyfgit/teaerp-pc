@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成本分配 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../../../../css/common.css">
+    <link rel="stylesheet" href="../../../../../../css/layout.css">
+    <link rel="stylesheet" href="../../../../../../css/modules/finance.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb">
+                <span>财务管理</span>
+                <span class="separator">/</span>
+                <span>成本分析</span>
+                <span class="separator">/</span>
+                <span>产品成本分析</span>
+                <span class="separator">/</span>
+                <span>成本分配</span>
+            </div>
+
+            <!-- 分配设置 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>分配设置</h3>
+                </div>
+                <div class="card-body">
+                    <form id="allocateForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>产品类别</label>
+                                <select class="form-control" name="categoryId" required>
+                                    <option value="">请选择</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>分配期间</label>
+                                <input type="month" class="form-control" name="period" required>
+                            </div>
+                            <div class="form-group">
+                                <label>分配方式</label>
+                                <select class="form-control" name="method" required>
+                                    <option value="output">产量比例</option>
+                                    <option value="worktime">工时比例</option>
+                                    <option value="material">材料比例</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="button">
+                                <i class="fas fa-random"></i> 开始分配
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- 分配结果 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>分配结果</h3>
+                    <div class="card-tools">
+                        <button class="button" onclick="exportResult()">
+                            <i class="fas fa-download"></i> 导出结果
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="result-summary">
+                        <div class="summary-item">
+                            <label>待分配总额</label>
+                            <span id="totalAmount">0.00</span>
+                        </div>
+                        <div class="summary-item">
+                            <label>已分配金额</label>
+                            <span id="allocatedAmount">0.00</span>
+                        </div>
+                        <div class="summary-item">
+                            <label>分配率</label>
+                            <span id="allocateRate">0%</span>
+                        </div>
+                    </div>
+
+                    <div class="tabs">
+                        <div class="tab-header">
+                            <button class="tab-btn active" data-tab="detail">分配明细</button>
+                            <button class="tab-btn" data-tab="chart">分配图表</button>
+                        </div>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="detailTab">
+                                <div id="detailTable"></div>
+                            </div>
+                            <div class="tab-pane" id="chartTab">
+                                <div id="allocateChart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 分配历史 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>分配历史</h3>
+                </div>
+                <div class="card-body">
+                    <div class="search-bar">
+                        <div class="form-group">
+                            <label>产品类别</label>
+                            <select class="form-control" id="searchCategory">
+                                <option value="">全部</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>日期范围</label>
+                            <input type="date" class="form-control" id="startDate">
+                            <span>至</span>
+                            <input type="date" class="form-control" id="endDate">
+                        </div>
+                        <button class="button" onclick="searchRecords()">
+                            <i class="fas fa-search"></i> 搜索
+                        </button>
+                    </div>
+                    <div id="historyTable"></div>
+                    <div id="pagination"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../../../../../js/common.js"></script>
+    <script src="../../../../../../js/modules/finance/cost/analysis/product/allocate.js"></script>
+</body>
+</html> 

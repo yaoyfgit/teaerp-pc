@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeaERP</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- 系统样式 -->
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/layout.css">
+</head>
+</html> <body>
+    <div class="app-container">
+        <!-- 顶部导航 -->
+        <header class="app-header">
+            <div class="logo">TeaERP</div>
+            <nav class="top-nav">
+                <ul>
+                    <li><a href="../../index.html">首页</a></li>
+                    <li><a href="#">消息</a></li>
+                    <li><a href="#">帮助</a></li>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <span class="username">管理员</span>
+                <a href="#" class="logout">退出</a>
+            </div>
+        </header>
+
+        <div class="app-main">
+            <!-- 左侧菜单 -->
+            <aside class="app-sidebar">
+                <!-- ��单内容 -->
+            </aside>
+
+            <!-- 内容区域 -->
+            <main class="app-content">
+                <!-- 面包屑导航 -->
+                <div class="breadcrumb">
+                    <span>供应商管理</span>
+                    <span class="separator">/</span>
+                    <span>价格管理</span>
+                </div>
+
+                <!-- 工具栏 -->
+                <div class="toolbar">
+                    <div class="search-bar">
+                        <div class="form-group">
+                            <select class="form-control" name="supplierId">
+                                <option value="">选择供应商</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control" name="category">
+                                <option value="">商品品类</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="输入商品名称/编码搜索">
+                        </div>
+                        <button class="button primary">搜索</button>
+                        <button class="button" onclick="resetSearch()">重置</button>
+                    </div>
+                    <div class="action-bar">
+                        <button class="button primary" onclick="showCreateModal()">新建价格</button>
+                        <button class="button" onclick="importPrice()">导入</button>
+                        <button class="button" onclick="exportPrice()">导出</button>
+                    </div>
+                </div>
+
+                <!-- 数据表格 -->
+                <div class="data-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>商品编码</th>
+                                <th>商品名称</th>
+                                <th>品类</th>
+                                <th>供应商</th>
+                                <th>采购价格</th>
+                                <th>计量单位</th>
+                                <th>最小起订量</th>
+                                <th>生效日期</th>
+                                <th>失效日期</th>
+                                <th>价格状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 价格数据行 -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 分页器 -->
+                <div class="pagination">
+                    <!-- 分页内容 -->
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- 新建/编辑价格弹窗 -->
+    <div class="modal" id="priceModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>新建价格</h3>
+                <button class="close-btn" onclick="hideModal('priceModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form">
+                    <!-- 基本信息 -->
+                    <div class="form-section">
+                        <h4>基本信息</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>供应商</label>
+                                <select class="form-control" name="supplierId" required>
+                                    <option value="">请选择供应商</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>商品品类</label>
+                                <select class="form-control" name="category" required>
+                                    <option value="">请选择品类</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>商品名称</label>
+                                <select class="form-control" name="productId" required>
+                                    <option value="">请选择商品</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>计量单位</label>
+                                <select class="form-control" name="unit" required>
+                                    <option value="kg">千克</option>
+                                    <option value="g">克</option>
+                                    <option value="piece">件</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 价格信息 -->
+                    <div class="form-section">
+                        <h4>价格信息</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>采购价格</label>
+                                <input type="number" class="form-control" name="price" required>
+                            </div>
+                            <div class="form-group">
+                                <label>最小起订量</label>
+                                <input type="number" class="form-control" name="minOrderQuantity">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>生效日期</label>
+                                <input type="date" class="form-control" name="startDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label>失效日期</label>
+                                <input type="date" class="form-control" name="endDate">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 其他信息 -->
+                    <div class="form-section">
+                        <h4>其他信息</h4>
+                        <div class="form-group">
+                            <label>备注说明</label>
+                            <textarea class="form-control" name="remarks" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="button" onclick="hideModal('priceModal')">取消</button>
+                <button class="button primary" onclick="submitPrice()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/common.js"></script>
+    <script src="../../js/modules/supplier/price.js"></script>
+</body>
+</html> 

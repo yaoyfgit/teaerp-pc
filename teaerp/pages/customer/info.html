@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>客户信息 - TeaERP</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- 系统样式 -->
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/menu.css">
+    <!-- 模块样式 -->
+    <link rel="stylesheet" href="../../css/modules/customer.css">
+</head>
+<body>
+    <div class="modal-content">
+        <!-- 客户基本信息 -->
+        <div class="card standard-card">
+            <div class="toolbar">
+                <div class="toolbar-title">
+                    <i class="fas fa-user"></i>
+                    <span>基本信息</span>
+                </div>
+            </div>
+            <div class="form-container">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label class="form-label">客户编号</label>
+                        <input type="text" class="form-control" value="CU202403010001" readonly>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="form-label">客户名称</label>
+                        <input type="text" class="form-control" value="茶叶专卖店A">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="form-label">客户类型</label>
+                        <select class="form-control">
+                            <option value="retail" selected>零售客户</option>
+                            <option value="wholesale">批发客户</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label class="form-label">客户等级</label>
+                        <select class="form-control">
+                            <option value="A" selected>A级</option>
+                            <option value="B">B级</option>
+                            <option value="C">C级</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="form-label">注册时间</label>
+                        <input type="date" class="form-control" value="2024-03-01">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="form-label">客户状态</label>
+                        <select class="form-control">
+                            <option value="active" selected>活跃</option>
+                            <option value="inactive">非活跃</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 联系人信息 -->
+        <div class="card standard-card">
+            <div class="toolbar">
+                <div class="toolbar-title">
+                    <i class="fas fa-address-book"></i>
+                    <span>联系人信息</span>
+                </div>
+                <div class="action-bar">
+                    <button class="btn btn-primary btn-sm" onclick="addContact()">
+                        <i class="fas fa-plus"></i> 新增联系人
+                    </button>
+                </div>
+            </div>
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>姓名</th>
+                            <th>职位</th>
+                            <th>手机号码</th>
+                            <th>固定电话</th>
+                            <th>电子邮箱</th>
+                            <th>是否主联系人</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>张三</td>
+                            <td>采购经理</td>
+                            <td>13800138000</td>
+                            <td>0592-88888888</td>
+                            <td>zhangsan@example.com</td>
+                            <td><span class="badge primary">是</span></td>
+                            <td>
+                                <button class="btn btn-secondary btn-sm" onclick="editContact(1)">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteContact(1)">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 收货地址 -->
+        <div class="card standard-card">
+            <div class="toolbar">
+                <div class="toolbar-title">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>收货地址</span>
+                </div>
+                <div class="action-bar">
+                    <button class="btn btn-primary btn-sm" onclick="addAddress()">
+                        <i class="fas fa-plus"></i> 新增地址
+                    </button>
+                </div>
+            </div>
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>收货人</th>
+                            <th>联系电话</th>
+                            <th>所在地区</th>
+                            <th>详细地址</th>
+                            <th>是否默认</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>张三</td>
+                            <td>13800138000</td>
+                            <td>福建省厦门市思明区</td>
+                            <td>软件园二期观日路56号</td>
+                            <td><span class="badge primary">是</span></td>
+                            <td>
+                                <button class="btn btn-secondary btn-sm" onclick="editAddress(1)">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteAddress(1)">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 交易记录 -->
+        <div class="card standard-card">
+            <div class="toolbar">
+                <div class="toolbar-title">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>交易记录</span>
+                </div>
+                <div class="action-bar">
+                    <div class="search-bar">
+                        <input type="month" class="form-control" value="2024-03">
+                    </div>
+                    <button class="btn btn-secondary btn-sm" onclick="exportOrders()">
+                        <i class="fas fa-file-export"></i> 导出记录
+                    </button>
+                </div>
+            </div>
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>订单编号</th>
+                            <th>订单日期</th>
+                            <th>订单金额</th>
+                            <th>支付方式</th>
+                            <th>订单状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>SO202403010001</td>
+                            <td>2024-03-01</td>
+                            <td>¥10,000.00</td>
+                            <td>银行转账</td>
+                            <td><span class="badge success">已完成</span></td>
+                            <td>
+                                <button class="btn btn-secondary btn-sm" onclick="viewOrder(1)">
+                                    <i class="fas fa-eye"></i> 查看
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- 分页器 -->
+                <div class="toolbar pagination-toolbar">
+                    <div class="pagination">
+                        <button class="btn btn-secondary btn-sm" disabled>
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="btn btn-primary btn-sm">1</button>
+                        <button class="btn btn-secondary btn-sm">2</button>
+                        <button class="btn btn-secondary btn-sm">3</button>
+                        <button class="btn btn-secondary btn-sm">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部按钮 -->
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal()">
+                <i class="fas fa-times"></i> 取消
+            </button>
+            <button class="btn btn-primary" onclick="saveCustomer()">
+                <i class="fas fa-save"></i> 保存
+            </button>
+        </div>
+    </div>
+
+    <script src="../../js/app.js"></script>
+    <script>
+        function closeModal() {
+            // 关闭弹窗
+            window.parent.closeCustomerModal();
+        }
+
+        function saveCustomer() {
+            // 保存客户信息
+            alert('保存成功');
+            closeModal();
+        }
+    </script>
+</body>
+</html>

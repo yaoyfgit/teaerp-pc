@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成本计算 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../../../../css/common.css">
+    <link rel="stylesheet" href="../../../../../../css/layout.css">
+    <link rel="stylesheet" href="../../../../../../css/modules/finance.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb">
+                <span>财务管理</span>
+                <span class="separator">/</span>
+                <span>成本分析</span>
+                <span class="separator">/</span>
+                <span>产品成本分析</span>
+                <span class="separator">/</span>
+                <span>成本计算</span>
+            </div>
+
+            <!-- 计算条件 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>计算条件</h3>
+                </div>
+                <div class="card-body">
+                    <form id="calculateForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>产品类别</label>
+                                <select class="form-control" name="categoryId" required>
+                                    <option value="">请选择</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>计算期间</label>
+                                <input type="month" class="form-control" name="period" required>
+                            </div>
+                            <div class="form-group">
+                                <label>计算方法</label>
+                                <select class="form-control" name="method" required>
+                                    <option value="weighted">加权平均法</option>
+                                    <option value="fifo">先进先出法</option>
+                                    <option value="batch">分批法</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="button">
+                                <i class="fas fa-calculator"></i> 开始计算
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- 计算结果 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>计算结果</h3>
+                    <div class="card-tools">
+                        <button class="button" onclick="exportResult()">
+                            <i class="fas fa-download"></i> 导出结果
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="result-summary">
+                        <div class="summary-item">
+                            <label>产品总量</label>
+                            <span id="totalQuantity">0</span>
+                        </div>
+                        <div class="summary-item">
+                            <label>材料成本</label>
+                            <span id="materialCost">0.00</span>
+                        </div>
+                        <div class="summary-item">
+                            <label>人工成本</label>
+                            <span id="laborCost">0.00</span>
+                        </div>
+                        <div class="summary-item">
+                            <label>制造费用</label>
+                            <span id="manufacturingCost">0.00</span>
+                        </div>
+                        <div class="summary-item">
+                            <label>单位成本</label>
+                            <span id="unitCost">0.00</span>
+                        </div>
+                    </div>
+
+                    <div class="tabs">
+                        <div class="tab-header">
+                            <button class="tab-btn active" data-tab="material">材料成本明细</button>
+                            <button class="tab-btn" data-tab="labor">人工成本明细</button>
+                            <button class="tab-btn" data-tab="manufacturing">制造费用明细</button>
+                        </div>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="materialTab">
+                                <div id="materialTable"></div>
+                            </div>
+                            <div class="tab-pane" id="laborTab">
+                                <div id="laborTable"></div>
+                            </div>
+                            <div class="tab-pane" id="manufacturingTab">
+                                <div id="manufacturingTable"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 计算历史 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>计算历史</h3>
+                </div>
+                <div class="card-body">
+                    <div id="historyTable"></div>
+                    <div id="pagination"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../../../../../js/common.js"></script>
+    <script src="../../../../../../js/modules/finance/cost/analysis/product/calculate.js"></script>
+</body>
+</html> 

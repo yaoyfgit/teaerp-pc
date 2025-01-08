@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>计划调整 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../../css/common.css">
+    <link rel="stylesheet" href="../../../../css/layout.css">
+    <link rel="stylesheet" href="../../../../css/menu.css">
+    <link rel="stylesheet" href="../../../../css/modules/operation.css">
+    <style>
+        /* 统计卡片样式 */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            padding: 16px;
+        }
+        
+        .overview-item {
+            background: #fff;
+            border-radius: 4px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .overview-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .overview-item i {
+            font-size: 24px;
+            margin-right: 16px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+        
+        .overview-item:nth-child(1) i {
+            background-color: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .overview-item:nth-child(2) i {
+            background-color: #e8f5e9;
+            color: #43a047;
+        }
+        
+        .overview-item:nth-child(3) i {
+            background-color: #fff3e0;
+            color: #ef6c00;
+        }
+        
+        .overview-item:nth-child(4) i {
+            background-color: #f3e5f5;
+            color: #8e24aa;
+        }
+        
+        .overview-item .info {
+            flex: 1;
+        }
+        
+        .overview-item h4 {
+            margin: 0;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .overview-item .number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .overview-item .unit {
+            font-size: 14px;
+            color: #666;
+            margin-left: 4px;
+        }
+
+        /* 表格内的状态标签 */
+        .status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .status.pending {
+            background-color: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .status.approved {
+            background-color: #e8f5e9;
+            color: #43a047;
+        }
+
+        .status.rejected {
+            background-color: #ffebee;
+            color: #d32f2f;
+        }
+
+        .status.processing {
+            background-color: #fff3e0;
+            color: #ef6c00;
+        }
+
+        /* 弹窗样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #fff;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .modal-header {
+            background: #f8f9fa;
+            padding: 16px 24px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-header .close-button {
+            padding: 4px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+
+        .modal-header .close-button:hover {
+            color: #333;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            background: #f8f9fa;
+            border-top: 1px solid #eee;
+        }
+
+        /* 表单两列布局样式 */
+        .standard-form {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            padding: 16px;
+        }
+
+        .standard-form .form-group {
+            margin: 0;
+        }
+
+        .standard-form .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .standard-form label {
+            display: block;
+            margin-bottom: 8px;
+            color: #666;
+        }
+
+        .standard-form .standard-input,
+        .standard-form .standard-select,
+        .standard-form .standard-textarea {
+            width: 100%;
+        }
+
+        .standard-form .standard-textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        /* 按钮组样式 */
+        .button-group {
+            display: flex;
+            gap: 4px;
+        }
+        
+        .button-group .standard-button.small {
+            padding: 4px;
+            font-size: 12px;
+            height: 24px;
+            width: 24px;
+            min-width: unset;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .button-group .standard-button.small i {
+            margin: 0;
+            font-size: 12px;
+        }
+        
+        .button-group .standard-button.small.primary {
+            background-color: #1976d2;
+            color: #fff;
+        }
+        
+        .button-group .standard-button.small.primary:hover {
+            background-color: #1565c0;
+        }
+        
+        .button-group .standard-button.small:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <!-- 面包屑 -->
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-chart-line"></i>
+                    <span>经营计划</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-tasks"></i>
+                    <span>计划调整</span>
+                </div>
+
+                <!-- 调整统计概览 -->
+                <div class="standard-card">
+                    <div class="overview-grid">
+                        <div class="overview-item">
+                            <i class="fas fa-file-alt"></i>
+                            <div class="info">
+                                <h4>调整申请总数</h4>
+                                <div class="number">24<span class="unit">个</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item">
+                            <i class="fas fa-check-circle"></i>
+                            <div class="info">
+                                <h4>已批准</h4>
+                                <div class="number">12<span class="unit">个</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item">
+                            <i class="fas fa-clock"></i>
+                            <div class="info">
+                                <h4>待审批</h4>
+                                <div class="number">8<span class="unit">个</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item">
+                            <i class="fas fa-times-circle"></i>
+                            <div class="info">
+                                <h4>已驳回</h4>
+                                <div class="number">4<span class="unit">个</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 调整申请列表 -->
+                <div class="standard-card">
+                    <div class="standard-card-header">
+                        <h3><i class="fas fa-list"></i> 调整申请列表</h3>
+                        <div class="action-bar">
+                            <div class="search-group">
+                                <input type="text" class="standard-input" placeholder="计划名称/编号">
+                                <select class="standard-select" id="planScope">
+                                    <option value="">计划范围</option>
+                                    <option value="company">公司计划</option>
+                                    <option value="department">部门计划</option>
+                                    <option value="employee">员工计划</option>
+                                </select>
+                                <select class="standard-select">
+                                    <option value="">调整类型</option>
+                                    <option value="value">目标值调整</option>
+                                    <option value="date">时间调整</option>
+                                    <option value="cancel">目标取消</option>
+                                </select>
+                                <select class="standard-select">
+                                    <option value="">审批状态</option>
+                                    <option value="pending">待审批</option>
+                                    <option value="approved">已批准</option>
+                                    <option value="rejected">已驳回</option>
+                                </select>
+                                <div class="date-range-group">
+                                    <input type="date" class="standard-input" placeholder="开始日期">
+                                    <span class="separator">至</span>
+                                    <input type="date" class="standard-input" placeholder="结束日期">
+                                </div>
+                                <button class="standard-button primary">
+                                    <i class="fas fa-search"></i>
+                                    <span>查询</span>
+                                </button>
+                                <div class="toolbar-divider"></div>
+                                <button class="standard-button primary" onclick="showModal('adjustModal')">
+                                    <i class="fas fa-plus"></i>
+                                    <span>新建调整</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="standard-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>申请编号</th>
+                                    <th>计划编号</th>
+                                    <th>计划名称</th>
+                                    <th>调整类型</th>
+                                    <th>申请人</th>
+                                    <th>申请时间</th>
+                                    <th>审批状态</th>
+                                    <th width="120">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adjustTable">
+                                <!-- 示例数据 -->
+                                <tr>
+                                    <td>AD202403200001</td>
+                                    <td>PL202403200001</td>
+                                    <td>2024年Q1销售目标</td>
+                                    <td>目标值调整</td>
+                                    <td>张三</td>
+                                    <td>2024-03-20 10:00:00</td>
+                                    <td><span class="status pending">待审批</span></td>
+                                    <td>
+                                        <div class="button-group">
+                                            <button class="standard-button small" onclick="viewAdjust('AD202403200001')">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="standard-button small primary" onclick="approveAdjust('AD202403200001')">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>AD202403200002</td>
+                                    <td>PL202403200002</td>
+                                    <td>生产部Q1成本控制</td>
+                                    <td>时间调整</td>
+                                    <td>李四</td>
+                                    <td>2024-03-20 11:30:00</td>
+                                    <td><span class="status approved">已批准</span></td>
+                                    <td>
+                                        <div class="button-group">
+                                            <button class="standard-button small" onclick="viewAdjust('AD202403200002')">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>AD202403200003</td>
+                                    <td>PL202403200003</td>
+                                    <td>张三Q1销售任务</td>
+                                    <td>目标取消</td>
+                                    <td>王五</td>
+                                    <td>2024-03-20 14:20:00</td>
+                                    <td><span class="status rejected">已驳回</span></td>
+                                    <td>
+                                        <div class="button-group">
+                                            <button class="standard-button small" onclick="viewAdjust('AD202403200003')">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="standard-pagination" id="pagination"></div>
+                    </div>
+                </div>
+
+                <!-- 调整申请弹窗样式优化 -->
+                <style>
+                    .modal-content {
+                        max-width: 800px;
+                        width: 90%;
+                    }
+
+                    .standard-form {
+                        display: grid;
+                        grid-template-columns: repeat(2, 1fr);
+                        gap: 20px;
+                        padding: 24px;
+                    }
+
+                    .standard-form .form-group {
+                        margin: 0;
+                    }
+
+                    .standard-form .form-group.full-width {
+                        grid-column: 1 / -1;
+                    }
+
+                    .standard-form label {
+                        display: block;
+                        margin-bottom: 8px;
+                        color: #666;
+                        font-weight: 500;
+                    }
+
+                    .standard-form .standard-input,
+                    .standard-form .standard-select,
+                    .standard-form .standard-textarea {
+                        width: 100%;
+                        padding: 8px 12px;
+                        border: 1px solid #ddd;
+                        border-radius: 4px;
+                        transition: all 0.3s ease;
+                    }
+
+                    .standard-form .standard-input:focus,
+                    .standard-form .standard-select:focus,
+                    .standard-form .standard-textarea:focus {
+                        border-color: #1976d2;
+                        box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.1);
+                    }
+
+                    .standard-form .standard-textarea {
+                        min-height: 100px;
+                        resize: vertical;
+                    }
+
+                    .modal-footer {
+                        display: flex;
+                        justify-content: flex-end;
+                        gap: 12px;
+                        padding: 16px 24px;
+                        background: #f8f9fa;
+                        border-top: 1px solid #eee;
+                    }
+
+                    .modal-footer .standard-button {
+                        min-width: 80px;
+                    }
+                </style>
+
+                <!-- 调整申请弹窗内容优化 -->
+                <div class="modal" id="adjustModal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3><i class="fas fa-plus-circle"></i> 新建调整申请</h3>
+                            <button class="standard-button close-button" onclick="hideModal('adjustModal')">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="standard-form" id="adjustForm">
+                                <div class="form-group">
+                                    <label>计划选择 <span class="required">*</span></label>
+                                    <select class="standard-select" name="planId" required onchange="loadPlanInfo(this.value)">
+                                        <option value="">请选择计划</option>
+                                        <option value="PL202403200001">2024年Q1销售目标</option>
+                                        <option value="PL202403200002">生产部Q1成本控制</option>
+                                        <option value="PL202403200003">张三Q1销售任务</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>调整类型 <span class="required">*</span></label>
+                                    <select class="standard-select" name="adjustType" required onchange="handleAdjustTypeChange(this.value)">
+                                        <option value="value">目标值调整</option>
+                                        <option value="date">时间调整</option>
+                                        <option value="cancel">目标取消</option>
+                                    </select>
+                                </div>
+                                <div class="form-group value-adjust">
+                                    <label>调整前值(万)</label>
+                                    <input type="number" class="standard-input" name="originalValue" readonly>
+                                </div>
+                                <div class="form-group value-adjust">
+                                    <label>调整后值(万) <span class="required">*</span></label>
+                                    <input type="number" class="standard-input" name="newValue" required>
+                                </div>
+                                <div class="form-group date-adjust" style="display: none;">
+                                    <label>原开始日期</label>
+                                    <input type="date" class="standard-input" name="originalStartDate" readonly>
+                                </div>
+                                <div class="form-group date-adjust" style="display: none;">
+                                    <label>原结束日期</label>
+                                    <input type="date" class="standard-input" name="originalEndDate" readonly>
+                                </div>
+                                <div class="form-group date-adjust" style="display: none;">
+                                    <label>新开始日期 <span class="required">*</span></label>
+                                    <input type="date" class="standard-input" name="newStartDate">
+                                </div>
+                                <div class="form-group date-adjust" style="display: none;">
+                                    <label>新结束日期 <span class="required">*</span></label>
+                                    <input type="date" class="standard-input" name="newEndDate">
+                                </div>
+                                <div class="form-group full-width">
+                                    <label>调整原因 <span class="required">*</span></label>
+                                    <textarea class="standard-textarea" name="reason" rows="3" required 
+                                        placeholder="请详细说明调整原因..."></textarea>
+                                </div>
+                                <div class="form-group full-width">
+                                    <label>调整说明</label>
+                                    <textarea class="standard-textarea" name="description" rows="3"
+                                        placeholder="请输入具体的调整内容说明..."></textarea>
+                                </div>
+                                <div class="form-group full-width">
+                                    <label>附件</label>
+                                    <input type="file" class="standard-input" name="attachment" 
+                                        accept=".pdf,.doc,.docx,.xls,.xlsx">
+                                    <div class="help-text">支持PDF、Word、Excel格式，大小不超过10MB</div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="standard-button" onclick="hideModal('adjustModal')">取消</button>
+                            <button class="standard-button primary" onclick="saveAdjustment()">提交申请</button>
+                        </div>
+                    </div>
+                </div>
+
+                <style>
+                    /* 调整表单样式优化 */
+                    .standard-form .form-group {
+                        margin-bottom: 16px;
+                    }
+
+                    .standard-form label {
+                        font-weight: 500;
+                        margin-bottom: 8px;
+                    }
+
+                    .standard-form .required {
+                        color: #f5222d;
+                        margin-left: 4px;
+                    }
+
+                    .standard-form .help-text {
+                        font-size: 12px;
+                        color: #666;
+                        margin-top: 4px;
+                    }
+
+                    .standard-form .standard-input:disabled,
+                    .standard-form .standard-input[readonly] {
+                        background-color: #f5f5f5;
+                        cursor: not-allowed;
+                    }
+
+                    .value-adjust,
+                    .date-adjust {
+                        transition: all 0.3s ease;
+                    }
+                </style>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../../js/app.js"></script>
+    <script src="../../../../js/modules/operation/plan/adjust/index.js"></script>
+</body>
+</html> 

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>销售发货 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/menu.css">
+    <link rel="stylesheet" href="../../css/modules/sales.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <span>销售管理</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <span>销售发货</span>
+                </div>
+
+                <div class="standard-card">
+                    <div class="standard-toolbar">
+                        <div class="search-group">
+                            <input type="text" class="standard-input" placeholder="输入发货单号或客户名称搜索">
+                            <select class="standard-select">
+                                <option value="">发货状态</option>
+                                <option value="pending">待发货</option>
+                                <option value="processing">发货中</option>
+                                <option value="completed">已完成</option>
+                                <option value="cancelled">已取消</option>
+                            </select>
+                            <div class="date-range-group">
+                                <input type="date" class="standard-input">
+                                <span class="date-separator">至</span>
+                                <input type="date" class="standard-input">
+                            </div>
+                            <button class="standard-button primary">
+                                <i class="fas fa-search"></i> 查询
+                            </button>
+                        </div>
+                        <div class="button-group">
+                            <button class="standard-button primary" onclick="createDelivery()">
+                                <i class="fas fa-plus"></i> 新建发货
+                            </button>
+                            <button class="standard-button">
+                                <i class="fas fa-file-excel"></i> 导出Excel
+                            </button>
+                        </div>
+                    </div>
+
+                    <table class="standard-table">
+                        <thead>
+                            <tr>
+                                <th>发货单号</th>
+                                <th>关联出库</th>
+                                <th>客户名称</th>
+                                <th>发货日期</th>
+                                <th>物流公司</th>
+                                <th>发货状态</th>
+                                <th class="operation-column">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>DN202403010001</td>
+                                <td>OB202403010001</td>
+                                <td>客户A</td>
+                                <td>2024-03-01</td>
+                                <td>顺丰速运</td>
+                                <td><span class="status-badge warning">待发货</span></td>
+                                <td>
+                                    <button class="standard-button">查看</button>
+                                    <button class="standard-button">编辑</button>
+                                    <button class="standard-button danger">删除</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="standard-pagination">
+                        <button><i class="fas fa-chevron-left"></i></button>
+                        <button class="active">1</button>
+                        <button>2</button>
+                        <button>3</button>
+                        <button><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="standard-modal" id="deliveryModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-plus-circle"></i> 新建销售发货</h3>
+                <button class="standard-button" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="deliveryForm">
+                    <div class="form-group">
+                        <label>关联出库</label>
+                        <select class="standard-select" required>
+                            <option value="">请选择出库单</option>
+                            <option value="1">OB202403010001 - 客户A</option>
+                            <option value="2">OB202403010002 - 客户B</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>发货日期</label>
+                        <input type="date" class="standard-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>物流公司</label>
+                        <select class="standard-select" required>
+                            <option value="">请选择物流公司</option>
+                            <option value="sf">顺丰速运</option>
+                            <option value="zt">中通快递</option>
+                            <option value="yd">韵达快递</option>
+                            <option value="ems">EMS</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>物流单号</label>
+                        <input type="text" class="standard-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>收货信息</label>
+                        <div class="address-info">
+                            <div class="form-row">
+                                <div class="form-col">
+                                    <label>收货人</label>
+                                    <input type="text" class="standard-input" required>
+                                </div>
+                                <div class="form-col">
+                                    <label>联系电话</label>
+                                    <input type="tel" class="standard-input" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-col">
+                                    <label>收货地址</label>
+                                    <textarea class="standard-input" rows="3" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>发货明细</label>
+                        <table class="standard-table">
+                            <thead>
+                                <tr>
+                                    <th>商品</th>
+                                    <th>规格</th>
+                                    <th>出库数量</th>
+                                    <th>发货数量</th>
+                                    <th>包装数量</th>
+                                    <th class="operation-column">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>商品A</td>
+                                    <td>500g/罐</td>
+                                    <td>100</td>
+                                    <td>100</td>
+                                    <td><input type="number" class="standard-input" min="1" value="10"></td>
+                                    <td>
+                                        <button type="button" class="standard-button danger">删除</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="form-group">
+                        <label>备注</label>
+                        <textarea class="standard-input"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="standard-button" onclick="closeModal()">取消</button>
+                <button class="standard-button primary" onclick="saveDelivery()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/app.js"></script>
+    <script src="../../js/modules/sales/delivery.js"></script>
+</body>
+</html> 

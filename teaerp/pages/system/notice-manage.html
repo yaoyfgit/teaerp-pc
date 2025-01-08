@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeaERP</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- 系统样式 -->
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/menu.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 顶部导航 -->
+        <header class="app-header">
+            <div class="logo">TeaERP</div>
+            <nav class="top-nav">
+                <ul>
+                    <li><a href="../../index.html">首页</a></li>
+                    <li><a href="#">消息</a></li>
+                    <li><a href="#">帮助</a></li>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <span class="username">管理员</span>
+                <a href="#" class="logout">退出</a>
+            </div>
+        </header>
+
+        <div class="app-main">
+            <!-- 左侧菜单 -->
+            <aside class="app-sidebar">
+                <nav class="side-menu">
+                    <ul class="menu-list">
+                        <li class="menu-item active">
+                            <a href="../dashboard/index.html">
+                                <i class="fas fa-home"></i>
+                                <span>首页</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- 内容区域 -->
+            <main class="app-content">
+                <!-- 面包屑导航 -->
+                <div class="breadcrumb">
+                    <span>系统管理</span>
+                    <span class="separator">/</span>
+                    <span>通知公告</span>
+                </div>
+
+                <!-- 修改工具栏样式类 -->
+                <div class="content-toolbar">
+                    <div class="search-bar standard-form">
+                        <input type="text" placeholder="输入标题/内容搜索" class="form-control">
+                        <select class="form-control">
+                            <option value="">公告类型</option>
+                            <option value="notice">通知</option>
+                            <option value="announcement">公告</option>
+                        </select>
+                        <select class="form-control">
+                            <option value="">状态</option>
+                            <option value="draft">草稿</option>
+                            <option value="published">已发布</option>
+                            <option value="expired">已过期</option>
+                        </select>
+                        <button class="button">搜索</button>
+                    </div>
+                    <div class="action-bar">
+                        <button class="btn btn-primary" onclick="showCreateModal()">
+                            <i class="fas fa-plus"></i>发布公告
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 添加标准卡片容器 -->
+                <div class="card-container">
+                    <div class="notice-list">
+                        <!-- 通知卡片 -->
+                    </div>
+                </div>
+
+                <!-- 标准分页器样式 -->
+                <div class="standard-pagination">
+                    <!-- 分页控件 -->
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- 使用标准模态框样式 -->
+    <div class="standard-modal" id="createNoticeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>发布公告</h3>
+                <button class="close-btn" onclick="hideModal('createNoticeModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>标题</label>
+                            <input type="text" class="form-control" name="title" required>
+                        </div>
+                        <div class="form-group">
+                            <label>类型</label>
+                            <select class="form-control" name="type">
+                                <option value="notice">通知</option>
+                                <option value="announcement">公告</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>生效时间</label>
+                            <input type="datetime-local" class="form-control" name="startTime">
+                        </div>
+                        <div class="form-group">
+                            <label>失效时间</label>
+                            <input type="datetime-local" class="form-control" name="endTime">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>接收范围</label>
+                        <div class="receiver-selector">
+                            <div class="selector-tabs">
+                                <span class="tab active" data-type="all">全部</span>
+                                <span class="tab" data-type="department">按部门</span>
+                                <span class="tab" data-type="role">按角色</span>
+                                <span class="tab" data-type="user">按用户</span>
+                            </div>
+                            <div class="selector-content">
+                                <!-- 选择器内容区域 -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>内容</label>
+                        <div class="rich-editor">
+                            <div class="editor-toolbar">
+                                <button class="tool-btn" data-command="bold">B</button>
+                                <button class="tool-btn" data-command="italic">I</button>
+                                <button class="tool-btn" data-command="underline">U</button>
+                                <button class="tool-btn" data-command="insertOrderedList">1.</button>
+                                <button class="tool-btn" data-command="insertUnorderedList">•</button>
+                                <button class="tool-btn" data-command="createLink">Link</button>
+                                <button class="tool-btn" data-command="insertImage">Image</button>
+                            </div>
+                            <div class="editor-content" contenteditable="true"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>附件</label>
+                        <div class="attachment-uploader">
+                            <input type="file" multiple class="form-control" name="attachments">
+                            <div class="attachment-list">
+                                <!-- 附件列表 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="saveAsDraft()">保存草稿</button>
+                <button class="button" onclick="submitNotice()">发布</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/lib/jquery.min.js"></script>
+    <script src="../../js/common.js"></script>
+    <script src="../../js/components/modal.js"></script>
+    <script src="../../js/components/pagination.js"></script>
+    <script src="../../js/modules/system/notice.js"></script>
+</body>
+</html> 

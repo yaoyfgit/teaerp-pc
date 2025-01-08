@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>销售数据分析 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../../../css/common.css">
+    <link rel="stylesheet" href="../../../../../css/layout.css">
+    <link rel="stylesheet" href="../../../../../css/modules/operation.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb">
+                <span>经营管理</span>
+                <span class="separator">/</span>
+                <span>计划管理</span>
+                <span class="separator">/</span>
+                <span>目标分析</span>
+                <span class="separator">/</span>
+                <span>销售数据分析</span>
+            </div>
+
+            <!-- 分析条件 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>分析条件</h3>
+                </div>
+                <div class="card-body">
+                    <div class="search-bar">
+                        <div class="form-group">
+                            <label>分析维度</label>
+                            <select class="form-control" id="analysisDimension">
+                                <option value="time">时间维度</option>
+                                <option value="product">产品维度</option>
+                                <option value="region">区域维度</option>
+                                <option value="customer">客户维度</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>时间范围</label>
+                            <select class="form-control" id="timeRange">
+                                <option value="month">月度</option>
+                                <option value="quarter">季度</option>
+                                <option value="year">年度</option>
+                                <option value="custom">自定义</option>
+                            </select>
+                        </div>
+                        <div class="form-group date-range" style="display: none;">
+                            <input type="date" class="form-control" id="startDate">
+                            <span>至</span>
+                            <input type="date" class="form-control" id="endDate">
+                        </div>
+                        <button class="button" onclick="analyzeData()">
+                            <i class="fas fa-chart-line"></i> 分析
+                        </button>
+                        <button class="button" onclick="exportReport()">
+                            <i class="fas fa-file-export"></i> 导出
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 销售趋势 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>销售趋势</h3>
+                </div>
+                <div class="card-body">
+                    <div id="trendChart"></div>
+                </div>
+            </div>
+
+            <!-- 销售结构 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>销售结构</h3>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <div class="chart-wrapper">
+                            <h4>产品结构</h4>
+                            <div id="productChart"></div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <h4>区域结构</h4>
+                            <div id="regionChart"></div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <h4>客户结构</h4>
+                            <div id="customerChart"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 销售对比 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>销售对比</h3>
+                    <div class="card-tools">
+                        <select class="form-control" id="compareType">
+                            <option value="yoy">同比</option>
+                            <option value="mom">环比</option>
+                            <option value="target">目标对比</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="compareChart"></div>
+                </div>
+            </div>
+
+            <!-- 销售预测 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>销售预测</h3>
+                    <div class="card-tools">
+                        <select class="form-control" id="forecastPeriod">
+                            <option value="1">未来1个月</option>
+                            <option value="3">未来3个月</option>
+                            <option value="6">未来6个月</option>
+                            <option value="12">未来12个月</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="forecastChart"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../../../../js/common.js"></script>
+    <script src="../../../../../js/modules/operation/plan/analysis/sales/index.js"></script>
+</body>
+</html> 

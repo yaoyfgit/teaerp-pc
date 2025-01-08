@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MRP运算监控 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/modules/production.css">
+    <link rel="stylesheet" href="../../../css/modules/production/mrp.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 侧边栏 -->
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+
+        <!-- 主内容区 -->
+        <div class="main-content">
+            <!-- 顶部导航 -->
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <!-- 内容区 -->
+            <div class="content">
+                <!-- 面包屑 -->
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-industry"></i>
+                    <span>生产管理</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-calculator"></i>
+                    <span>MRP运算</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-chart-line"></i>
+                    <span>运算监控</span>
+                </div>
+
+                <!-- 运算状态监控 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>运算状态监控</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="monitor-grid">
+                            <div class="monitor-card">
+                                <h4>运算进度</h4>
+                                <div class="progress-bar">
+                                    <div class="progress" id="mrpProgress"></div>
+                                    <span class="progress-text">75%</span>
+                                </div>
+                                <div class="status-text">预计剩余时间: 5分钟</div>
+                            </div>
+                            <div class="monitor-card">
+                                <h4>性能监控</h4>
+                                <div class="performance-stats">
+                                    <div class="stat-item">
+                                        <span class="label">CPU使用率</span>
+                                        <span class="value">45%</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <span class="label">内存使用</span>
+                                        <span class="value">2.5GB</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <span class="label">运行时长</span>
+                                        <span class="value">15分钟</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="log-section">
+                            <h4>运算日志</h4>
+                            <div class="log-viewer" id="logViewer">
+                                <!-- 日志内容 -->
+                            </div>
+                        </div>
+
+                        <!-- 异常记录 -->
+                        <div class="error-section">
+                            <h4>异常记录</h4>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>时间</th>
+                                        <th>错误类型</th>
+                                        <th>错误描述</th>
+                                        <th>影响范围</th>
+                                        <th>处理状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>2023-12-21 10:00:20</td>
+                                        <td><span class="badge warning">数据异常</span></td>
+                                        <td>物料M001库存数据异常</td>
+                                        <td>影响该物料的需求计算</td>
+                                        <td><span class="badge warning">未处理</span></td>
+                                        <td>
+                                            <button class="btn btn-xs btn-primary" onclick="showErrorModal('数据异常', '物料M001库存数据异常')">处理</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023-12-21 09:55:15</td>
+                                        <td><span class="badge danger">系统错误</span></td>
+                                        <td>数据库连接超时</td>
+                                        <td>影响系统整体运行</td>
+                                        <td><span class="badge info">处理中</span></td>
+                                        <td>
+                                            <button class="btn btn-xs btn-primary" onclick="showErrorModal('系统错误', '数据库连接超时')">查看</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023-12-21 09:50:30</td>
+                                        <td><span class="badge primary">配置错误</span></td>
+                                        <td>安全库存参数设置错误</td>
+                                        <td>影响库存计算</td>
+                                        <td><span class="badge success">已解决</span></td>
+                                        <td>
+                                            <button class="btn btn-xs btn-primary" onclick="showErrorModal('配置错误', '安全库存参数设置错误')">详情</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 运算结果分析 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-chart-line"></i> 运算结果分析</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="analysis-tabs">
+                            <div class="tab-header">
+                                <span class="tab-item active" data-tab="demand">需求分析</span>
+                                <span class="tab-item" data-tab="material">物料分析</span>
+                            </div>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="demandAnalysis">
+                                    <div id="demandChart" class="analysis-chart"></div>
+                                    <table class="data-table">
+                                        <thead>
+                                            <tr>
+                                                <th>产品</th>
+                                                <th>总需求量</th>
+                                                <th>订单需求</th>
+                                                <th>预测需求</th>
+                                                <th>安全库存需求</th>
+                                                <th>缺口数量</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>红茶</td>
+                                                <td>1000kg</td>
+                                                <td>600kg</td>
+                                                <td>300kg</td>
+                                                <td>100kg</td>
+                                                <td><span class="badge warning">-200kg</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>绿茶</td>
+                                                <td>800kg</td>
+                                                <td>500kg</td>
+                                                <td>200kg</td>
+                                                <td>100kg</td>
+                                                <td><span class="badge success">+50kg</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>乌龙茶</td>
+                                                <td>500kg</td>
+                                                <td>300kg</td>
+                                                <td>150kg</td>
+                                                <td>50kg</td>
+                                                <td><span class="badge danger">-100kg</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="materialAnalysis">
+                                    <div id="materialChart" class="analysis-chart"></div>
+                                    <table class="data-table">
+                                        <thead>
+                                            <tr>
+                                                <th>物料</th>
+                                                <th>需求数量</th>
+                                                <th>现有库存</th>
+                                                <th>采购在途</th>
+                                                <th>缺口数量</th>
+                                                <th>建议操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>茶叶原料A</td>
+                                                <td>3000kg</td>
+                                                <td>1000kg</td>
+                                                <td>500kg</td>
+                                                <td><span class="badge danger">-1500kg</span></td>
+                                                <td><span class="badge warning">建议采购</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>包装材料B</td>
+                                                <td>5000个</td>
+                                                <td>3000个</td>
+                                                <td>1000个</td>
+                                                <td><span class="badge success">+1000个</span></td>
+                                                <td><span class="badge success">库存充足</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>添加剂C</td>
+                                                <td>200kg</td>
+                                                <td>50kg</td>
+                                                <td>100kg</td>
+                                                <td><span class="badge warning">-50kg</span></td>
+                                                <td><span class="badge info">待评估</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 运算调整 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-sliders-h"></i> 运算调整</h3>
+                        <div class="card-tools">
+                            <button class="btn btn-default" onclick="showAdjustModal()">
+                                <i class="fas fa-cog"></i> 参数调整
+                            </button>
+                            <button class="btn btn-default" onclick="showPlanAdjustModal()">
+                                <i class="fas fa-tasks"></i> 计划调整
+                            </button>
+                            <button class="btn btn-primary" style="background-color: #8fd4d2; border-color: #8fd4d2;" onclick="rerunMRP()">
+                                <i class="fas fa-sync"></i> 重新运算
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="adjustment-history">
+                            <h4>调整历史</h4>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>调整时间</th>
+                                        <th>调整类型</th>
+                                        <th>调整内容</th>
+                                        <th>调整人</th>
+                                        <th>调整原因</th>
+                                        <th>影响范围</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>2024-03-01 09:30:00</td>
+                                        <td><span class="badge primary">参数调整</span></td>
+                                        <td>修改安全库存系数</td>
+                                        <td>张三</td>
+                                        <td>优化库存水平</td>
+                                        <td>全局</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2024-03-01 10:15:00</td>
+                                        <td><span class="badge warning">计划调整</span></td>
+                                        <td>调整生产批量</td>
+                                        <td>李四</td>
+                                        <td>设备产能变更</td>
+                                        <td>局部</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2024-03-01 11:00:00</td>
+                                        <td><span class="badge info">数据修正</span></td>
+                                        <td>更新物料参数</td>
+                                        <td>王五</td>
+                                        <td>数据不准确</td>
+                                        <td>局部</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 参数调整弹窗 -->
+                <div class="modal" id="adjustModal">
+        <div class="modal-content">
+                        <div class="modal-header">
+                <h3><i class="fas fa-cog"></i> 参数调整</h3>
+                            <button class="close-btn" onclick="hideModal('adjustModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                            <form id="adjustForm">
+                    <div class="form-group">
+                                    <label>调整参数<span class="required">*</span></label>
+                                    <select class="form-control" name="paramType" required>
+                                        <option value="">请选择参数</option>
+                            <option value="leadTime">提前期</option>
+                            <option value="safetyStock">安全库存</option>
+                            <option value="minBatch">最小批量</option>
+                            <option value="batchMultiple">批量倍数</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                                    <label>调整值<span class="required">*</span></label>
+                                    <input type="number" class="form-control" name="paramValue" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>调整原因<span class="required">*</span></label>
+                                    <textarea class="form-control" name="reason" rows="3" required></textarea>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" onclick="hideModal('adjustModal')">取消</button>
+                            <button class="btn btn-primary" onclick="saveAdjustment()">确定</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 计划调整弹窗 -->
+                <div class="modal" id="planAdjustModal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3><i class="fas fa-tasks"></i> 计划调整</h3>
+                            <button class="close-btn" onclick="hideModal('planAdjustModal')">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="planAdjustForm">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>调整对象<span class="required">*</span></label>
+                                        <select class="form-control" name="adjustTarget" required>
+                                            <option value="">请选择调整对象</option>
+                                            <option value="product">产品计划</option>
+                                            <option value="material">物料计划</option>
+                                            <option value="capacity">产能计划</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>调整类型<span class="required">*</span></label>
+                                        <select class="form-control" name="adjustType" required>
+                                            <option value="">请选择调整类型</option>
+                                            <option value="quantity">数量调整</option>
+                                            <option value="date">日期调整</option>
+                                            <option value="priority">优先级调整</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>调整内容<span class="required">*</span></label>
+                                    <textarea class="form-control" name="adjustContent" rows="4" required></textarea>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>影响范围<span class="required">*</span></label>
+                                        <select class="form-control" name="impactScope" required>
+                                            <option value="">请选择影响范围</option>
+                                            <option value="global">全局</option>
+                                            <option value="partial">局部</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>优先级<span class="required">*</span></label>
+                                        <select class="form-control" name="priority" required>
+                                            <option value="">请选择优先级</option>
+                                            <option value="high">高</option>
+                                            <option value="medium">中</option>
+                                            <option value="low">低</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>调整原因<span class="required">*</span></label>
+                                    <textarea class="form-control" name="reason" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                                    <label>附件</label>
+                                    <input type="file" class="form-control" name="attachments" multiple>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" onclick="hideModal('planAdjustModal')">取消</button>
+                            <button class="btn btn-primary" onclick="savePlanAdjustment()">确定</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 异常处理弹窗 -->
+    <div class="modal" id="errorModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="errorTitle">异常处理</h3>
+                <button class="close-btn" onclick="hideModal('errorModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>异常描述</label>
+                    <div id="errorDescription" class="error-description"></div>
+                </div>
+                <div class="form-group">
+                    <label>处理方案<span class="required">*</span></label>
+                    <select class="form-control" required>
+                        <option value="">请选择处理方案</option>
+                        <option value="retry">重新执行</option>
+                        <option value="skip">跳过处理</option>
+                        <option value="manual">人工处理</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>处理说明<span class="required">*</span></label>
+                    <textarea class="form-control" rows="3" required></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="hideModal('errorModal')">取消</button>
+                <button class="btn btn-primary" onclick="handleError()">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="../../../js/common.js"></script>
+    <script src="../../../js/modules/production/mrp/mock-data.js"></script>
+    <script src="../../../js/modules/production/mrp/monitor.js"></script>
+    <script src="../../../js/app.js"></script>
+    <script>
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', () => {
+            // 初始化菜单
+            Menu.renderMenu();
+            // 初始化菜单切换功能
+            initMenuToggle();
+            // 初始化标签页切换
+            initTabs();
+            // 初始化图表
+            setTimeout(initCharts, 100); // 延迟100ms确保DOM完全准备好
+            // 初始化日志
+            initLogs();
+        });
+
+        // 标签页切换
+        function initTabs() {
+            const tabs = document.querySelectorAll('.tab-item');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const target = tab.dataset.tab;
+                    // 移除所有活动状态
+                    document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+                    // 设置当前活动状态
+                    tab.classList.add('active');
+                    document.getElementById(target + 'Analysis').classList.add('active');
+                });
+            });
+        }
+
+        // 图表初始化
+        function initCharts() {
+            // 需求分析图表
+            const demandChart = echarts.init(document.getElementById('demandChart'));
+            demandChart.setOption({
+                title: {
+                    text: '需求分析趋势'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['总需求', '订单需求', '预测需求']
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['1月', '2月', '3月', '4月', '5月', '6月']
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [{
+                    name: '总需求',
+                    type: 'line',
+                    data: [1000, 1200, 1100, 1300, 1400, 1500]
+                }, {
+                    name: '订单需求',
+                    type: 'line',
+                    data: [600, 700, 800, 900, 1000, 1100]
+                }, {
+                    name: '预测需求',
+                    type: 'line',
+                    data: [400, 500, 300, 400, 400, 400]
+                }]
+            });
+
+            // 物料分析图表
+            const materialChart = echarts.init(document.getElementById('materialChart'));
+            materialChart.setOption({
+                title: {
+                    text: '物料库存分析'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                legend: {
+                    data: ['需求量', '现有库存', '采购在途', '安全库存']
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['茶叶原料A', '包装材料B', '添加剂C']
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [
+                    {
+                        name: '需求量',
+                        type: 'bar',
+                        stack: 'total',
+                        data: [3000, 5000, 200]
+                    },
+                    {
+                        name: '现有库存',
+                        type: 'bar',
+                        stack: 'total',
+                        data: [1000, 3000, 50]
+                    },
+                    {
+                        name: '采购在途',
+                        type: 'bar',
+                        stack: 'total',
+                        data: [500, 1000, 100]
+                    },
+                    {
+                        name: '安全库存',
+                        type: 'line',
+                        data: [1500, 2000, 100]
+                    }
+                ]
+            });
+
+            // 监听窗口大小变化，重新调整图表大小
+            window.addEventListener('resize', function() {
+                demandChart.resize();
+                materialChart.resize();
+            });
+
+            // 标签页切换时重新渲染图表
+            const tabs = document.querySelectorAll('.tab-item');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    setTimeout(() => {
+                        if (tab.dataset.tab === 'material') {
+                            materialChart.resize();
+                        } else {
+                            demandChart.resize();
+                        }
+                    }, 0);
+                });
+            });
+        }
+
+        // 日志初始化
+        function initLogs() {
+            const logViewer = document.getElementById('logViewer');
+            const logs = [
+                '[2024-03-01 10:00:00] INFO: MRP运算开始',
+                '[2024-03-01 10:00:05] INFO: 加载主数据...',
+                '[2024-03-01 10:00:10] INFO: 计算需求量...',
+                '[2024-03-01 10:00:15] WARNING: 物料"添加剂C"库存不足',
+                '[2024-03-01 10:00:20] INFO: 生成计划建议...',
+                '[2024-03-01 10:00:25] ERROR: 数据库连接超时',
+                '[2024-03-01 10:00:30] INFO: 重试连接...',
+                '[2024-03-01 10:00:35] INFO: 连接恢复',
+                '[2024-03-01 10:00:40] INFO: 继续运算...'
+            ];
+            logViewer.innerHTML = logs.join('<br>');
+            // 滚动到底部
+            logViewer.scrollTop = logViewer.scrollHeight;
+        }
+
+        // 保存参数调整
+        function saveAdjustment() {
+            const form = document.getElementById('adjustForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            // TODO: 处理表单提交
+            alert('参数调整已保存！');
+            hideModal('adjustModal');
+        }
+
+        // 保存计划调整
+        function savePlanAdjustment() {
+            const form = document.getElementById('planAdjustForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            // TODO: 处理表单提交
+            alert('计划调整已保存！');
+            hideModal('planAdjustModal');
+        }
+
+        // 重新运算
+        function rerunMRP() {
+            if (confirm('确定要重新运算吗？这可能需要一些时间。')) {
+                // TODO: 处理重新运算
+                alert('重新运算已启动！');
+            }
+        }
+
+        // 显示异常处理弹窗
+        function showErrorModal(title, description) {
+            const modal = document.getElementById('errorModal');
+            document.getElementById('errorTitle').textContent = title;
+            document.getElementById('errorDescription').textContent = description;
+            modal.style.display = 'block';
+        }
+
+        // 显示计划调整弹窗
+        function showPlanAdjustModal() {
+            const modal = document.getElementById('planAdjustModal');
+            modal.style.display = 'block';
+        }
+
+        // 隐藏弹窗
+        function hideModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+    </script>
+
+    <style>
+        /* 监控网格样式 */
+        .monitor-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .monitor-card {
+            background: #fff;
+            border-radius: 4px;
+            padding: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .monitor-card h4 {
+            margin: 0 0 16px 0;
+            color: #303133;
+            font-size: 14px;
+        }
+
+        /* 进度条样式 */
+        .progress-bar {
+            height: 20px;
+            background: #f5f7fa;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .progress {
+            height: 100%;
+            background: #409eff;
+            width: 75%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #606266;
+            font-size: 12px;
+        }
+
+        .status-text {
+            color: #909399;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        /* 性能统计样式 */
+        .performance-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-item .label {
+            color: #909399;
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+
+        .stat-item .value {
+            color: #303133;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        /* 日志查看器样式 */
+        .log-section {
+            margin-top: 16px;
+        }
+
+        .log-viewer {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 16px;
+            border-radius: 4px;
+            font-family: monospace;
+            height: 200px;
+            overflow-y: auto;
+        }
+
+        /* 分析标签页样式 */
+        .analysis-tabs {
+            border: 1px solid #dcdfe6;
+            border-radius: 4px;
+        }
+
+        .tab-header {
+            display: flex;
+            background: #f5f7fa;
+            border-bottom: 1px solid #dcdfe6;
+        }
+
+        .tab-item {
+            padding: 12px 24px;
+            cursor: pointer;
+            color: #606266;
+            border-right: 1px solid #dcdfe6;
+        }
+
+        .tab-item:hover {
+            color: #409eff;
+        }
+
+        .tab-item.active {
+            color: #409eff;
+            background: #fff;
+            border-bottom: 2px solid #409eff;
+            margin-bottom: -1px;
+        }
+
+        .tab-content {
+            padding: 16px;
+        }
+
+        .tab-pane {
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        .analysis-chart {
+            height: 400px;
+            margin-bottom: 20px;
+        }
+
+        /* 调整历史表格样式 */
+        .adjustment-history {
+            margin-top: 16px;
+        }
+
+        .adjustment-history h4 {
+            margin: 0 0 16px 0;
+            color: #303133;
+            font-size: 14px;
+        }
+
+        /* 表单行样式 */
+        .form-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        /* 卡片工具栏 */
+        .card-tools {
+            display: flex;
+            gap: 8px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-header h3 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* 按钮图标间距 */
+        .btn i {
+            margin-right: 4px;
+        }
+
+        .error-section {
+            margin-top: 20px;
+        }
+
+        .error-section h4 {
+            margin: 0 0 16px 0;
+            color: #303133;
+            font-size: 14px;
+        }
+
+        /* 卡片样式 */
+        .card {
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 0 2px 12px 0 rgba(0,0,0,0.1);
+            margin-bottom: 16px;
+        }
+
+        .card-header {
+            padding: 16px;
+            border-bottom: 1px solid #dcdfe6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-header h3 {
+            margin: 0;
+            font-size: 16px;
+            color: #303133;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-body {
+            padding: 16px;
+        }
+
+        /* 表格样式 */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 12px 8px;
+            text-align: left;
+            border-bottom: 1px solid #ebeef5;
+        }
+
+        .data-table th {
+            background-color: #f5f7fa;
+            color: #606266;
+            font-weight: 500;
+        }
+
+        /* 状态标签样式 */
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            line-height: 1;
+        }
+
+        .badge.primary {
+            background: #ecf5ff;
+            color: #409eff;
+        }
+
+        .badge.success {
+            background: #f0f9eb;
+            color: #67c23a;
+        }
+
+        .badge.warning {
+            background: #fdf6ec;
+            color: #e6a23c;
+        }
+
+        .badge.danger {
+            background: #fef0f0;
+            color: #f56c6c;
+        }
+
+        .badge.info {
+            background: #f4f4f5;
+            color: #909399;
+        }
+
+        /* 按钮样式 */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 32px;
+            padding: 0 16px;
+            font-size: 14px;
+            border-radius: 4px;
+            border: 1px solid #dcdfe6;
+            background: #fff;
+            color: #606266;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            color: #409eff;
+            border-color: #c6e2ff;
+            background-color: #ecf5ff;
+        }
+
+        .btn-primary {
+            background: #409eff;
+            border-color: #409eff;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #a8e0de !important;
+            border-color: #a8e0de !important;
+            color: #fff;
+        }
+
+        .btn-secondary {
+            background: #fff;
+            border-color: #dcdfe6;
+            color: #606266;
+        }
+
+        .btn-secondary:hover {
+            border-color: #409eff;
+            color: #409eff;
+        }
+
+        .btn-xs {
+            height: 24px;
+            padding: 0 8px;
+            font-size: 12px;
+        }
+
+        /* 弹窗样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: relative;
+            width: 500px;
+            max-height: 80vh;
+            margin: 10vh auto;
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 0 2px 12px 0 rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            padding: 16px;
+            border-bottom: 1px solid #dcdfe6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 16px;
+            color: #303133;
+        }
+
+        .close-btn {
+            border: none;
+            background: none;
+            font-size: 20px;
+            color: #909399;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 16px;
+            overflow-y: auto;
+            max-height: calc(80vh - 120px);
+        }
+
+        .modal-footer {
+            padding: 16px;
+            border-top: 1px solid #dcdfe6;
+            text-align: right;
+            flex-shrink: 0;
+            background: #fff;
+            border-radius: 0 0 4px 4px;
+        }
+
+        .modal-footer .btn + .btn {
+            margin-left: 8px;
+        }
+
+        /* 表单样式 */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #606266;
+        }
+
+        .form-control {
+            width: 100%;
+            height: 36px;
+            padding: 0 12px;
+            border: 1px solid #dcdfe6;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: #409eff;
+            outline: none;
+        }
+
+        textarea.form-control {
+            height: auto;
+            padding: 8px 12px;
+        }
+
+        .required {
+            color: #f56c6c;
+            margin-left: 4px;
+        }
+
+        .error-description {
+            background: #f5f7fa;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 16px;
+            color: #606266;
+        }
+
+        /* 滚动条样式 */
+        .modal-body::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .modal-body::-webkit-scrollbar-thumb {
+            background: #c0c4cc;
+            border-radius: 3px;
+        }
+
+        .modal-body::-webkit-scrollbar-track {
+            background: #f5f7fa;
+        }
+
+        /* 确保弹窗内容可滚动 */
+        #planAdjustModal .modal-body {
+            overflow-y: auto;
+            max-height: calc(80vh - 120px);
+        }
+
+        /* 确保底部按钮固定 */
+        #planAdjustModal .modal-footer {
+            position: sticky;
+            bottom: 0;
+            background: #fff;
+            z-index: 1;
+        }
+    </style>
+</body>
+</html> 

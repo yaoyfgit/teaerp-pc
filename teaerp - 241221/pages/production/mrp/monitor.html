@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MRP运算监控 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/modules/production.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb">
+                <span>生产管理</span>
+                <span class="separator">/</span>
+                <span>MRP运算管理</span>
+                <span class="separator">/</span>
+                <span>运算监控</span>
+            </div>
+
+            <!-- 运算状态监控 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>运算状态监控</h3>
+                </div>
+                <div class="card-body">
+                    <div class="monitor-grid">
+                        <div class="monitor-card">
+                            <h4>运算进度</h4>
+                            <div class="progress-bar">
+                                <div class="progress" id="mrpProgress"></div>
+                                <span class="progress-text">75%</span>
+                            </div>
+                            <div class="status-text">预计剩余时间: 5分钟</div>
+                        </div>
+                        <div class="monitor-card">
+                            <h4>性能监控</h4>
+                            <div class="performance-stats">
+                                <div class="stat-item">
+                                    <span class="label">CPU使用率</span>
+                                    <span class="value">45%</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="label">内存使用</span>
+                                    <span class="value">2.5GB</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="label">运行时长</span>
+                                    <span class="value">15分钟</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="log-section">
+                        <h4>运算日志</h4>
+                        <div class="log-viewer" id="logViewer">
+                            <!-- 日志内容 -->
+                        </div>
+                    </div>
+
+                    <div class="error-section">
+                        <h4>异常记录</h4>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>时间</th>
+                                    <th>错误类型</th>
+                                    <th>错误描述</th>
+                                    <th>影响范围</th>
+                                    <th>处理状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="errorTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 运算结果分析 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>运算结果分析</h3>
+                </div>
+                <div class="card-body">
+                    <div class="analysis-tabs">
+                        <div class="tab-header">
+                            <span class="tab-item active" data-tab="demand">需求分析</span>
+                            <span class="tab-item" data-tab="material">物料分析</span>
+                        </div>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="demandAnalysis">
+                                <div id="demandChart" class="analysis-chart"></div>
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>产品</th>
+                                            <th>总需求量</th>
+                                            <th>订单需求</th>
+                                            <th>预测需求</th>
+                                            <th>安全库存需求</th>
+                                            <th>缺口数量</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="demandAnalysisTable"></tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="materialAnalysis">
+                                <div id="materialChart" class="analysis-chart"></div>
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>物料</th>
+                                            <th>需求数量</th>
+                                            <th>现有库存</th>
+                                            <th>采购在途</th>
+                                            <th>缺口数量</th>
+                                            <th>建议操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="materialAnalysisTable"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 运算调整 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>运算调整</h3>
+                    <div class="card-tools">
+                        <button class="button" onclick="showAdjustModal()">参数调整</button>
+                        <button class="button" onclick="showPlanAdjustModal()">计划调整</button>
+                        <button class="button primary" onclick="rerunMRP()">重新运算</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="adjustment-history">
+                        <h4>调整历史</h4>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>调整时间</th>
+                                    <th>调整类型</th>
+                                    <th>调整内容</th>
+                                    <th>调整人</th>
+                                    <th>调整原因</th>
+                                    <th>影响范围</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adjustmentTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 参数调整弹窗 -->
+    <div class="modal" id="adjustModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>参数调整</h3>
+                <button class="close-btn" onclick="hideModal('adjustModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="adjustForm" class="form">
+                    <div class="form-group">
+                        <label>调整参数</label>
+                        <select class="form-control" name="paramType">
+                            <option value="leadTime">提前期</option>
+                            <option value="safetyStock">安全库存</option>
+                            <option value="minBatch">最小批量</option>
+                            <option value="batchMultiple">批量倍数</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>调整值</label>
+                        <input type="number" class="form-control" name="paramValue">
+                    </div>
+                    <div class="form-group">
+                        <label>调整原因</label>
+                        <textarea class="form-control" name="reason" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideModal('adjustModal')">取消</button>
+                <button class="button primary" onclick="saveAdjustment()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="../../../js/common.js"></script>
+    <script src="../../../js/modules/production/mrp-monitor.js"></script>
+</body>
+</html> 

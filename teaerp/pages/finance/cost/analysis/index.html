@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>成本分析</title>
+    <link rel="stylesheet" href="/teaerp/css/common.css">
+    <link rel="stylesheet" href="/teaerp/css/layout.css">
+</head>
+<body>
+    <div class="page-container">
+        <div class="content-wrapper">
+            <!-- 分析类型导航 -->
+            <div class="nav-tabs">
+                <a href="/teaerp/pages/finance/cost/analysis/product.html" class="tab-item">
+                    <i class="icon-product"></i>
+                    产品成本分析
+                </a>
+                <a href="/teaerp/pages/finance/cost/analysis/department.html" class="tab-item">
+                    <i class="icon-department"></i>
+                    部门成本分析
+                </a>
+                <a href="/teaerp/pages/finance/cost/analysis/project.html" class="tab-item">
+                    <i class="icon-project"></i>
+                    项目成本分析
+                </a>
+            </div>
+
+            <!-- 成本概览 -->
+            <div class="dashboard">
+                <div class="dashboard-item">
+                    <div class="title">
+                        <i class="icon-total-cost"></i>
+                        总成本
+                    </div>
+                    <div class="number">
+                        ¥<span id="totalCost">0.00</span>
+                        <small>万元</small>
+                    </div>
+                    <div class="trend">
+                        <i class="icon-up"></i>
+                        <span id="totalCostGrowth">0.00%</span>
+                    </div>
+                </div>
+                <div class="dashboard-item">
+                    <div class="title">
+                        <i class="icon-product-cost"></i>
+                        产品成本占比
+                    </div>
+                    <div class="number">
+                        <span id="productCostRatio">0.00</span>
+                        <small>%</small>
+                    </div>
+                    <div class="trend">
+                        <i class="icon-up"></i>
+                        <span id="productCostGrowth">0.00%</span>
+                    </div>
+                </div>
+                <div class="dashboard-item">
+                    <div class="title">
+                        <i class="icon-department-cost"></i>
+                        部门成本占比
+                    </div>
+                    <div class="number">
+                        <span id="departmentCostRatio">0.00</span>
+                        <small>%</small>
+                    </div>
+                    <div class="trend">
+                        <i class="icon-down"></i>
+                        <span id="departmentCostGrowth">0.00%</span>
+                    </div>
+                </div>
+                <div class="dashboard-item">
+                    <div class="title">
+                        <i class="icon-project-cost"></i>
+                        项目成本占比
+                    </div>
+                    <div class="number">
+                        <span id="projectCostRatio">0.00</span>
+                        <small>%</small>
+                    </div>
+                    <div class="trend">
+                        <i class="icon-up"></i>
+                        <span id="projectCostGrowth">0.00%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 成本趋势图 -->
+            <div class="chart-section">
+                <div class="chart-header">
+                    <h3>成本趋势分析</h3>
+                    <div class="chart-actions">
+                        <select id="periodSelect">
+                            <option value="month">月度</option>
+                            <option value="quarter">季度</option>
+                            <option value="year">年度</option>
+                        </select>
+                        <button class="btn" onclick="exportChart('trendChart')">导出</button>
+                    </div>
+                </div>
+                <div id="trendChart" style="height: 400px;"></div>
+            </div>
+
+            <!-- 成本构成分析 -->
+            <div class="chart-row">
+                <div class="chart-section half">
+                    <div class="chart-header">
+                        <h3>成本类型分布</h3>
+                        <div class="chart-actions">
+                            <button class="btn" onclick="exportChart('typeChart')">导出</button>
+                        </div>
+                    </div>
+                    <div id="typeChart" style="height: 300px;"></div>
+                </div>
+                <div class="chart-section half">
+                    <div class="chart-header">
+                        <h3>成本结构分析</h3>
+                        <div class="chart-actions">
+                            <button class="btn" onclick="exportChart('structureChart')">导出</button>
+                        </div>
+                    </div>
+                    <div id="structureChart" style="height: 300px;"></div>
+                </div>
+            </div>
+
+            <!-- 成本排名 -->
+            <div class="data-section">
+                <div class="data-header">
+                    <h3>成本TOP10</h3>
+                    <div class="data-actions">
+                        <select id="rankType">
+                            <option value="product">按产品</option>
+                            <option value="department">按部门</option>
+                            <option value="project">按项目</option>
+                        </select>
+                        <button class="btn" onclick="exportRanking()">导出</button>
+                    </div>
+                </div>
+                <div class="data-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>排名</th>
+                                <th>名称</th>
+                                <th>成本金额（万元）</th>
+                                <th>占比</th>
+                                <th>环比</th>
+                                <th>同比</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rankingList">
+                            <!-- 数据将通过JavaScript动态加载 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="/teaerp/js/modules/finance/cost/analysis/index.js"></script>
+</body>
+</html> 

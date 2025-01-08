@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人工成本汇总 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../../css/common.css">
+    <link rel="stylesheet" href="../../../../css/layout.css">
+    <link rel="stylesheet" href="../../../../css/modules/finance.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb">
+                <span>财务管理</span>
+                <span class="separator">/</span>
+                <span>成本管理</span>
+                <span class="separator">/</span>
+                <span>人工成本</span>
+                <span class="separator">/</span>
+                <span>成本汇总</span>
+            </div>
+
+            <!-- 成本汇总卡片 -->
+            <div class="summary-cards">
+                <div class="summary-card">
+                    <h3>本月人工成本</h3>
+                    <div class="amount">¥128,500</div>
+                    <div class="trend up">+12.5%</div>
+                </div>
+                <div class="summary-card">
+                    <h3>人均成本</h3>
+                    <div class="amount">¥5,140</div>
+                    <div class="trend down">-3.2%</div>
+                </div>
+                <div class="summary-card">
+                    <h3>加班成本</h3>
+                    <div class="amount">¥15,600</div>
+                    <div class="trend up">+8.7%</div>
+                </div>
+                <div class="summary-card">
+                    <h3>社保成本</h3>
+                    <div class="amount">¥32,500</div>
+                    <div class="trend">0%</div>
+                </div>
+            </div>
+
+            <!-- 成本趋势图表 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>成本趋势</h3>
+                    <div class="card-tools">
+                        <select class="form-control" id="trendPeriod">
+                            <option value="month">月度</option>
+                            <option value="quarter">季度</option>
+                            <option value="year">���度</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="costTrendChart" style="height: 300px;"></div>
+                </div>
+            </div>
+
+            <!-- 部门成本分布 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>部门成本分布</h3>
+                </div>
+                <div class="card-body">
+                    <div id="deptCostChart" style="height: 300px;"></div>
+                </div>
+            </div>
+
+            <!-- 成本明细表格 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>成本明细</h3>
+                    <div class="card-tools">
+                        <button class="button" onclick="exportData()">
+                            <i class="fas fa-download"></i> 导出
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="costTable"></div>
+                    <div id="pagination"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="../../../../js/common.js"></script>
+    <script src="../../../../js/modules/finance/cost/labor-summary.js"></script>
+</body>
+</html> 

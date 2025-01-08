@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>费用项目分类 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../../../css/common.css">
+    <link rel="stylesheet" href="../../../../../css/layout.css">
+    <link rel="stylesheet" href="../../../../../css/modules/finance.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb">
+                <span>财务管理</span>
+                <span class="separator">/</span>
+                <span>成本管理</span>
+                <span class="separator">/</span>
+                <span>制造费用</span>
+                <span class="separator">/</span>
+                <span>项目分类</span>
+            </div>
+
+            <!-- 分类管理 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>费用项目分类</h3>
+                    <div class="card-tools">
+                        <button class="button" onclick="showModal('categoryModal')">
+                            <i class="fas fa-plus"></i> 新增分类
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="categoryTree"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 分类编辑弹窗 -->
+    <div class="modal" id="categoryModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>费用项目分类</h3>
+                <button class="close-btn" onclick="hideModal('categoryModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="categoryForm">
+                    <div class="form-group">
+                        <label>分类名称</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>上级分类</label>
+                        <select class="form-control" name="parentId">
+                            <option value="">无</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>分类说明</label>
+                        <textarea class="form-control" name="description" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideModal('categoryModal')">取消</button>
+                <button class="button" onclick="saveCategory()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../../../js/common.js"></script>
+    <script src="../../../../../js/modules/finance/cost/manufacturing/project-category.js"></script>
+</body>
+</html> 

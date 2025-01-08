@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>成本报表</title>
+    <link rel="stylesheet" href="/teaerp/css/common.css">
+    <link rel="stylesheet" href="/teaerp/css/layout.css">
+</head>
+<body>
+    <div class="page-container">
+        <div class="content-wrapper">
+            <!-- 报表类型导航 -->
+            <div class="nav-tabs">
+                <a href="/teaerp/pages/finance/cost/report/summary.html" class="tab-item">
+                    <i class="icon-summary"></i>
+                    成本汇总表
+                </a>
+                <a href="/teaerp/pages/finance/cost/report/variance.html" class="tab-item">
+                    <i class="icon-variance"></i>
+                    成本差异表
+                </a>
+                <a href="/teaerp/pages/finance/cost/report/trend.html" class="tab-item">
+                    <i class="icon-trend"></i>
+                    成本趋势表
+                </a>
+            </div>
+
+            <!-- 报表概览 -->
+            <div class="dashboard">
+                <div class="dashboard-item">
+                    <div class="title">
+                        <i class="icon-total"></i>
+                        总成本
+                    </div>
+                    <div class="number">
+                        ¥<span id="totalCost">0.00</span>
+                        <small>万元</small>
+                    </div>
+                    <div class="trend">
+                        <i class="icon-up"></i>
+                        <span id="totalCostGrowth">0.00%</span>
+                    </div>
+                </div>
+                <div class="dashboard-item">
+                    <div class="title">
+                        <i class="icon-variance"></i>
+                        成本差异
+                    </div>
+                    <div class="number">
+                        ¥<span id="costVariance">0.00</span>
+                        <small>万元</small>
+                    </div>
+                    <div class="desc">较计划</div>
+                </div>
+                <div class="dashboard-item">
+                    <div class="title">
+                        <i class="icon-rate"></i>
+                        成本率
+                    </div>
+                    <div class="number">
+                        <span id="costRate">0.00</span>
+                        <small>%</small>
+                    </div>
+                    <div class="trend">
+                        <i class="icon-down"></i>
+                        <span id="costRateChange">0.00%</span>
+                    </div>
+                </div>
+                <div class="dashboard-item">
+                    <div class="title">
+                        <i class="icon-efficiency"></i>
+                        成本效率
+                    </div>
+                    <div class="number">
+                        <span id="costEfficiency">0.00</span>
+                    </div>
+                    <div class="trend">
+                        <i class="icon-up"></i>
+                        <span id="efficiencyChange">0.00%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 筛选条件 -->
+            <div class="filter-bar">
+                <div class="filter-item">
+                    <label>统计周期：</label>
+                    <select id="periodSelect">
+                        <option value="month">月度</option>
+                        <option value="quarter">季度</option>
+                        <option value="year">年度</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label>成本类型：</label>
+                    <select id="costTypeSelect">
+                        <option value="">全部</option>
+                        <option value="material">材料成本</option>
+                        <option value="labor">人工成本</option>
+                        <option value="manufacturing">制造费用</option>
+                        <option value="operation">运营费用</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label>时间范围：</label>
+                    <input type="month" id="startDate">
+                    <span>至</span>
+                    <input type="month" id="endDate">
+                </div>
+                <button class="btn btn-primary" onclick="refreshData()">刷新数据</button>
+            </div>
+
+            <!-- 报表内容区域 -->
+            <div id="reportContent">
+                <!-- 报表内容将根据选择的报表类型动态加载 -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="/teaerp/js/modules/finance/cost/report/index.js"></script>
+</body>
+</html> 

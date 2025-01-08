@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>物料消耗采集 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/modules/production.css">
+    <style>
+        .content {
+            padding: 16px 24px;
+            background: #f5f7fa;
+            min-height: calc(100vh - 60px);
+        }
+
+        .standard-card {
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 0 2px 12px 0 rgba(0,0,0,0.1);
+            margin-bottom: 16px;
+        }
+
+        .card-header {
+            padding: 16px;
+            border-bottom: 1px solid #ebeef5;
+        }
+
+        .card-header h3 {
+            margin: 0;
+            font-size: 16px;
+            color: #303133;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-body {
+            padding: 16px;
+        }
+
+        .standard-search-bar {
+            background: #f8f9fa;
+            padding: 16px;
+            border-radius: 4px;
+            margin-bottom: 16px;
+            border: 1px solid #ebeef5;
+        }
+
+        .standard-search-bar .form-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .standard-search-bar label {
+            color: #606266;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .standard-select {
+            min-width: 280px;
+            height: 32px;
+            border: 1px solid #dcdfe6;
+            border-radius: 4px;
+            padding: 0 12px;
+            color: #606266;
+            background-color: #fff;
+        }
+
+        .standard-table {
+            width: 100%;
+            border: 1px solid #ebeef5;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .standard-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .standard-table th {
+            background-color: #f5f7fa;
+            color: #606266;
+            font-weight: 500;
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #ebeef5;
+        }
+
+        .standard-table td {
+            padding: 12px 16px;
+            color: #606266;
+            border-bottom: 1px solid #ebeef5;
+        }
+
+        .standard-table tbody tr:hover {
+            background-color: #f5f7fa;
+        }
+
+        .standard-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .analysis-card {
+            background: #fff;
+            border-radius: 4px;
+            padding: 16px;
+            border: 1px solid #ebeef5;
+            height: 100%;
+        }
+
+        .analysis-card h4 {
+            margin: 0 0 16px 0;
+            color: #303133;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #ebeef5;
+        }
+
+        .chart {
+            height: 300px;
+        }
+
+        .suggestion-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .suggestion-item {
+            padding: 12px;
+            border-bottom: 1px solid #ebeef5;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-item i {
+            color: #409EFF;
+            margin-top: 3px;
+        }
+
+        .suggestion-content {
+            flex: 1;
+        }
+
+        .suggestion-title {
+            font-weight: 500;
+            margin-bottom: 4px;
+            color: #303133;
+        }
+
+        .suggestion-desc {
+            color: #606266;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .standard-button {
+            height: 32px;
+            padding: 0 16px;
+            font-size: 13px;
+            border-radius: 4px;
+            border: 1px solid #dcdfe6;
+            background: #fff;
+            color: #606266;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.3s;
+        }
+
+        .standard-button:hover {
+            color: #409EFF;
+            border-color: #c6e2ff;
+            background-color: #ecf5ff;
+        }
+
+        .standard-button.primary {
+            background: #409EFF;
+            border-color: #409EFF;
+            color: #fff;
+        }
+
+        .standard-button.primary:hover {
+            background: #66b1ff;
+            border-color: #66b1ff;
+            color: #fff;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .modal-header {
+            padding: 16px;
+            border-bottom: 1px solid #ebeef5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 16px;
+            color: #303133;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-footer {
+            padding: 16px;
+            border-top: 1px solid #ebeef5;
+            text-align: right;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #606266;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            height: 32px;
+            border: 1px solid #dcdfe6;
+            border-radius: 4px;
+            padding: 0 12px;
+            color: #606266;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: #409EFF;
+            outline: none;
+        }
+
+        textarea.form-control {
+            height: auto;
+            padding: 8px 12px;
+            resize: vertical;
+        }
+
+        .standard-close-btn {
+            border: none;
+            background: none;
+            padding: 4px;
+            cursor: pointer;
+            color: #909399;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .standard-close-btn:hover {
+            color: #f56c6c;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-industry"></i>
+                    <span>生产管理</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>生产数据采集</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-boxes"></i>
+                    <span>物料消耗采集</span>
+                </div>
+
+                <!-- 物料消耗采集 -->
+                <div class="standard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-boxes"></i> 物料消耗采集</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="standard-search-bar">
+                            <div class="form-group">
+                                <label><i class="fas fa-tasks"></i> 生产任务</label>
+                                <select class="standard-select" onchange="loadMaterialList(this.value)">
+                                    <option value="">请选择任务</option>
+                                    <option value="WO202403250001">WO202403250001 - 特级铁观音</option>
+                                    <option value="WO202403250002">WO202403250002 - 特级大红袍</option>
+                                    <option value="WO202403250003">WO202403250003 - 特级金骏眉</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="standard-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>物料编码</th>
+                                        <th>物料名称</th>
+                                        <th>规格型号</th>
+                                        <th>计划用量</th>
+                                        <th>已消耗</th>
+                                        <th>本次消耗</th>
+                                        <th>消耗原因</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>M001</td>
+                                        <td>铁观音原料</td>
+                                        <td>特级</td>
+                                        <td>1000kg</td>
+                                        <td>450kg</td>
+                                        <td>50kg</td>
+                                        <td>正常生产</td>
+                                        <td>
+                                            <button class="standard-button" onclick="showConsumptionModal('M001')">
+                                                <i class="fas fa-edit"></i> 录入
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>M002</td>
+                                        <td>包装袋</td>
+                                        <td>250g</td>
+                                        <td>4000个</td>
+                                        <td>1800个</td>
+                                        <td>200个</td>
+                                        <td>正常生产</td>
+                                        <td>
+                                            <button class="standard-button" onclick="showConsumptionModal('M002')">
+                                                <i class="fas fa-edit"></i> 录入
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 消耗分析 -->
+                <div class="standard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-chart-line"></i> 消耗分析</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="analysis-grid">
+                            <div class="analysis-card">
+                                <h4><i class="fas fa-chart-line"></i> 消耗趋势</h4>
+                                <div id="consumptionChart" class="chart"></div>
+                            </div>
+                            <div class="analysis-card">
+                                <h4><i class="fas fa-exclamation-triangle"></i> 异常分析</h4>
+                                <div id="abnormalChart" class="chart"></div>
+                            </div>
+                            <div class="analysis-card">
+                                <h4><i class="fas fa-lightbulb"></i> 改进建议</h4>
+                                <div class="suggestion-list">
+                                    <div class="suggestion-item">
+                                        <i class="fas fa-info-circle"></i>
+                                        <div class="suggestion-content">
+                                            <div class="suggestion-title">原料消耗优化</div>
+                                            <div class="suggestion-desc">本周原料消耗量较计划偏高5%，建议优化生产工艺，减少损耗。</div>
+                                        </div>
+                                    </div>
+                                    <div class="suggestion-item">
+                                        <i class="fas fa-info-circle"></i>
+                                        <div class="suggestion-content">
+                                            <div class="suggestion-title">包装材料使用效率</div>
+                                            <div class="suggestion-desc">包装材料损耗率高于行业标准，建议加强操作培训。</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 消耗录入弹窗 -->
+    <div class="modal" id="consumptionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> 物料消耗录入</h3>
+                <button class="standard-close-btn" onclick="hideModal('consumptionModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="consumptionForm" class="standard-form">
+                    <input type="hidden" name="materialId">
+                    <div class="form-group">
+                        <label>物料名称</label>
+                        <input type="text" class="form-control" name="materialName" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>消耗数量</label>
+                        <input type="number" class="form-control" name="quantity" required>
+                    </div>
+                    <div class="form-group">
+                        <label>消耗原因</label>
+                        <select class="form-control" name="reason" required>
+                            <option value="normal">正常生产</option>
+                            <option value="waste">报废损耗</option>
+                            <option value="test">试验调试</option>
+                            <option value="other">其他原因</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>备注说明</label>
+                        <textarea class="form-control" name="remark" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="standard-button secondary" onclick="hideModal('consumptionModal')">
+                    <i class="fas fa-times"></i> 取消
+                </button>
+                <button class="standard-button primary" onclick="saveConsumption()">
+                    <i class="fas fa-save"></i> 保存
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="../../../js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            Menu.renderMenu();
+            initMenuToggle();
+            initCharts();
+        });
+
+        function initCharts() {
+            // 消耗趋势图表
+            const consumptionChart = echarts.init(document.getElementById('consumptionChart'));
+            consumptionChart.setOption({
+                title: { text: '近7天物料消耗趋势' },
+                tooltip: { trigger: 'axis' },
+                xAxis: {
+                    type: 'category',
+                    data: ['3-19', '3-20', '3-21', '3-22', '3-23', '3-24', '3-25']
+                },
+                yAxis: { type: 'value' },
+                series: [{
+                    name: '原料消耗',
+                    type: 'line',
+                    data: [150, 160, 145, 155, 140, 150, 145],
+                    smooth: true
+                }]
+            });
+
+            // 异常分析图表
+            const abnormalChart = echarts.init(document.getElementById('abnormalChart'));
+            abnormalChart.setOption({
+                title: { text: '物料消耗异常分布' },
+                tooltip: { trigger: 'item' },
+                series: [{
+                    type: 'pie',
+                    radius: '60%',
+                    data: [
+                        { value: 75, name: '正常生产' },
+                        { value: 15, name: '报废损耗' },
+                        { value: 10, name: '试验调试' }
+                    ]
+                }]
+            });
+        }
+
+        function showConsumptionModal(materialId) {
+            document.getElementById('consumptionModal').style.display = 'flex';
+        }
+
+        function hideModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function saveConsumption() {
+            // 保存消耗记录
+            console.log('保存消耗记录');
+            hideModal('consumptionModal');
+        }
+
+        function loadMaterialList(workOrderId) {
+            // 加载物料清单
+            console.log('加载物料清单:', workOrderId);
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>计划制定 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../../css/common.css">
+    <link rel="stylesheet" href="../../../../css/layout.css">
+    <link rel="stylesheet" href="../../../../css/menu.css">
+    <link rel="stylesheet" href="../../../../css/modules/operation.css">
+    <style>
+        /* 统计卡片样式优化 */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            padding: 16px;
+            background: #f8f9fa;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            margin: 16px;
+        }
+        
+        .overview-item {
+            background: #fff;
+            border-radius: 4px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 1px solid #e8e8e8;
+        }
+        
+        .overview-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .overview-item i {
+            font-size: 24px;
+            margin-right: 16px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+        
+        .overview-item:nth-child(1) i {
+            background-color: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .overview-item:nth-child(2) i {
+            background-color: #e8f5e9;
+            color: #43a047;
+        }
+        
+        .overview-item:nth-child(3) i {
+            background-color: #fff3e0;
+            color: #ef6c00;
+        }
+        
+        .overview-item:nth-child(4) i {
+            background-color: #f3e5f5;
+            color: #8e24aa;
+        }
+        
+        .overview-item .info {
+            flex: 1;
+        }
+        
+        .overview-item h4 {
+            margin: 0;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .overview-item .number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .overview-item .unit {
+            font-size: 14px;
+            color: #666;
+            margin-left: 4px;
+        }
+
+        /* 弹窗样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #fff;
+            border-radius: 4px;
+            width: 90%;
+            max-width: 1000px;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 16px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            padding: 16px;
+        }
+
+        .modal-footer {
+            padding: 16px;
+            border-top: 1px solid #eee;
+            text-align: right;
+        }
+
+        /* 操作按钮样式 */
+        .button-link {
+            background: none;
+            border: none;
+            color: #1976d2;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .button-link:hover {
+            color: #1565c0;
+            text-decoration: underline;
+        }
+
+        .button-link + .button-link {
+            margin-left: 8px;
+        }
+
+        /* 表格内的状态标签 */
+        .status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .status.pending {
+            background-color: #fff3e0;
+            color: #ef6c00;
+        }
+
+        .status.approved {
+            background-color: #e8f5e9;
+            color: #43a047;
+        }
+
+        .status.rejected {
+            background-color: #ffebee;
+            color: #d32f2f;
+        }
+
+        .status.completed {
+            background-color: #e8f5e9;
+            color: #43a047;
+        }
+
+        .status.overdue {
+            background-color: #ffebee;
+            color: #d32f2f;
+        }
+
+        .status.warning {
+            background-color: #fff3e0;
+            color: #ef6c00;
+        }
+
+        .status.not-started {
+            background-color: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .status.in-progress {
+            background-color: #e3f2fd;
+            color: #1976d2;
+        }
+
+        /* 进度条样式 */
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: #eee;
+            border-radius: 4px;
+            overflow: visible;
+            position: relative;
+            cursor: pointer;
+            margin: 12px 0;
+        }
+
+        .progress-bar .progress {
+            height: 100%;
+            background-color: #1976d2;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            position: relative;
+        }
+
+        .progress-bar .progress-text {
+            position: absolute;
+            right: 0;
+            top: -20px;
+            font-size: 12px;
+            color: #666;
+            white-space: nowrap;
+        }
+
+        .progress-tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            white-space: nowrap;
+            z-index: 1000;
+            display: none;
+            top: -70px;
+            left: 50%;
+            transform: translateX(-50%);
+            line-height: 1.6;
+            pointer-events: none;
+        }
+
+        .progress-tooltip:after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            margin-left: -6px;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 6px solid rgba(0, 0, 0, 0.8);
+        }
+
+        .progress-bar:hover .progress-tooltip {
+            display: block;
+        }
+
+        /* 查看表单样式优化 */
+        .view-form {
+            padding: 16px 24px;
+        }
+
+        .view-form .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px 32px;
+            margin-bottom: 8px;
+        }
+
+        .view-form .form-row.full-width {
+            grid-column: 1 / -1;
+            margin-bottom: 16px;
+        }
+
+        .view-form .form-group {
+            margin: 0;
+            display: flex;
+            align-items: center;
+            min-height: 24px;
+            white-space: nowrap;
+        }
+
+        .view-form label {
+            width: 90px;
+            color: #666;
+            text-align: right;
+            padding-right: 8px;
+            flex-shrink: 0;
+            line-height: 24px;
+            font-size: 13px;
+        }
+
+        .view-form span,
+        .view-form p {
+            flex: 1;
+            color: #333;
+            line-height: 24px;
+            margin: 0;
+            font-size: 13px;
+        }
+
+        /* 查看弹窗中的进度条样式 */
+        .view-form .progress-bar {
+            width: 100%;
+            height: 24px;
+            margin: 0;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+            overflow: visible;
+        }
+
+        .view-form .progress-bar .progress {
+            height: 100%;
+            background-color: #1976d2;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .view-form .progress-bar .progress-text {
+            position: static;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 500;
+            z-index: 1;
+        }
+
+        .view-form .progress-bar .progress[style*="width:"][style*="30%"] .progress-text,
+        .view-form .progress-bar .progress[style*="width:0"] .progress-text,
+        .view-form .progress-bar .progress[style*="width: 0"] .progress-text,
+        .view-form .progress-bar .progress[style*="width:1"] .progress-text,
+        .view-form .progress-bar .progress[style*="width:2"] .progress-text {
+            color: #666;
+            margin-left: 8px;
+        }
+
+        .view-form .progress-tooltip {
+            top: -70px;
+            padding: 8px 12px;
+            font-size: 13px;
+            background: rgba(0, 0, 0, 0.85);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            z-index: 1010;
+        }
+
+        /* 表单两列布局样式 */
+        .standard-form {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            padding: 16px;
+        }
+
+        .standard-form .form-group {
+            margin: 0;
+        }
+
+        .standard-form .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .standard-form label {
+            display: block;
+            margin-bottom: 8px;
+            color: #666;
+        }
+
+        .standard-form .standard-input,
+        .standard-form .standard-select,
+        .standard-form .standard-textarea {
+            width: 100%;
+        }
+
+        .standard-form .standard-textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        /* 调整模态框宽度 */
+        .modal-content {
+            width: 90%;
+            max-width: 1000px;
+        }
+
+        /* 调整表单控件样式 */
+        .standard-input,
+        .standard-select {
+            height: 32px;
+            padding: 4px 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .standard-input:focus,
+        .standard-select:focus,
+        .standard-textarea:focus {
+            border-color: #1976d2;
+            box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.1);
+            outline: none;
+        }
+
+        .standard-textarea {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        /* 调整按钮组样式 */
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            padding: 16px;
+            border-top: 1px solid #eee;
+        }
+
+        .modal-footer .standard-button {
+            min-width: 80px;
+        }
+
+        /* 操作按钮统一样式 */
+        .button-group {
+            display: flex;
+            gap: 4px;
+        }
+        
+        .button-group .standard-button.small {
+            padding: 4px;
+            font-size: 12px;
+            height: 24px;
+            width: 24px;
+            min-width: unset;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #ddd;
+            background: #fff;
+            color: #666;
+        }
+        
+        .button-group .standard-button.small i {
+            margin: 0;
+            font-size: 12px;
+        }
+        
+        .button-group .standard-button.small:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-color: #1976d2;
+            color: #1976d2;
+        }
+        
+        .button-group .standard-button.small.primary {
+            background-color: #1976d2;
+            color: #fff;
+            border-color: #1976d2;
+        }
+        
+        .button-group .standard-button.small.primary:hover {
+            background-color: #1565c0;
+            border-color: #1565c0;
+        }
+
+        /* 销售订单列表样式优化 */
+        .order-list {
+            margin: 16px -24px 0;
+            border-top: 1px solid #eee;
+            padding: 16px 24px 0;
+        }
+
+        .order-list h4 {
+            font-size: 15px;
+            color: #333;
+            margin-bottom: 12px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .order-list h4 i {
+            color: #1976d2;
+            font-size: 14px;
+        }
+
+        .order-list .standard-table {
+            margin: 0;
+            border: 1px solid #eee;
+            border-radius: 4px;
+        }
+
+        .order-list .standard-table table {
+            width: 100%;
+            margin: 0;
+            border-collapse: collapse;
+        }
+
+        .order-list .standard-table th {
+            background-color: #f8f9fa;
+            padding: 10px 16px;
+            font-weight: 500;
+            text-align: left;
+            white-space: nowrap;
+            font-size: 13px;
+            color: #333;
+        }
+
+        .order-list .standard-table td {
+            padding: 8px 16px;
+            border-bottom: 1px solid #eee;
+            font-size: 13px;
+        }
+
+        .order-list .standard-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .order-list .standard-table th:first-child,
+        .order-list .standard-table td:first-child {
+            padding-left: 24px;
+        }
+
+        .order-list .standard-table th:last-child,
+        .order-list .standard-table td:last-child {
+            padding-right: 24px;
+        }
+
+        .order-list .empty-text {
+            text-align: center;
+            color: #999;
+            padding: 32px 0;
+        }
+
+        /* 调整弹窗内容区域的样式 */
+        .modal-content {
+            max-width: 900px;
+            width: 900px;
+        }
+
+        .modal-body {
+            padding: 0;
+        }
+
+        /* 调整表格列宽 */
+        .order-list .standard-table th.col-id { width: 15%; }
+        .order-list .standard-table th.col-customer { width: 30%; }
+        .order-list .standard-table th.col-amount { width: 15%; }
+        .order-list .standard-table th.col-date { width: 20%; }
+        .order-list .standard-table th.col-status { width: 20%; }
+
+        /* 调整表格中的状态标签 */
+        .order-list .standard-table .status {
+            padding: 2px 8px;
+            font-size: 12px;
+        }
+
+        /* 调整标题样式 */
+        .modal-header h3 {
+            font-size: 16px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-header h3 i {
+            font-size: 14px;
+            color: #1976d2;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <!-- 面包屑 -->
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-chart-line"></i>
+                    <span>经营计划</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-bullseye"></i>
+                    <span>计划制定</span>
+                </div>
+
+                <!-- 计划统计概览 -->
+                <div class="standard-card">
+                    <div class="overview-grid">
+                        <div class="overview-item">
+                            <i class="fas fa-clipboard-check"></i>
+                            <div class="info">
+                                <h4>已完成计划</h4>
+                                <div class="number">18<span class="unit">个</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item">
+                            <i class="fas fa-clock"></i>
+                            <div class="info">
+                                <h4>进行中计划</h4>
+                                <div class="number">25<span class="unit">个</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <div class="info">
+                                <h4>即将到期</h4>
+                                <div class="number">5<span class="unit">个</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item">
+                            <i class="fas fa-chart-line"></i>
+                            <div class="info">
+                                <h4>计划完成率</h4>
+                                <div class="number">85<span class="unit">%</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 计划列表 -->
+                <div class="standard-card">
+                    <div class="standard-card-header">
+                        <h3><i class="fas fa-list"></i> 计划列表</h3>
+                        <div class="action-bar">
+                            <div class="search-group">
+                                <input type="text" class="standard-input" placeholder="计划名称/编号">
+                                <select class="standard-select" id="planScope">
+                                    <option value="">计划范围</option>
+                                    <option value="company">公司计划</option>
+                                    <option value="department">部门计划</option>
+                                    <option value="employee">员工计划</option>
+                                </select>
+                                <select class="standard-select">
+                                    <option value="">计划类型</option>
+                                    <option value="sales">销售计划</option>
+                                    <option value="profit">利润计划</option>
+                                    <option value="cost">成本计划</option>
+                                </select>
+                                <select class="standard-select">
+                                    <option value="">完成状态</option>
+                                    <option value="pending">进行中</option>
+                                    <option value="completed">已完成</option>
+                                    <option value="overdue">已逾期</option>
+                                </select>
+                                <div class="date-range-group">
+                                    <input type="date" class="standard-input" placeholder="开始日期">
+                                    <span class="separator">至</span>
+                                    <input type="date" class="standard-input" placeholder="结束日期">
+                                </div>
+                                <button class="standard-button primary">
+                                    <i class="fas fa-search"></i>
+                                    <span>查询</span>
+                                </button>
+                                <div class="toolbar-divider"></div>
+                                <button class="standard-button primary" onclick="showModal('planModal')">
+                                    <i class="fas fa-plus"></i>
+                                    <span>新建计划</span>
+                                </button>
+                                <button class="standard-button">
+                                    <i class="fas fa-file-export"></i>
+                                    <span>导出</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="standard-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>计划编号</th>
+                                    <th>计划范围</th>
+                                    <th>计划类型</th>
+                                    <th>计划名称</th>
+                                    <th>计划值</th>
+                                    <th>当前进度</th>
+                                    <th>开始日期</th>
+                                    <th>结束日期</th>
+                                    <th>审批状态</th>
+                                    <th width="120">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="planTable">
+                                <!-- 示例数据 -->
+                                <tr>
+                                    <td>PL202403200001</td>
+                                    <td>公司</td>
+                                    <td>销售计划</td>
+                                    <td>2024年Q1销售目标</td>
+                                    <td>1000</td>
+                                    <td>
+                                        <div class="progress-bar" title="点击查看详情">
+                                            <div class="progress" style="width: 60%">
+                                                <span class="progress-text">60%</span>
+                                            </div>
+                                            <div class="progress-tooltip">
+                                                计划值：1000万<br>
+                                                已完成：600万
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>2024-01-01</td>
+                                    <td>2024-03-31</td>
+                                    <td><span class="status pending">待审批</span></td>
+                                    <td>
+                                        <div class="button-group">
+                                            <button class="standard-button small" onclick="viewPlan('PL202403200001')">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="standard-button small primary" onclick="approvePlan('PL202403200001')">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>PL202403200002</td>
+                                    <td>部门</td>
+                                    <td>成本计划</td>
+                                    <td>生产部Q1成本控制</td>
+                                    <td>50</td>
+                                    <td>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 45%;">45%</div>
+                                        </div>
+                                    </td>
+                                    <td>2024-01-01</td>
+                                    <td>2024-03-31</td>
+                                    <td><span class="status approved">已批准</span></td>
+                                    <td>
+                                        <div class="button-group">
+                                            <button class="standard-button small" onclick="viewPlan('PL202403200002')">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>PL202403200003</td>
+                                    <td>员工</td>
+                                    <td>销售计划</td>
+                                    <td>张三Q1销售任务</td>
+                                    <td>100</td>
+                                    <td>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 0%;">0%</div>
+                                        </div>
+                                    </td>
+                                    <td>2024-01-01</td>
+                                    <td>2024-03-31</td>
+                                    <td><span class="status rejected">已驳回</span></td>
+                                    <td>
+                                        <div class="button-group">
+                                            <button class="standard-button small" onclick="viewPlan('PL202403200003')">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="standard-button small" onclick="editPlan('PL202403200003')">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>PL202403200004</td>
+                                    <td>公司计划</td>
+                                    <td>利润计划</td>
+                                    <td>2024年Q2利润目标</td>
+                                    <td>800,000</td>
+                                    <td>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 0%"></div>
+                                            <span>0%</span>
+                                        </div>
+                                    </td>
+                                    <td>2024-04-01</td>
+                                    <td>2024-06-30</td>
+                                    <td><span class="status pending">未开始</span></td>
+                                    <td>
+                                        <div class="button-group">
+                                            <button class="standard-button small" onclick="viewPlan('PL202403200004')">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="standard-button small" onclick="editPlan('PL202403200004')">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>PL202403200005</td>
+                                    <td>部门计划</td>
+                                    <td>成本计划</td>
+                                    <td>市场部Q2预算</td>
+                                    <td>300,000</td>
+                                    <td>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 85%"></div>
+                                            <span>85%</span>
+                                        </div>
+                                    </td>
+                                    <td>2024-04-01</td>
+                                    <td>2024-06-30</td>
+                                    <td><span class="status warning">即将到期</span></td>
+                                    <td>
+                                        <div class="button-group">
+                                            <button class="standard-button small" onclick="viewPlan('PL202403200005')">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="standard-button small" onclick="editPlan('PL202403200005')">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="standard-pagination" id="pagination"></div>
+                    </div>
+                </div>
+
+                <!-- 计划表单弹窗 -->
+                <div class="modal" id="planModal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>新建计划</h3>
+                            <button class="standard-button" onclick="hideModal('planModal')">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="standard-form" id="planForm">
+                                <div class="form-group">
+                                    <label>计划范围</label>
+                                    <select class="standard-select" name="scope" required>
+                                        <option value="company">公司计划</option>
+                                        <option value="department">部门计划</option>
+                                        <option value="employee">员工计划</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>计划类型</label>
+                                    <select class="standard-select" name="type" required>
+                                        <option value="sales">销售计划</option>
+                                        <option value="profit">利润计划</option>
+                                        <option value="cost">成本计划</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>时间周期</label>
+                                    <select class="standard-select" name="timeDimension" required>
+                                        <option value="month">月度计划</option>
+                                        <option value="quarter">季度计划</option>
+                                        <option value="year">年度计划</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>计划值(万)</label>
+                                    <input type="number" class="standard-input" name="value" required>
+                                </div>
+                                <div class="form-group department-group" style="display:none">
+                                    <label>部门</label>
+                                    <select class="standard-select" name="departmentId">
+                                        <option value="">请选择部门</option>
+                                    </select>
+                                </div>
+                                <div class="form-group employee-group" style="display:none">
+                                    <label>员工</label>
+                                    <select class="standard-select" name="employeeId">
+                                        <option value="">请选择员工</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>计划名称</label>
+                                    <input type="text" class="standard-input" name="name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>开始日期</label>
+                                    <input type="date" class="standard-input" name="startDate" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>结束日期</label>
+                                    <input type="date" class="standard-input" name="endDate" required>
+                                </div>
+                                <div class="form-group full-width">
+                                    <label>计划说明</label>
+                                    <textarea class="standard-textarea" name="description" rows="3"></textarea>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="standard-button" onclick="hideModal('planModal')">取消</button>
+                            <button class="standard-button primary" onclick="savePlan()">保存</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 查看计划弹窗 -->
+                <div class="modal" id="viewPlanModal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>查看计划</h3>
+                            <button class="standard-button" onclick="hideModal('viewPlanModal')">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="view-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>计划编号：</label>
+                                        <span id="viewPlanId">PL202403200001</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>计划范围：</label>
+                                        <span id="viewPlanScope">公司计划</span>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>计划类型：</label>
+                                        <span id="viewPlanType">销售计划</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>计划名称：</label>
+                                        <span id="viewPlanName">2024年Q1销售目标</span>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>时间周期：</label>
+                                        <span id="viewPlanTimeDimension">季度计划</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>计划值：</label>
+                                        <span id="viewPlanValue">1,000万</span>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>开始日期：</label>
+                                        <span id="viewPlanStartDate">2024-01-01</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>结束日期：</label>
+                                        <span id="viewPlanEndDate">2024-03-31</span>
+                                    </div>
+                                </div>
+                                <div class="form-row full-width">
+                                    <div class="form-group">
+                                        <label>计划说明：</label>
+                                        <p id="viewPlanDescription">第一季度销售目标</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>当前进度：</label>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 75%">
+                                                <span class="progress-text">75%</span>
+                                            </div>
+                                            <div class="progress-tooltip">
+                                                计划值：1,000万<br>
+                                                已完成：750万<br>
+                                                完成率：75%
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 销售订单列表 -->
+                            <div class="order-list">
+                                <h4>
+                                    <i class="fas fa-list-alt"></i>
+                                    相关销售订单
+                                </h4>
+                                <div class="standard-table">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th class="col-id">订单编号</th>
+                                                <th class="col-customer">客户名称</th>
+                                                <th class="col-amount">订单金额(万)</th>
+                                                <th class="col-date">订单日期</th>
+                                                <th class="col-status">订单状态</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="orderTable">
+                                            <tr>
+                                                <td>SO202403200001</td>
+                                                <td>上海茶叶有限公司</td>
+                                                <td>200</td>
+                                                <td>2024-01-15</td>
+                                                <td><span class="status completed">已完成</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>SO202403200002</td>
+                                                <td>北京茶业贸易有限公司</td>
+                                                <td>150</td>
+                                                <td>2024-02-01</td>
+                                                <td><span class="status completed">已完成</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>SO202403200003</td>
+                                                <td>广州茶叶批发市场</td>
+                                                <td>250</td>
+                                                <td>2024-02-20</td>
+                                                <td><span class="status in-progress">进行中</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>SO202403200004</td>
+                                                <td>深圳茶业连锁店</td>
+                                                <td>150</td>
+                                                <td>2024-03-05</td>
+                                                <td><span class="status pending">待处理</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="standard-button" onclick="hideModal('viewPlanModal')">关闭</button>
+                            <button class="standard-button primary" onclick="editPlan(currentPlanId)">编辑</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 审批弹窗 -->
+                <div class="modal" id="approveModal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>计划审批</h3>
+                            <button class="standard-button" onclick="hideModal('approveModal')">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="standard-form" id="approveForm">
+                                <div class="form-group">
+                                    <label>计划编号</label>
+                                    <input type="text" class="standard-input" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label>计划名称</label>
+                                    <input type="text" class="standard-input" readonly>
+                                </div>
+                                <div class="form-group full-width">
+                                    <label>审批意见</label>
+                                    <textarea class="standard-textarea" name="approvalComment" rows="3" required></textarea>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="standard-button" onclick="hideModal('approveModal')">取消</button>
+                            <button class="standard-button danger" onclick="rejectPlan()">驳回</button>
+                            <button class="standard-button primary" onclick="approvePlan()">批准</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../../js/app.js"></script>
+    <script src="../../../../js/modules/operation/plan/target/index.js"></script>
+</body>
+</html> 

@@ -1,0 +1,32 @@
+.search-bar {
+  background: #fff;
+  padding: 16px;
+  border-radius: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-end;
+  margin-bottom: 16px;
+}
+
+.search-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.search-item label {
+  font-size: 14px;
+  color: #666;
+}
+
+.search-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.search-actions .button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+} 

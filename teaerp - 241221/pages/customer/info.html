@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>客户管理 - TeaERP</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- 系统样式 -->
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <!-- 模块样式 -->
+    <link rel="stylesheet" href="../../css/modules/customer.css">
+</head>
+</html> <body>
+    <div class="app-container">
+        <!-- 顶部导航 -->
+        <header class="app-header">
+            <div class="logo">TeaERP</div>
+            <nav class="top-nav">
+                <ul>
+                    <li><a href="../../index.html">首页</a></li>
+                    <li><a href="#">消息</a></li>
+                    <li><a href="#">帮助</a></li>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <span class="username">管理员</span>
+                <a href="#" class="logout">退出</a>
+            </div>
+        </header>
+
+        <div class="app-main">
+            <!-- 左侧菜单 -->
+            <aside class="app-sidebar">
+                <!-- ��容 -->
+            </aside>
+
+            <!-- 内容区域 -->
+            <main class="app-content">
+                <!-- 面包屑导航 -->
+                <div class="breadcrumb">
+                    <span>客户管理</span>
+                    <span class="separator">/</span>
+                    <span>客户信息</span>
+                </div>
+
+                <!-- 工具栏 -->
+                <div class="toolbar">
+                    <div class="search-bar">
+                        <div class="form-group">
+                            <input type="text" placeholder="输入客户名称/编号搜索" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control">
+                                <option value="">客户类型</option>
+                                <option value="individual">个人</option>
+                                <option value="company">企业</option>
+                                <option value="government">政府机构</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control">
+                                <option value="">客户等级</option>
+                                <option value="A">A级</option>
+                                <option value="B">B级</option>
+                                <option value="C">C级</option>
+                                <option value="D">D级</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control">
+                                <option value="">客户状态</option>
+                                <option value="1">正常</option>
+                                <option value="0">禁用</option>
+                            </select>
+                        </div>
+                        <button class="button primary">搜索</button>
+                        <button class="button">重置</button>
+                    </div>
+                    <div class="action-bar">
+                        <button class="button primary" onclick="showCreateModal()">
+                            <i class="icon-plus"></i>新建客户
+                        </button>
+                        <button class="button secondary">
+                            <i class="icon-import"></i>导入
+                        </button>
+                        <button class="button secondary">
+                            <i class="icon-export"></i>导出
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 数据表格卡片 -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="data-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>客户编号</th>
+                                        <th>客户名称</th>
+                                        <th>客户简称</th>
+                                        <th>客户分类</th>
+                                        <th>客户类型</th>
+                                        <th>客户等级</th>
+                                        <th>客户状态</th>
+                                        <th>联系人</th>
+                                        <th>联系电话</th>
+                                        <th>所在地区</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- 客户数据行 -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- 新建客户弹窗 -->
+    <div class="modal" id="createCustomerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>新建客户</h3>
+                <button class="close-btn" onclick="hideModal('createCustomerModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form">
+                    <!-- 基本信息 -->
+                    <div class="form-section">
+                        <h4>基础信息</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>客户编码</label>
+                                <input type="text" class="form-control" name="customerCode" disabled placeholder="系统自动生成">
+                            </div>
+                            <div class="form-group">
+                                <label>客户名称</label>
+                                <input type="text" class="form-control" name="customerName" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>客户类型</label>
+                                <select class="form-control" name="customerType" required>
+                                    <option value="company">企业</option>
+                                    <option value="individual">个人</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>客户等级</label>
+                                <select class="form-control" name="customerLevel">
+                                    <option value="A">A级</option>
+                                    <option value="B">B级</option>
+                                    <option value="C">C级</option>
+                                    <option value="D">D级</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>客户来源</label>
+                                <select class="form-control" name="customerSource">
+                                    <option value="referral">转介绍</option>
+                                    <option value="advertisement">广告</option>
+                                    <option value="exhibition">展会</option>
+                                    <option value="internet">网络</option>
+                                    <option value="other">其他</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>所属行业</label>
+                                <select class="form-control" name="industry">
+                                    <option value="manufacturing">制造业</option>
+                                    <option value="service">服务业</option>
+                                    <option value="retail">零售业</option>
+                                    <option value="other">其他</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>企业规模</label>
+                                <input type="number" class="form-control" name="companySize" placeholder="员工人数">
+                            </div>
+                            <div class="form-group">
+                                <label>营业执照号</label>
+                                <input type="text" class="form-control" name="businessLicense">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>税号</label>
+                                <input type="text" class="form-control" name="taxNumber">
+                            </div>
+                            <div class="form-group">
+                                <label>开户银行</label>
+                                <input type="text" class="form-control" name="bankName">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>银行账号</label>
+                            <input type="text" class="form-control" name="bankAccount">
+                        </div>
+                    </div>
+
+                    <!-- 联系信息 -->
+                    <div class="form-section">
+                        <h4>联系信息</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>联系人姓名</label>
+                                <input type="text" class="form-control" name="contactName">
+                            </div>
+                            <div class="form-group">
+                                <label>职位</label>
+                                <input type="text" class="form-control" name="position">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>手机</label>
+                            <input type="tel" class="form-control" name="mobile">
+                        </div>
+                    </div>
+
+                    <!-- 收货地址 -->
+                    <div class="form-section">
+                        <h4>收货地址</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>地址类型</label>
+                                <select class="form-control" name="addressType">
+                                    <option value="main">主要地址</option>
+                                    <option value="branch">分支地址</option>
+                                    <option value="warehouse">仓库地址</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>所在地区</label>
+                                <div class="region-select form-row">
+                                    <select class="form-control" name="province" style="flex: 1;">
+                                        <option value="">省份</option>
+                                    </select>
+                                    <select class="form-control" name="city" style="flex: 1;">
+                                        <option value="">城市</option>
+                                    </select>
+                                    <select class="form-control" name="district" style="flex: 1;">
+                                        <option value="">区县</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>详细地址</label>
+                            <input type="text" class="form-control" name="address">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>收货人</label>
+                                <input type="text" class="form-control" name="receiver">
+                            </div>
+                            <div class="form-group">
+                                <label>联系电话</label>
+                                <input type="tel" class="form-control" name="receiverPhone">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 商务信息 -->
+                    <div class="form-section">
+                        <h4>商务信息</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>信用额度</label>
+                                <input type="number" class="form-control" name="creditLimit">
+                            </div>
+                            <div class="form-group">
+                                <label>付款方式</label>
+                                <select class="form-control" name="paymentMethod">
+                                    <option value="cash">现金</option>
+                                    <option value="transfer">转账</option>
+                                    <option value="check">支票</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>结算方式</label>
+                                <select class="form-control" name="settlementMethod">
+                                    <option value="monthly">月结</option>
+                                    <option value="prepaid">预付</option>
+                                    <option value="cod">货到付款</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>账期天数</label>
+                                <input type="number" class="form-control" name="paymentDays">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>跟进销售</label>
+                                <select class="form-control" name="salesPerson">
+                                    <option value="">请选择销售人员</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>所属部门</label>
+                                <select class="form-control" name="department">
+                                    <option value="">请选择部门</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="button" onclick="hideModal('createCustomerModal')">取消</button>
+                <button class="button primary" onclick="submitCreateCustomer()">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/common.js"></script>
+    <script src="../../js/modules/customer/info.js"></script>
+</body>
+</html> 

@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>物料管理 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/modules/production.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-industry"></i>
+                    <span>生产管理</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-sitemap"></i>
+                    <span>BOM管理</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-boxes"></i>
+                    <span>物料管理</span>
+                </div>
+
+                <div class="standard-card">
+                    <div class="standard-toolbar">
+                        <div class="search-group">
+                            <input type="text" class="standard-input" placeholder="输入物料编码/名称搜索">
+                            <select class="standard-select">
+                                <option value="">物料类型</option>
+                                <option value="1">原材料</option>
+                                <option value="2">半成品</option>
+                                <option value="3">成品</option>
+                                <option value="4">包材</option>
+                            </select>
+                            <select class="standard-select">
+                                <option value="">物料状态</option>
+                                <option value="1">启用</option>
+                                <option value="0">停用</option>
+                            </select>
+                            <button class="standard-button primary" onclick="searchMaterials()">
+                                <i class="fas fa-search"></i> 查询
+                            </button>
+                        </div>
+                        <div class="button-group">
+                            <button class="standard-button primary" onclick="showAddMaterialModal()">
+                                <i class="fas fa-plus"></i> 新增物料
+                            </button>
+                            <button class="standard-button" onclick="exportMaterials()">
+                                <i class="fas fa-file-export"></i> 导出
+                            </button>
+                        </div>
+                    </div>
+
+                    <table class="standard-table">
+                        <thead>
+                            <tr>
+                                <th>物料编码</th>
+                                <th>物料名称</th>
+                                <th>规格型号</th>
+                                <th>物料类型</th>
+                                <th>计量单位</th>
+                                <th>创建时间</th>
+                                <th>状态</th>
+                                <th class="operation-column">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>M202403200001</td>
+                                <td>茶叶原料A</td>
+                                <td>特级</td>
+                                <td><span class="badge primary">原材料</span></td>
+                                <td>kg</td>
+                                <td>2024-03-20</td>
+                                <td><span class="badge success">启用</span></td>
+                                <td>
+                                    <button class="standard-button" onclick="viewMaterial('M202403200001')">
+                                        <i class="fas fa-eye"></i> 查看
+                                    </button>
+                                    <button class="standard-button" onclick="editMaterial('M202403200001')">
+                                        <i class="fas fa-edit"></i> 编辑
+                                    </button>
+                                    <button class="standard-button danger" onclick="toggleMaterial('M202403200001')">
+                                        <i class="fas fa-ban"></i> 停用
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>M202403200002</td>
+                                <td>茶叶包装盒</td>
+                                <td>250g</td>
+                                <td><span class="badge info">包材</span></td>
+                                <td>个</td>
+                                <td>2024-03-20</td>
+                                <td><span class="badge success">启用</span></td>
+                                <td>
+                                    <button class="standard-button" onclick="viewMaterial('M202403200002')">
+                                        <i class="fas fa-eye"></i> 查看
+                                    </button>
+                                    <button class="standard-button" onclick="editMaterial('M202403200002')">
+                                        <i class="fas fa-edit"></i> 编辑
+                                    </button>
+                                    <button class="standard-button danger" onclick="toggleMaterial('M202403200002')">
+                                        <i class="fas fa-ban"></i> 停用
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>M202403200003</td>
+                                <td>红茶半成品</td>
+                                <td>标准</td>
+                                <td><span class="badge warning">半成品</span></td>
+                                <td>kg</td>
+                                <td>2024-03-20</td>
+                                <td><span class="badge danger">停用</span></td>
+                                <td>
+                                    <button class="standard-button" onclick="viewMaterial('M202403200003')">
+                                        <i class="fas fa-eye"></i> 查看
+                                    </button>
+                                    <button class="standard-button" onclick="editMaterial('M202403200003')">
+                                        <i class="fas fa-edit"></i> 编辑
+                                    </button>
+                                    <button class="standard-button success" onclick="toggleMaterial('M202403200003')">
+                                        <i class="fas fa-check"></i> 启用
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>M202403200004</td>
+                                <td>精品红茶</td>
+                                <td>特级</td>
+                                <td><span class="badge success">成品</span></td>
+                                <td>盒</td>
+                                <td>2024-03-20</td>
+                                <td><span class="badge warning">待审核</span></td>
+                                <td>
+                                    <button class="standard-button" onclick="viewMaterial('M202403200004')">
+                                        <i class="fas fa-eye"></i> 查看
+                                    </button>
+                                    <button class="standard-button" onclick="editMaterial('M202403200004')">
+                                        <i class="fas fa-edit"></i> 编辑
+                                    </button>
+                                    <button class="standard-button info" onclick="reviewMaterial('M202403200004')">
+                                        <i class="fas fa-check-double"></i> 审核
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="standard-pagination">
+                        <button><i class="fas fa-chevron-left"></i></button>
+                        <button class="active">1</button>
+                        <button>2</button>
+                        <button>3</button>
+                        <button><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 物料弹窗 -->
+    <div id="materialModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-plus-circle"></i> 新增物料</h3>
+                <button class="close-btn" onclick="hideModal('materialModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="materialForm" class="form-grid">
+                    <div class="form-group">
+                        <label>物料编码<span class="required">*</span></label>
+                        <input type="text" class="form-control" name="code" required>
+                    </div>
+                    <div class="form-group">
+                        <label>物料名称<span class="required">*</span></label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>规格型号</label>
+                        <input type="text" class="form-control" name="specification">
+                    </div>
+                    <div class="form-group">
+                        <label>物料类型<span class="required">*</span></label>
+                        <select class="form-control" name="type" required>
+                            <option value="">请选择物料类型</option>
+                            <option value="1">原材料</option>
+                            <option value="2">半成品</option>
+                            <option value="3">成品</option>
+                            <option value="4">包材</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>计量单位<span class="required">*</span></label>
+                        <select class="form-control" name="unit" required>
+                            <option value="">请选择计量单位</option>
+                            <option value="个">个</option>
+                            <option value="件">件</option>
+                            <option value="kg">kg</option>
+                            <option value="g">g</option>
+                            <option value="ml">ml</option>
+                            <option value="l">l</option>
+                            <option value="盒">盒</option>
+                            <option value="箱">箱</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>安全库存<span class="required">*</span></label>
+                        <input type="number" class="form-control" name="safetyStock" required>
+                    </div>
+                    <div class="form-group">
+                        <label>最小批量</label>
+                        <input type="number" class="form-control" name="minBatch">
+                    </div>
+                    <div class="form-group">
+                        <label>批量倍数</label>
+                        <input type="number" class="form-control" name="batchMultiple">
+                    </div>
+                    <div class="form-group">
+                        <label>描述</label>
+                        <textarea class="form-control" name="description" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>附件</label>
+                        <input type="file" class="form-control" name="attachments" multiple>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="standard-button" onclick="hideModal('materialModal')">
+                    <i class="fas fa-times"></i> 取消
+                </button>
+                <button class="standard-button primary" onclick="saveMaterial()">
+                    <i class="fas fa-save"></i> 保存
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* 弹窗样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            overflow-y: auto;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .modal-content {
+            position: relative;
+            width: 800px;
+            max-height: 80vh;
+            margin: 10vh auto;
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 0 2px 12px 0 rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            padding: 16px;
+            border-bottom: 1px solid #dcdfe6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 16px;
+            color: #303133;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .close-btn {
+            border: none;
+            background: none;
+            font-size: 20px;
+            color: #909399;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 16px;
+            overflow-y: auto;
+            max-height: calc(80vh - 120px);
+        }
+
+        .modal-footer {
+            padding: 16px;
+            border-top: 1px solid #dcdfe6;
+            text-align: right;
+            flex-shrink: 0;
+            background: #fff;
+            border-radius: 0 0 4px 4px;
+            gap: 8px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .modal-footer .standard-button {
+            min-width: 80px;
+        }
+
+        /* 表单样式 */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #606266;
+        }
+
+        .form-control {
+            width: 100%;
+            height: 36px;
+            padding: 0 12px;
+            border: 1px solid #dcdfe6;
+            border-radius: 4px;
+            transition: all 0.3s;
+            box-sizing: border-box;
+        }
+
+        .form-control:focus {
+            border-color: #409eff;
+            outline: none;
+        }
+
+        textarea.form-control {
+            height: auto;
+            min-height: 80px;
+            padding: 8px 12px;
+        }
+
+        .required {
+            color: #f56c6c;
+            margin-left: 4px;
+        }
+
+        /* 滚动条样式 */
+        .modal-body::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .modal-body::-webkit-scrollbar-thumb {
+            background: #c0c4cc;
+            border-radius: 3px;
+        }
+
+        .modal-body::-webkit-scrollbar-track {
+            background: #f5f7fa;
+        }
+
+        /* 状态标签样式 */
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            line-height: 1;
+        }
+
+        .badge.primary {
+            background: #ecf5ff;
+            color: #409eff;
+        }
+
+        .badge.success {
+            background: #f0f9eb;
+            color: #67c23a;
+        }
+
+        .badge.warning {
+            background: #fdf6ec;
+            color: #e6a23c;
+        }
+
+        .badge.danger {
+            background: #fef0f0;
+            color: #f56c6c;
+        }
+
+        .badge.info {
+            background: #f4f4f5;
+            color: #909399;
+        }
+
+        /* 按钮样式 */
+        .btn-xs {
+            height: 24px;
+            padding: 0 8px;
+            font-size: 12px;
+        }
+
+        .btn-danger {
+            background: #f56c6c;
+            border-color: #f56c6c;
+            color: #fff;
+        }
+
+        .btn-danger:hover {
+            background: #f78989;
+            border-color: #f78989;
+        }
+
+        .btn-success {
+            background: #67c23a;
+            border-color: #67c23a;
+            color: #fff;
+        }
+
+        .btn-success:hover {
+            background: #85ce61;
+            border-color: #85ce61;
+        }
+
+        .btn-info {
+            background: #909399;
+            border-color: #909399;
+            color: #fff;
+        }
+
+        .btn-info:hover {
+            background: #a6a9ad;
+            border-color: #a6a9ad;
+        }
+
+        /* 优化表单布局 */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        /* 描述和附件占据整行 */
+        .form-group:nth-last-child(1),
+        .form-group:nth-last-child(2) {
+            grid-column: span 2;
+        }
+
+        /* 调整文件上传控件样式 */
+        input[type="file"].form-control {
+            padding: 6px 12px;
+            height: auto;
+        }
+    </style>
+
+    <script src="../../../js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            Menu.renderMenu();
+            initMenuToggle();
+        });
+
+        // 显示物料弹窗
+        function showAddMaterialModal() {
+            document.getElementById('materialModal').style.display = 'block';
+        }
+
+        // 隐藏弹窗
+        function hideModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // 保存物料
+        function saveMaterial() {
+            const form = document.getElementById('materialForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            // TODO: 处理表单提交
+            alert('物料信息已保存！');
+            hideModal('materialModal');
+        }
+    </script>
+</body>
+</html> 

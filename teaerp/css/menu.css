@@ -1,0 +1,174 @@
+/* 主菜单容器 */
+.main-menu {
+    width: 240px;
+    height: 100%;
+    background-color: #ffffff;
+    color: #333333;
+    overflow-y: auto;
+    transition: all 0.3s ease;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 模块标题 */
+.menu-module {
+    border-bottom: 1px solid rgba(129, 216, 208, 0.1);
+}
+
+.module-title {
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    color: #333333;
+}
+
+.module-title:hover {
+    background-color: rgba(129, 216, 208, 0.1);
+}
+
+.module-title i {
+    margin-right: 10px;
+    width: 20px;
+    text-align: center;
+    color: #81D8D0;
+}
+
+.module-title .icon-arrow {
+    margin-left: auto;
+    transition: transform 0.3s ease;
+    color: #81D8D0;
+}
+
+.menu-module.expanded .module-title .icon-arrow {
+    transform: rotate(180deg);
+}
+
+/* 子菜单 */
+.sub-menu {
+    display: none;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background-color: #f8f9fa;
+}
+
+.menu-item {
+    position: relative;
+}
+
+.menu-group {
+    padding: 12px 20px 12px 40px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    color: #333333;
+}
+
+.menu-group:hover {
+    background-color: rgba(129, 216, 208, 0.1);
+}
+
+.menu-group i {
+    margin-right: 10px;
+    width: 16px;
+    text-align: center;
+    font-size: 0.9em;
+    color: #81D8D0;
+}
+
+.menu-group .icon-arrow {
+    margin-left: auto;
+    transition: transform 0.3s ease;
+    color: #81D8D0;
+}
+
+.menu-item.expanded > .menu-group .icon-arrow {
+    transform: rotate(180deg);
+}
+
+.menu-link {
+    padding: 12px 20px 12px 40px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #333333;
+    transition: all 0.3s ease;
+}
+
+.menu-link:hover {
+    background-color: rgba(129, 216, 208, 0.1);
+    color: #81D8D0;
+}
+
+.menu-link i {
+    margin-right: 10px;
+    width: 16px;
+    text-align: center;
+    font-size: 0.9em;
+    color: #81D8D0;
+}
+
+.menu-item.active > .menu-link {
+    background-color: #81D8D0;
+    color: #ffffff;
+}
+
+.menu-item.active > .menu-link i {
+    color: #ffffff;
+}
+
+/* 三级菜单样式 */
+.menu-item .sub-menu .menu-link {
+    padding-left: 60px;
+}
+
+/* 滚动条样式 */
+.main-menu::-webkit-scrollbar {
+    width: 6px;
+}
+
+.main-menu::-webkit-scrollbar-track {
+    background: #f8f9fa;
+}
+
+.main-menu::-webkit-scrollbar-thumb {
+    background: #81D8D0;
+    border-radius: 3px;
+}
+
+.main-menu::-webkit-scrollbar-thumb:hover {
+    background: #66aca5;
+}
+
+/* 展开的子菜单显示 */
+.menu-module.expanded .sub-menu,
+.menu-item.expanded > .sub-menu {
+    display: block;
+}
+
+/* 响应式设计 */
+@media screen and (max-width: 768px) {
+    .main-menu {
+        width: 200px;
+    }
+    
+    .module-title,
+    .menu-group,
+    .menu-link {
+        padding: 10px 15px;
+    }
+    
+    .menu-group {
+        padding-left: 30px;
+    }
+    
+    .menu-link {
+        padding-left: 30px;
+    }
+    
+    .menu-item .sub-menu .menu-link {
+        padding-left: 45px;
+    }
+} 

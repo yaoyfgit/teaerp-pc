@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>目标调整申请 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../../../css/common.css">
+    <link rel="stylesheet" href="../../../../../css/layout.css">
+    <link rel="stylesheet" href="../../../../../css/modules/operation.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb">
+                <span>经营管理</span>
+                <span class="separator">/</span>
+                <span>计划管理</span>
+                <span class="separator">/</span>
+                <span>目标调整</span>
+                <span class="separator">/</span>
+                <span>调整申请</span>
+            </div>
+
+            <!-- 调整申请列表 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>调整申请列表</h3>
+                    <div class="card-tools">
+                        <button class="button" onclick="showModal('adjustModal')">
+                            <i class="fas fa-plus"></i> 新建申请
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="search-bar">
+                        <div class="form-group">
+                            <label>目标类型</label>
+                            <select class="form-control" id="searchType">
+                                <option value="">全部</option>
+                                <option value="company">公司目标</option>
+                                <option value="department">部门目标</option>
+                                <option value="employee">员工目标</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>申请状态</label>
+                            <select class="form-control" id="searchStatus">
+                                <option value="">全部</option>
+                                <option value="draft">草稿</option>
+                                <option value="pending">待审批</option>
+                                <option value="approved">已通过</option>
+                                <option value="rejected">已驳回</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>日期范围</label>
+                            <input type="date" class="form-control" id="searchStartDate">
+                            <span>至</span>
+                            <input type="date" class="form-control" id="searchEndDate">
+                        </div>
+                        <button class="button" onclick="searchAdjustments()">
+                            <i class="fas fa-search"></i> 搜索
+                        </button>
+                    </div>
+                    <div id="adjustTable"></div>
+                    <div id="pagination"></div>
+                </div>
+            </div>
+
+            <!-- 调整申请弹窗 -->
+            <div class="modal" id="adjustModal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>调整申请</h3>
+                        <button class="close" onclick="hideModal('adjustModal')">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="adjustForm">
+                            <div class="form-group">
+                                <label>目标选择</label>
+                                <select class="form-control" name="targetId" required>
+                                    <option value="">请选择</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>调整类型</label>
+                                <select class="form-control" name="adjustType" required>
+                                    <option value="value">目标值调整</option>
+                                    <option value="date">时间调整</option>
+                                    <option value="content">内容调整</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>调整原因</label>
+                                <textarea class="form-control" name="reason" rows="3" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>调整前</label>
+                                <input type="text" class="form-control" name="beforeValue" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label>调整后</label>
+                                <input type="text" class="form-control" name="afterValue" required>
+                            </div>
+                            <div class="form-group">
+                                <label>支撑材料</label>
+                                <input type="file" class="form-control" name="files" multiple>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="button secondary" onclick="hideModal('adjustModal')">取消</button>
+                        <button class="button" onclick="saveAdjustment('draft')">保存草稿</button>
+                        <button class="button" onclick="saveAdjustment('submit')">提交审批</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../../../../js/common.js"></script>
+    <script src="../../../../../js/modules/operation/plan/adjust/apply/index.js"></script>
+</body>
+</html> 

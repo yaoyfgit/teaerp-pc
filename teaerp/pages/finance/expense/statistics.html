@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>费用统计 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/modules/finance.css">
+    <style>
+        /* 统计卡片样式 */
+        .statistics-cards {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .statistics-card {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border-left: 4px solid #8fd4d2;
+        }
+
+        .statistics-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .statistics-card i {
+            font-size: 24px;
+            margin-right: 12px;
+            color: #8fd4d2;
+        }
+
+        .statistics-content {
+            flex: 1;
+        }
+
+        .stat-title {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Tab样式 */
+        .tab-container {
+            margin-top: 16px;
+        }
+        
+        .tab-header {
+            display: flex;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 16px;
+        }
+        
+        .tab-item {
+            padding: 8px 16px;
+            cursor: pointer;
+            position: relative;
+            color: #666;
+        }
+        
+        .tab-item.active {
+            color: #8fd4d2;
+            font-weight: bold;
+        }
+        
+        .tab-item.active:after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #8fd4d2;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+
+        /* 图表样式 */
+        .chart-container {
+            background: #fff;
+            border-radius: 4px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .chart-header h3 {
+            margin: 0;
+            font-size: 16px;
+            color: #333;
+        }
+
+        /* 表格样式 */
+        .standard-table td,
+        .standard-table th {
+            vertical-align: middle;
+            text-align: left;
+            padding: 12px 16px;
+        }
+
+        .standard-table th.text-right,
+        .standard-table td.text-right,
+        .standard-table th.amount-header,
+        .standard-table td.amount-cell {
+            text-align: right;
+        }
+
+        .standard-table th.text-center,
+        .standard-table td.text-center {
+            text-align: center;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 4px;
+        }
+
+        /* 金额单元格样式 */
+        .amount-cell,
+        .amount-header {
+            text-align: right !important;
+            padding-right: 24px !important;
+        }
+
+        /* 趋势指标样式 */
+        .trend {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+
+        .trend.success {
+            color: #4caf50;
+            background-color: rgba(76, 175, 80, 0.1);
+        }
+
+        .trend.danger {
+            color: #f44336;
+            background-color: rgba(244, 67, 54, 0.1);
+        }
+
+        /* 工具栏样式 */
+        .standard-toolbar {
+            margin-bottom: 16px;
+        }
+
+        .toolbar-left {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .toolbar-divider {
+            width: 1px;
+            height: 24px;
+            background-color: #eee;
+            margin: 0 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-money-check-alt"></i>
+                    <span>财务管理</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-chart-pie"></i>
+                    <span>费用统计</span>
+                </div>
+
+                <!-- 统计卡片 -->
+                <div class="statistics-cards">
+                    <div class="statistics-card">
+                        <i class="fas fa-yen-sign"></i>
+                        <div class="statistics-content">
+                            <div class="stat-title">本月费用总额</div>
+                            <div class="stat-value">¥234,567</div>
+                        </div>
+                    </div>
+                    <div class="statistics-card">
+                        <i class="fas fa-chart-line"></i>
+                        <div class="statistics-content">
+                            <div class="stat-title">同比增长</div>
+                            <div class="stat-value">12.34%</div>
+                        </div>
+                    </div>
+                    <div class="statistics-card">
+                        <i class="fas fa-percentage"></i>
+                        <div class="statistics-content">
+                            <div class="stat-title">费用率</div>
+                            <div class="stat-value">15.67%</div>
+                        </div>
+                    </div>
+                    <div class="statistics-card">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                        <div class="statistics-content">
+                            <div class="stat-title">待审批金额</div>
+                            <div class="stat-value">¥45,678</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 图表区域 -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>费用趋势分析</h3>
+                        <div class="chart-actions">
+                            <select class="standard-select">
+                                <option value="year">年度</option>
+                                <option value="quarter">季度</option>
+                                <option value="month">月度</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="trendChart" style="height: 300px;"></div>
+                </div>
+
+                <!-- Tab切换 -->
+                <div class="tab-container">
+                    <div class="tab-header">
+                        <div class="tab-item active">费用类型分析</div>
+                        <div class="tab-item">部门费用分析</div>
+                        <div class="tab-item">项目费用分析</div>
+                    </div>
+                    
+                    <!-- 费用类型分析 -->
+                    <div class="tab-content active">
+                        <div class="chart-container">
+                            <div class="chart-header">
+                                <h3>费用类型占比</h3>
+                            </div>
+                            <div id="typeChart" style="height: 300px;"></div>
+                        </div>
+                        <table class="standard-table">
+                            <thead>
+                                <tr>
+                                    <th>费用类型</th>
+                                    <th class="amount-header">本期金额</th>
+                                    <th class="amount-header">上期金额</th>
+                                    <th class="amount-header">同比变化</th>
+                                    <th class="amount-header">占比</th>
+                                    <th class="text-center">趋势</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>差旅费</td>
+                                    <td class="amount-cell">50,000.00</td>
+                                    <td class="amount-cell">45,000.00</td>
+                                    <td class="amount-cell">11.11%</td>
+                                    <td class="amount-cell">21.32%</td>
+                                    <td class="text-center"><span class="trend success">上升</span></td>
+                                </tr>
+                                <tr>
+                                    <td>办公费</td>
+                                    <td class="amount-cell">30,000.00</td>
+                                    <td class="amount-cell">35,000.00</td>
+                                    <td class="amount-cell">-14.29%</td>
+                                    <td class="amount-cell">12.79%</td>
+                                    <td class="text-center"><span class="trend danger">下降</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- 部门费用分析 -->
+                    <div class="tab-content">
+                        <div class="chart-container">
+                            <div class="chart-header">
+                                <h3>部门费用占比</h3>
+                            </div>
+                            <div id="departmentChart" style="height: 300px;"></div>
+                        </div>
+                        <table class="standard-table">
+                            <thead>
+                                <tr>
+                                    <th>部门名称</th>
+                                    <th class="amount-header">本期金额</th>
+                                    <th class="amount-header">上期金额</th>
+                                    <th class="amount-header">同比变化</th>
+                                    <th class="amount-header">占比</th>
+                                    <th class="text-center">趋势</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>销售部</td>
+                                    <td class="amount-cell">80,000.00</td>
+                                    <td class="amount-cell">75,000.00</td>
+                                    <td class="amount-cell">6.67%</td>
+                                    <td class="amount-cell">34.11%</td>
+                                    <td class="text-center"><span class="trend success">上升</span></td>
+                                </tr>
+                                <tr>
+                                    <td>生产部</td>
+                                    <td class="amount-cell">65,000.00</td>
+                                    <td class="amount-cell">70,000.00</td>
+                                    <td class="amount-cell">-7.14%</td>
+                                    <td class="amount-cell">27.71%</td>
+                                    <td class="text-center"><span class="trend danger">下降</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 项目费用分析 -->
+                    <div class="tab-content">
+                        <div class="chart-container">
+                            <div class="chart-header">
+                                <h3>项目费用占比</h3>
+                            </div>
+                            <div id="projectChart" style="height: 300px;"></div>
+                        </div>
+                        <table class="standard-table">
+                            <thead>
+                                <tr>
+                                    <th>项目名称</th>
+                                    <th class="amount-header">本期金额</th>
+                                    <th class="amount-header">预算金额</th>
+                                    <th class="amount-header">完成率</th>
+                                    <th class="amount-header">占比</th>
+                                    <th class="text-center">状态</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>新品研发</td>
+                                    <td class="amount-cell">45,000.00</td>
+                                    <td class="amount-cell">50,000.00</td>
+                                    <td class="amount-cell">90.00%</td>
+                                    <td class="amount-cell">19.18%</td>
+                                    <td class="text-center"><span class="trend success">正常</span></td>
+                                </tr>
+                                <tr>
+                                    <td>市场推广</td>
+                                    <td class="amount-cell">35,000.00</td>
+                                    <td class="amount-cell">30,000.00</td>
+                                    <td class="amount-cell">116.67%</td>
+                                    <td class="amount-cell">14.92%</td>
+                                    <td class="text-center"><span class="trend danger">超预算</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 初始化菜单
+            Menu.renderMenu();
+            // 初始化菜单切换功能
+            initMenuToggle();
+            // 初始化Tab切换
+            initTabs();
+            // 初始化趋势图表
+            initTrendChart();
+        });
+
+        // Tab切换
+        function initTabs() {
+            const tabItems = document.querySelectorAll('.tab-item');
+            const tabContents = document.querySelectorAll('.tab-content');
+            let currentCharts = {
+                trendChart: null,
+                typeChart: null,
+                departmentChart: null,
+                projectChart: null
+            };
+            
+            // 初始化第一个Tab的图表
+            currentCharts.trendChart = initTrendChart();
+            currentCharts.typeChart = initTypeChart();
+            
+            tabItems.forEach((item, index) => {
+                item.addEventListener('click', () => {
+                    // 切换Tab显示状态
+                    tabItems.forEach(i => i.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    item.classList.add('active');
+                    tabContents[index].classList.add('active');
+                    
+                    // 重新初始化对应的图表
+                    setTimeout(() => {
+                        switch(index) {
+                            case 0:
+                                if (currentCharts.typeChart) {
+                                    currentCharts.typeChart.dispose();
+                                }
+                                currentCharts.typeChart = initTypeChart();
+                                break;
+                            case 1:
+                                if (currentCharts.departmentChart) {
+                                    currentCharts.departmentChart.dispose();
+                                }
+                                currentCharts.departmentChart = initDepartmentChart();
+                                break;
+                            case 2:
+                                if (currentCharts.projectChart) {
+                                    currentCharts.projectChart.dispose();
+                                }
+                                currentCharts.projectChart = initProjectChart();
+                                break;
+                        }
+                    }, 100);
+                });
+            });
+
+            // 监听窗口大小变化
+            window.addEventListener('resize', () => {
+                Object.values(currentCharts).forEach(chart => {
+                    if (chart) {
+                        chart.resize();
+                    }
+                });
+            });
+        }
+
+        // 费用趋势图表
+        function initTrendChart() {
+            const chartDom = document.getElementById('trendChart');
+            if (!chartDom) return null;
+            const chart = echarts.init(chartDom);
+            const option = {
+                tooltip: {
+                    trigger: 'axis'
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['1月', '2月', '3月', '4月', '5月', '6月']
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [{
+                    name: '费用金额',
+                    type: 'line',
+                    smooth: true,
+                    data: [150000, 230000, 224000, 218000, 135000, 147000],
+                    itemStyle: {
+                        color: '#8fd4d2'
+                    }
+                }]
+            };
+            chart.setOption(option);
+            return chart;
+        }
+
+        // 费用类型占比图表
+        function initTypeChart() {
+            const chartDom = document.getElementById('typeChart');
+            if (!chartDom) return null;
+            const chart = echarts.init(chartDom);
+            const option = {
+                tooltip: {
+                    trigger: 'item'
+                },
+                legend: {
+                    orient: 'vertical',
+                    right: 10,
+                    top: 'center'
+                },
+                series: [{
+                    name: '费用类型',
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    center: ['40%', '50%'],
+                    avoidLabelOverlap: false,
+                    itemStyle: {
+                        borderRadius: 10,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    },
+                    label: {
+                        show: false,
+                        position: 'center'
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: '20',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    labelLine: {
+                        show: false
+                    },
+                    data: [
+                        { value: 50000, name: '差旅费' },
+                        { value: 30000, name: '办公费' },
+                        { value: 45000, name: '招待费' },
+                        { value: 35000, name: '培训费' },
+                        { value: 74567, name: '其他费用' }
+                    ]
+                }]
+            };
+            chart.setOption(option);
+            return chart;
+        }
+
+        // 部门费用占比图表
+        function initDepartmentChart() {
+            const chartDom = document.getElementById('departmentChart');
+            if (!chartDom) return null;
+            const chart = echarts.init(chartDom);
+            const option = {
+                tooltip: {
+                    trigger: 'item'
+                },
+                legend: {
+                    orient: 'vertical',
+                    right: 10,
+                    top: 'center'
+                },
+                series: [{
+                    name: '部门费用',
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    center: ['40%', '50%'],
+                    avoidLabelOverlap: false,
+                    itemStyle: {
+                        borderRadius: 10,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    },
+                    label: {
+                        show: false,
+                        position: 'center'
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: '20',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    labelLine: {
+                        show: false
+                    },
+                    data: [
+                        { value: 80000, name: '销售部' },
+                        { value: 65000, name: '生产部' },
+                        { value: 45000, name: '研发部' },
+                        { value: 35000, name: '行政部' },
+                        { value: 9567, name: '其他部门' }
+                    ]
+                }]
+            };
+            chart.setOption(option);
+            return chart;
+        }
+
+        // 项目费用占比图表
+        function initProjectChart() {
+            const chartDom = document.getElementById('projectChart');
+            if (!chartDom) return null;
+            const chart = echarts.init(chartDom);
+            const option = {
+                tooltip: {
+                    trigger: 'item'
+                },
+                legend: {
+                    orient: 'vertical',
+                    right: 10,
+                    top: 'center'
+                },
+                series: [{
+                    name: '项目费用',
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    center: ['40%', '50%'],
+                    avoidLabelOverlap: false,
+                    itemStyle: {
+                        borderRadius: 10,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    },
+                    label: {
+                        show: false,
+                        position: 'center'
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: '20',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    labelLine: {
+                        show: false
+                    },
+                    data: [
+                        { value: 45000, name: '新品研发' },
+                        { value: 35000, name: '市场推广' },
+                        { value: 30000, name: '设备升级' },
+                        { value: 25000, name: '人员培训' },
+                        { value: 99567, name: '其他项目' }
+                    ]
+                }]
+            };
+            chart.setOption(option);
+            return chart;
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>目标达成分析 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../../../css/common.css">
+    <link rel="stylesheet" href="../../../../../css/layout.css">
+    <link rel="stylesheet" href="../../../../../css/modules/operation.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb">
+                <span>经营管理</span>
+                <span class="separator">/</span>
+                <span>计划管理</span>
+                <span class="separator">/</span>
+                <span>目标分析</span>
+                <span class="separator">/</span>
+                <span>目标达成分析</span>
+            </div>
+
+            <!-- 分析条件 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>分析条件</h3>
+                </div>
+                <div class="card-body">
+                    <div class="search-bar">
+                        <div class="form-group">
+                            <label>目标类型</label>
+                            <select class="form-control" id="targetType">
+                                <option value="">全部</option>
+                                <option value="company">公司目标</option>
+                                <option value="department">部门目标</option>
+                                <option value="employee">员工目标</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>年度</label>
+                            <select class="form-control" id="year">
+                                <option value="2024">2024年</option>
+                                <option value="2023">2023年</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>达成状态</label>
+                            <select class="form-control" id="status">
+                                <option value="">全部</option>
+                                <option value="exceeded">超额完成</option>
+                                <option value="achieved">达成目标</option>
+                                <option value="risk">存在风险</option>
+                                <option value="failed">未达标</option>
+                            </select>
+                        </div>
+                        <button class="button" onclick="analyzeAchievement()">
+                            <i class="fas fa-chart-line"></i> 分析
+                        </button>
+                        <button class="button" onclick="exportReport()">
+                            <i class="fas fa-file-export"></i> 导出
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 达成概览 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>达成概览</h3>
+                </div>
+                <div class="card-body">
+                    <div class="stats-overview">
+                        <div class="stats-item">
+                            <div class="stats-label">总目标数</div>
+                            <div class="stats-value" id="totalTargets">0</div>
+                        </div>
+                        <div class="stats-item">
+                            <div class="stats-label">超额完成</div>
+                            <div class="stats-value" id="exceededTargets">0</div>
+                        </div>
+                        <div class="stats-item">
+                            <div class="stats-label">达成目标</div>
+                            <div class="stats-value" id="achievedTargets">0</div>
+                        </div>
+                        <div class="stats-item">
+                            <div class="stats-label">存在风险</div>
+                            <div class="stats-value" id="riskTargets">0</div>
+                        </div>
+                        <div class="stats-item">
+                            <div class="stats-label">未达标</div>
+                            <div class="stats-value" id="failedTargets">0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 达成趋势 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>达成趋势</h3>
+                </div>
+                <div class="card-body">
+                    <div id="trendChart"></div>
+                </div>
+            </div>
+
+            <!-- ���成分布 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>达成分布</h3>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <div class="chart-wrapper">
+                            <h4>目标类型分布</h4>
+                            <div id="typeChart"></div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <h4>部门分布</h4>
+                            <div id="departmentChart"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 目标列表 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>目标列表</h3>
+                </div>
+                <div class="card-body">
+                    <div id="targetTable"></div>
+                    <div id="pagination"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../../../../js/common.js"></script>
+    <script src="../../../../../js/modules/operation/plan/analysis/achievement/index.js"></script>
+</body>
+</html> 

@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>发票管理 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/modules/finance.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+            
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-money-bill"></i>
+                    <span>财务管理</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-file-invoice"></i>
+                    <span>发票管理</span>
+                </div>
+
+                <!-- 统计卡片 -->
+                <div class="statistics-cards">
+                    <div class="standard-card">
+                        <div class="card-body">
+                            <i class="fas fa-file-invoice"></i>
+                            <div class="stat-info">
+                                <div class="stat-title">本月发票总数</div>
+                                <div class="stat-value">328</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="standard-card info">
+                        <div class="card-body">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                            <div class="stat-info">
+                                <div class="stat-title">本月进项税额</div>
+                                <div class="stat-value">¥85,632.00</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="standard-card success">
+                        <div class="card-body">
+                            <i class="fas fa-file-export"></i>
+                            <div class="stat-info">
+                                <div class="stat-title">本月销项税额</div>
+                                <div class="stat-value">¥126,450.00</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="standard-card warning">
+                        <div class="card-body">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <div class="stat-info">
+                                <div class="stat-title">待认证发票</div>
+                                <div class="stat-value">12张</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab切换 -->
+                <div class="standard-card">
+                    <div class="tab-header">
+                        <div class="tab-item active" data-tab="all">全部发票</div>
+                        <div class="tab-item" data-tab="input">进项发票</div>
+                        <div class="tab-item" data-tab="output">销项发票</div>
+                    </div>
+
+                    <!-- 全部发票 -->
+                    <div class="tab-content active" id="all">
+                        <div class="standard-toolbar">
+                            <div class="toolbar-left">
+                                <input type="text" class="standard-input" placeholder="发票号码">
+                                <select class="standard-select">
+                                    <option value="">发票类型</option>
+                                    <option value="1">增值税专用发票</option>
+                                    <option value="2">增值税普通发票</option>
+                                </select>
+                                <select class="standard-select">
+                                    <option value="">发票状态</option>
+                                    <option value="1">已认证</option>
+                                    <option value="2">待认证</option>
+                                    <option value="3">认证失败</option>
+                                </select>
+                                <button class="standard-button primary">
+                                    <i class="fas fa-search"></i>
+                                    查询
+                                </button>
+                            </div>
+                            <div class="toolbar-divider"></div>
+                            <div class="toolbar-right">
+                                <button class="standard-button">
+                                    <i class="fas fa-plus"></i>
+                                    新增发票
+                                </button>
+                                <button class="standard-button">
+                                    <i class="fas fa-upload"></i>
+                                    批量导入
+                                </button>
+                                <button class="standard-button">
+                                    <i class="fas fa-download"></i>
+                                    导出
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="table-container">
+                            <table class="standard-table">
+                                <thead>
+                                    <tr>
+                                        <th>发票号码</th>
+                                        <th>发票类型</th>
+                                        <th>开票日期</th>
+                                        <th>供应商/客户</th>
+                                        <th>金额（元）</th>
+                                        <th>税额（元）</th>
+                                        <th>状态</th>
+                                        <th width="120">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1234567890</td>
+                                        <td>增值税专用发票</td>
+                                        <td>2024-01-03</td>
+                                        <td>杭州茶叶有限公司</td>
+                                        <td>85,632.00</td>
+                                        <td>14,558.00</td>
+                                        <td><span class="status-badge success">已认证</span></td>
+                                        <td>
+                                            <button class="standard-button small">查看</button>
+                                            <button class="standard-button small danger">作废</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>1234567891</td>
+                                        <td>增值税普通发票</td>
+                                        <td>2024-01-03</td>
+                                        <td>福建茶业股份公司</td>
+                                        <td>32,150.00</td>
+                                        <td>5,465.50</td>
+                                        <td><span class="status-badge warning">待认证</span></td>
+                                        <td>
+                                            <button class="standard-button small">查看</button>
+                                            <button class="standard-button small">认证</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="standard-pagination">
+                            <button class="standard-button" disabled>
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="standard-button primary">1</button>
+                            <button class="standard-button">2</button>
+                            <button class="standard-button">3</button>
+                            <button class="standard-button">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 进项发票 -->
+                    <div class="tab-content" id="input">
+                        <div class="standard-toolbar">
+                            <div class="toolbar-left">
+                                <input type="text" class="standard-input" placeholder="发票号码/供应商">
+                                <select class="standard-select">
+                                    <option value="">发票状态</option>
+                                    <option value="1">已认证</option>
+                                    <option value="2">待认证</option>
+                                    <option value="3">认证失败</option>
+                                </select>
+                                <input type="date" class="standard-input" placeholder="开始日期">
+                                <input type="date" class="standard-input" placeholder="结束日期">
+                                <button class="standard-button primary">
+                                    <i class="fas fa-search"></i>
+                                    查询
+                                </button>
+                                <div class="toolbar-divider"></div>
+                                <button class="standard-button primary">
+                                    <i class="fas fa-plus"></i>
+                                    新增进项发票
+                                </button>
+                                <button class="standard-button">
+                                    <i class="fas fa-upload"></i>
+                                    批量导入
+                                </button>
+                                <button class="standard-button">
+                                    <i class="fas fa-download"></i>
+                                    导出
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="table-container">
+                            <table class="standard-table">
+                                <thead>
+                                    <tr>
+                                        <th>发票号码</th>
+                                        <th>开票日期</th>
+                                        <th>供应商</th>
+                                        <th>金额（元）</th>
+                                        <th>税率</th>
+                                        <th>税额（元）</th>
+                                        <th>状态</th>
+                                        <th width="120">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>FP2023120001</td>
+                                        <td>2023-12-01</td>
+                                        <td>福建茶叶有限公司</td>
+                                        <td>50,000.00</td>
+                                        <td>13%</td>
+                                        <td>6,500.00</td>
+                                        <td><span class="status-badge warning">待认证</span></td>
+                                        <td>
+                                            <button class="standard-button small">查看</button>
+                                            <button class="standard-button small">认证</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="standard-pagination">
+                            <button class="standard-button" disabled>
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="standard-button primary">1</button>
+                            <button class="standard-button">2</button>
+                            <button class="standard-button">3</button>
+                            <button class="standard-button">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 销项发票 -->
+                    <div class="tab-content" id="output">
+                        <div class="standard-toolbar">
+                            <div class="toolbar-left">
+                                <input type="text" class="standard-input" placeholder="发票号码/客户">
+                                <select class="standard-select">
+                                    <option value="">发票状态</option>
+                                    <option value="1">已开具</option>
+                                    <option value="2">待开具</option>
+                                    <option value="3">已作废</option>
+                                </select>
+                                <input type="date" class="standard-input" placeholder="开始日期">
+                                <input type="date" class="standard-input" placeholder="结束日期">
+                                <button class="standard-button primary">
+                                    <i class="fas fa-search"></i>
+                                    查询
+                                </button>
+                                <div class="toolbar-divider"></div>
+                                <button class="standard-button primary">
+                                    <i class="fas fa-plus"></i>
+                                    新增销项发票
+                                </button>
+                                <button class="standard-button">
+                                    <i class="fas fa-upload"></i>
+                                    批量导入
+                                </button>
+                                <button class="standard-button">
+                                    <i class="fas fa-download"></i>
+                                    导出
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="table-container">
+                            <table class="standard-table">
+                                <thead>
+                                    <tr>
+                                        <th>发票号码</th>
+                                        <th>开票日期</th>
+                                        <th>客户</th>
+                                        <th>金额（元）</th>
+                                        <th>税率</th>
+                                        <th>税额（元）</th>
+                                        <th>状态</th>
+                                        <th width="120">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>XP2023120001</td>
+                                        <td>2023-12-01</td>
+                                        <td>杭州茶叶专卖店</td>
+                                        <td>80,000.00</td>
+                                        <td>13%</td>
+                                        <td>10,400.00</td>
+                                        <td><span class="status-badge success">已开具</span></td>
+                                        <td>
+                                            <button class="standard-button small">查看</button>
+                                            <button class="standard-button small danger">作废</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="standard-pagination">
+                            <button class="standard-button" disabled>
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="standard-button primary">1</button>
+                            <button class="standard-button">2</button>
+                            <button class="standard-button">3</button>
+                            <button class="standard-button">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增/编辑发票弹窗 -->
+    <div class="modal" id="invoiceModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>新增发票</h3>
+                <button class="close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="invoiceForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>发票类型</label>
+                            <select name="type" class="form-control" required>
+                                <option value="input">进项发票</option>
+                                <option value="output">销项发票</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>发票号码</label>
+                            <input type="text" name="invoiceNo" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>开票日期</label>
+                            <input type="date" name="invoiceDate" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>供应商/客户</label>
+                            <input type="text" name="partner" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>金额（元）</label>
+                            <input type="number" name="amount" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>税率（%）</label>
+                            <input type="number" name="taxRate" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>备注</label>
+                        <textarea name="remarks" class="form-control"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">取消</button>
+                <button class="btn btn-primary" onclick="saveInvoice()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 初始化菜单
+            Menu.renderMenu();
+            // 初始化菜单切换功能
+            initMenuToggle();
+            // 初始化标签页切换
+            initTabs();
+        });
+
+        function initTabs() {
+            const tabHeaders = document.querySelectorAll('.tab-item');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    // 移除所有active类
+                    tabHeaders.forEach(h => h.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+
+                    // 添加active类到当前选中的标签
+                    header.classList.add('active');
+                    const tabId = header.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+        }
+    </script>
+</body>
+</html> 

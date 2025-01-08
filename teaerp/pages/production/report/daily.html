@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日报工 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/modules/production.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 左侧菜单 -->
+        <aside class="main-sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <img src="../../../assets/images/logo.png" alt="TeaERP Logo">
+                    <span>TeaERP</span>
+                </div>
+            </div>
+            <div class="sidebar-menu">
+                <ul class="menu-list">
+                    <li class="menu-item">
+                        <a href="../../../index.html">
+                            <i class="fas fa-home"></i>
+                            <span>首页</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="../../stock/stock-warning.html">
+                            <i class="fas fa-boxes"></i>
+                            <span>库存管理</span>
+                        </a>
+                    </li>
+                    <li class="menu-item active">
+                        <a href="../report/daily.html">
+                            <i class="fas fa-industry"></i>
+                            <span>生产管理</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="../../purchase/order.html">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>采购管理</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="../../sales/order.html">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span>销售管理</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="../../finance/expense.html">
+                            <i class="fas fa-money-bill"></i>
+                            <span>财务管理</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="../../hr/employee.html">
+                            <i class="fas fa-users"></i>
+                            <span>人事管理</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="../../settings/company.html">
+                            <i class="fas fa-cog"></i>
+                            <span>系统设置</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <div class="main-content">
+            <!-- 顶部导航栏 -->
+            <header class="main-header">
+                <div class="nav-left">
+                    <button class="menu-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+                <div class="nav-right">
+                    <div class="user-info">
+                        <img src="../../../assets/images/avatar.jpg" alt="User Avatar" class="avatar">
+                        <span class="username">管理员</span>
+                    </div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-bell"></i>
+                            <span class="badge">3</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </a>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-industry"></i>
+                    <span>生产管理</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-clipboard-check"></i>
+                    <span>生产报工</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-calendar-day"></i>
+                    <span>日报工</span>
+                </div>
+
+                <!-- 状态概览 -->
+                <div class="standard-card">
+                    <div class="standard-card-header">
+                        <h3><i class="fas fa-chart-pie"></i> 今日概览</h3>
+                    </div>
+                    <div class="standard-card-body">
+                        <div class="overview-grid">
+                            <div class="overview-item">
+                                <i class="fas fa-tasks"></i>
+                                <h4>待报工任务</h4>
+                                <div class="number">12</div>
+                                <div class="description">个任务</div>
+                            </div>
+                            <div class="overview-item">
+                                <i class="fas fa-check-circle"></i>
+                                <h4>已完成报工</h4>
+                                <div class="number">8</div>
+                                <div class="description">个任务</div>
+                            </div>
+                            <div class="overview-item warning">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <h4>异常报工</h4>
+                                <div class="number">2</div>
+                                <div class="description">个任务</div>
+                            </div>
+                            <div class="overview-item">
+                                <i class="fas fa-clock"></i>
+                                <h4>平均工时</h4>
+                                <div class="number">6.5</div>
+                                <div class="description">小时/任务</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 报工列表 -->
+                <div class="standard-card">
+                    <div class="standard-card-header">
+                        <h3><i class="fas fa-list"></i> 报工列表</h3>
+                        <div class="card-tools">
+                            <button class="standard-button" onclick="exportReport()">
+                                <i class="fas fa-file-export"></i> 导出
+                            </button>
+                            <button class="standard-button primary" onclick="showReportModal()">
+                                <i class="fas fa-plus"></i> 新增报工
+                            </button>
+                        </div>
+                    </div>
+                    <div class="standard-card-body">
+                        <div class="standard-toolbar">
+                            <div class="search-bar">
+                                <input type="text" class="standard-input" placeholder="输入任务编号/名称搜索">
+                                <select class="standard-select">
+                                    <option value="">报工状态</option>
+                                    <option value="1">待审核</option>
+                                    <option value="2">已审核</option>
+                                    <option value="3">已驳回</option>
+                                </select>
+                                <button class="standard-button" onclick="searchReport()">
+                                    <i class="fas fa-search"></i> 搜索
+                                </button>
+                            </div>
+                        </div>
+                        <table class="standard-table">
+                            <thead>
+                                <tr>
+                                    <th>报工编号</th>
+                                    <th>任务编号</th>
+                                    <th>工序名称</th>
+                                    <th>报工人员</th>
+                                    <th>报工数量</th>
+                                    <th>合格数量</th>
+                                    <th>不合格数量</th>
+                                    <th>工时(小时)</th>
+                                    <th>报工时间</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reportTable"></tbody>
+                        </table>
+                        <div class="standard-pagination" id="pagination"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 报工弹窗 -->
+    <div class="standard-modal" id="reportModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> 生产报工</h3>
+                <button class="standard-close-btn" onclick="hideModal('reportModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="reportForm" class="standard-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>任务编号</label>
+                            <select class="standard-select" name="taskId" required>
+                                <option value="">选择任务</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>工序名称</label>
+                            <select class="standard-select" name="processId" required>
+                                <option value="">选择工序</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>报工数量</label>
+                            <input type="number" class="standard-input" name="quantity" required>
+                        </div>
+                        <div class="form-group">
+                            <label>合格数量</label>
+                            <input type="number" class="standard-input" name="qualifiedQuantity" required>
+                        </div>
+                        <div class="form-group">
+                            <label>不合格数量</label>
+                            <input type="number" class="standard-input" name="unqualifiedQuantity" required>
+                        </div>
+                        <div class="form-group">
+                            <label>工时(小时)</label>
+                            <input type="number" class="standard-input" name="workHours" required>
+                        </div>
+                        <div class="form-group">
+                            <label>备注说明</label>
+                            <textarea class="standard-textarea" name="remark" rows="3"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="standard-button" onclick="hideModal('reportModal')">
+                    <i class="fas fa-times"></i> 取消
+                </button>
+                <button class="standard-button primary" onclick="saveReport()">
+                    <i class="fas fa-save"></i> 保存
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript 引用 -->
+    <script src="../../../js/app.js"></script>
+    <script>
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', () => {
+            // 初始化菜单
+            Menu.renderMenu();
+            // 初始化菜单切换功能
+            initMenuToggle();
+        });
+    </script>
+</body>
+</html> 

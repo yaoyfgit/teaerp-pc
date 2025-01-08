@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeaERP</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- 系统样式 -->
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/menu.css">
+</head>
+</html> <body>
+    <div class="app-container">
+        <!-- 顶部导航 -->
+        <header class="app-header">
+            <div class="logo">TeaERP</div>
+            <nav class="top-nav">
+                <ul>
+                    <li><a href="../../index.html">首页</a></li>
+                    <li><a href="#">消息</a></li>
+                    <li><a href="#">帮助</a></li>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <span class="username">管理员</span>
+                <a href="#" class="logout">退出</a>
+            </div>
+        </header>
+
+        <div class="app-main">
+            <!-- 左侧菜单 -->
+            <aside class="app-sidebar">
+                <nav class="side-menu">
+                    <ul class="menu-list">
+                        <!-- 系统管理菜单项将通过JavaScript动态加载 -->
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- 内容区域 -->
+            <main class="app-content">
+                <!-- 面包屑导航 -->
+                <div class="breadcrumb">
+                    <span>系统管理</span>
+                    <span class="separator">/</span>
+                    <span>权限管理</span>
+                </div>
+
+                <!-- 工具栏 -->
+                <div class="toolbar">
+                    <div class="search-bar">
+                        <div class="form-group">
+                            <input type="text" placeholder="输入权限名称/编码搜索" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control">
+                                <option value="">权限类型</option>
+                                <option value="menu">菜单权限</option>
+                                <option value="operation">操作权限</option>
+                                <option value="data">数据权限</option>
+                            </select>
+                        </div>
+                        <button class="button primary">搜索</button>
+                        <button class="button">重置</button>
+                    </div>
+                    <div class="action-bar">
+                        <button class="button primary" onclick="showCreateModal()">
+                            <i class="icon-plus"></i>新建权限
+                        </button>
+                        <button class="button">
+                            <i class="icon-import"></i>导入
+                        </button>
+                        <button class="button">
+                            <i class="icon-export"></i>导出
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 数据表格卡片 -->
+                <div class="card">
+                    <div class="card-body">
+                        <!-- 权限树形表格 -->
+                        <div class="tree-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>权限名称</th>
+                                        <th>权限编码</th>
+                                        <th>权限类型</th>
+                                        <th>权限路径</th>
+                                        <th>排序号</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- 权限数据行 -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- 新建权限弹窗 -->
+    <div class="modal" id="createPermissionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>新建权限</h3>
+                <button class="close-btn" onclick="hideModal('createPermissionModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>权限名称</label>
+                            <input type="text" class="form-control" name="permissionName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>权限编码</label>
+                            <input type="text" class="form-control" name="permissionCode" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>权限类型</label>
+                            <select class="form-control" name="permissionType" onchange="handleTypeChange(this)">
+                                <option value="menu">菜单权限</option>
+                                <option value="operation">操作权限</option>
+                                <option value="data">数据权限</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>上级权限</label>
+                            <select class="form-control" name="parentId">
+                                <option value="">无</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row menu-fields">
+                        <div class="form-group">
+                            <label>菜单路径</label>
+                            <input type="text" class="form-control" name="menuPath">
+                        </div>
+                        <div class="form-group">
+                            <label>菜单图标</label>
+                            <input type="text" class="form-control" name="menuIcon">
+                        </div>
+                    </div>
+                    <div class="form-row operation-fields" style="display: none;">
+                        <div class="form-group">
+                            <label>操作代码</label>
+                            <input type="text" class="form-control" name="operationCode">
+                        </div>
+                        <div class="form-group">
+                            <label>操作类型</label>
+                            <select class="form-control" name="operationType">
+                                <option value="view">查看</option>
+                                <option value="add">新增</option>
+                                <option value="edit">修改</option>
+                                <option value="delete">删除</option>
+                                <option value="export">导出</option>
+                                <option value="import">导入</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row data-fields" style="display: none;">
+                        <div class="form-group">
+                            <label>数据范围</label>
+                            <select class="form-control" name="dataScope">
+                                <option value="all">全部数据</option>
+                                <option value="department">本部门数据</option>
+                                <option value="personal">个人数据</option>
+                                <option value="custom">自定义数据</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>排序号</label>
+                            <input type="number" class="form-control" name="orderNum" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label>状态</label>
+                            <select class="form-control" name="status">
+                                <option value="1">启用</option>
+                                <option value="0">禁用</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>备注</label>
+                        <textarea class="form-control" name="remarks" rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="button" onclick="hideModal('createPermissionModal')">取消</button>
+                <button class="button primary" onclick="submitCreatePermission()">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/common.js"></script>
+    <script src="../../js/modules/system/permission.js"></script>
+</body>
+</html> 

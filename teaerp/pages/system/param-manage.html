@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeaERP</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- 系统样式 -->
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/menu.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 顶部导航 -->
+        <header class="app-header">
+            <div class="logo">TeaERP</div>
+            <nav class="top-nav">
+                <ul>
+                    <li><a href="../../index.html">首页</a></li>
+                    <li><a href="#">消息</a></li>
+                    <li><a href="#">帮助</a></li>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <span class="username">管理员</span>
+                <a href="#" class="logout">退出</a>
+            </div>
+        </header>
+
+        <div class="app-main">
+            <!-- 左侧菜单 -->
+            <aside class="app-sidebar">
+                <nav class="side-menu">
+                    <ul class="menu-list">
+                        <li class="menu-item active">
+                            <a href="../dashboard/index.html">
+                                <i class="fas fa-home"></i>
+                                <span>首页</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- 内容区域 -->
+            <main class="app-content">
+                <!-- 面包屑导航 -->
+                <div class="breadcrumb">
+                    <span>系统管理</span>
+                    <span class="separator">/</span>
+                    <span>参数设置</span>
+                </div>
+
+                <!-- 工具栏 -->
+                <div class="card toolbar">
+                    <div class="search-bar">
+                        <input type="text" placeholder="输入参数名称/键名搜索" class="form-control">
+                        <select class="form-control">
+                            <option value="">参数类型</option>
+                            <option value="system">系统参数</option>
+                            <option value="business">业务参数</option>
+                        </select>
+                        <button class="button">搜索</button>
+                    </div>
+                    <div class="action-bar">
+                        <button class="button primary" onclick="showCreateModal()">
+                            <i class="icon-plus"></i>新建参数
+                        </button>
+                        <button class="button">
+                            <i class="icon-import"></i>导入
+                        </button>
+                        <button class="button">
+                            <i class="icon-export"></i>导出
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 参数列表 -->
+                <div class="card data-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>参数名称</th>
+                                <th>参数键名</th>
+                                <th>参数键值</th>
+                                <th>参数类型</th>
+                                <th>是否内置</th>
+                                <th>创建时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 参数数据行 -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 分页器 -->
+                <div class="card pagination">
+                    <ul class="pagination-list">
+                        <li><a href="#" class="pagination-link">1</a></li>
+                        <li><a href="#" class="pagination-link active">2</a></li>
+                        <li><a href="#" class="pagination-link">3</a></li>
+                    </ul>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- 新建参数弹窗 -->
+    <div class="modal" id="createParamModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>新建参数</h3>
+                <button class="close-btn" onclick="hideModal('createParamModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>参数名称</label>
+                            <input type="text" class="form-control" name="paramName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>参数键名</label>
+                            <input type="text" class="form-control" name="paramKey" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>参数类型</label>
+                            <select class="form-control" name="paramType">
+                                <option value="system">系统参数</option>
+                                <option value="business">业务参数</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>值类型</label>
+                            <select class="form-control" name="valueType" onchange="handleValueTypeChange(this)">
+                                <option value="text">文本</option>
+                                <option value="number">数字</option>
+                                <option value="boolean">布尔值</option>
+                                <option value="json">JSON</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group value-field">
+                        <label>参数键值</label>
+                        <div class="value-input">
+                            <!-- 根据值类型动态显示不同的输入控件 -->
+                            <input type="text" class="form-control" name="paramValue">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>验证规则</label>
+                        <div class="validation-rules">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="required"> 必填
+                            </label>
+                            <div class="rule-fields">
+                                <input type="text" class="form-control" name="pattern" placeholder="正则表达式">
+                                <input type="text" class="form-control" name="message" placeholder="错误提示">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>备注说明</label>
+                        <textarea class="form-control" name="remarks" rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideModal('createParamModal')">取消</button>
+                <button class="button" onclick="submitCreateParam()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/common.js"></script>
+    <script src="../../js/components/modal.js"></script>
+    <script src="../../js/components/pagination.js"></script>
+    <script src="../../js/modules/system/param.js"></script>
+</body>
+</html> 

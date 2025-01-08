@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>进度报告 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/modules/production.css">
+    <link rel="stylesheet" href="../../../css/modules/production/progress.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-industry"></i>
+                    <span>生产管理</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-tasks"></i>
+                    <span>生产进度</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-file-alt"></i>
+                    <span>进度报告</span>
+                </div>
+
+                <div class="standard-card">
+                    <div class="standard-toolbar">
+                        <div class="toolbar-left">
+                            <select class="standard-select">
+                                <option value="">报告类型</option>
+                                <option value="1">日报</option>
+                                <option value="2">周报</option>
+                                <option value="3">月报</option>
+                            </select>
+                            <input type="date" class="standard-input">
+                            <button class="standard-button">
+                                <i class="fas fa-search"></i> 查询
+                            </button>
+                            <div class="toolbar-divider"></div>
+                            <button class="standard-button primary">
+                                <i class="fas fa-plus"></i> 新增报告
+                            </button>
+                            <button class="standard-button">
+                                <i class="fas fa-file-export"></i> 导出
+                            </button>
+                        </div>
+                    </div>
+
+                    <table class="standard-table">
+                        <thead>
+                            <tr>
+                                <th>报告编号</th>
+                                <th>报告类型</th>
+                                <th>报告日期</th>
+                                <th>完成情况</th>
+                                <th>异常数</th>
+                                <th>创建人</th>
+                                <th>创建时间</th>
+                                <th width="120">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportTable">
+                            <tr>
+                                <td>RP202401001</td>
+                                <td><span class="status-badge info">日报</span></td>
+                                <td>2024-01-15</td>
+                                <td>
+                                    <div class="progress-bar">
+                                        <div class="progress" style="width: 85%"></div>
+                                        <span class="progress-text">85%</span>
+                                    </div>
+                                </td>
+                                <td><span class="status-badge warning">2</span></td>
+                                <td>张三</td>
+                                <td>2024-01-15 14:30</td>
+                                <td>
+                                    <button class="standard-button small">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="standard-button small">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="standard-button small danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="standard-pagination" id="pagination"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="standard-modal" id="reportModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-file-alt"></i> 新增报告</h3>
+                <button class="standard-close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="reportForm" class="standard-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>报告类型</label>
+                            <select class="standard-select" name="type" required>
+                                <option value="1">日报</option>
+                                <option value="2">周报</option>
+                                <option value="3">月报</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>报告日期</label>
+                            <input type="date" class="standard-input" name="reportDate" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>生产完成情况</label>
+                        <textarea class="standard-textarea" name="completion" rows="4" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>异常问题</label>
+                        <textarea class="standard-textarea" name="issues" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>解决方案</label>
+                        <textarea class="standard-textarea" name="solutions" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>下一步计划</label>
+                        <textarea class="standard-textarea" name="nextPlan" rows="4" required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="standard-button" onclick="hideModal('reportModal')">
+                    <i class="fas fa-times"></i> 取消
+                </button>
+                <button class="standard-button primary" onclick="saveReport()">
+                    <i class="fas fa-save"></i> 保存
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/common.js"></script>
+    <script src="../../../js/modules/production/progress/mock-data.js"></script>
+    <script src="../../../js/modules/production/progress/report.js"></script>
+    <script src="../../../js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            Menu.renderMenu();
+            initMenuToggle();
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeaERP - 首页</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/menu.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 侧边栏 -->
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <!-- 主内容区 -->
+        <div class="main-content">
+            <!-- 顶部导航栏 -->
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="#" class="active">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+            <!-- 内容区域 -->
+            <div class="content">
+                <!-- 面包屑导航 -->
+                <div class="breadcrumb">
+                    <span>首页</span>
+                </div>
+
+                <!-- 统计卡片 -->
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: rgba(129, 216, 208, 0.1); color: #81D8D0;">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-title">本月采购额</div>
+                            <div class="stat-value">128,450<span class="stat-unit">元</span></div>
+                            <div class="stat-trend positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>8.2%</span>
+                                <span class="trend-label">同比上月</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: rgba(255, 159, 67, 0.1); color: #FF9F43;">
+                            <i class="fas fa-store"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-title">本月销售额</div>
+                            <div class="stat-value">256,780<span class="stat-unit">元</span></div>
+                            <div class="stat-trend positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>12.5%</span>
+                                <span class="trend-label">同比上月</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: rgba(40, 199, 111, 0.1); color: #28C76F;">
+                            <i class="fas fa-industry"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-title">生产完成率</div>
+                            <div class="stat-value">92.5<span class="stat-unit">%</span></div>
+                            <div class="stat-trend positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>4.8%</span>
+                                <span class="trend-label">同比上月</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: rgba(234, 84, 85, 0.1); color: #EA5455;">
+                            <i class="fas fa-warehouse"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-title">库存周转率</div>
+                            <div class="stat-value">6.8<span class="stat-unit">次/月</span></div>
+                            <div class="stat-trend negative">
+                                <i class="fas fa-arrow-down"></i>
+                                <span>2.1%</span>
+                                <span class="trend-label">同比上月</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <!-- 待办事项 -->
+                    <div class="dashboard-card todo-list">
+                        <div class="card-header">
+                            <h3><i class="fas fa-tasks"></i> 待办事项</h3>
+                            <button class="refresh-btn"><i class="fas fa-sync-alt"></i></button>
+                        </div>
+                        <div class="card-body">
+                            <div class="todo-item">
+                                <div class="todo-priority high"></div>
+                                <div class="todo-content">
+                                    <div class="todo-title">审批采购订单 #PO2024010015</div>
+                                    <div class="todo-info">
+                                        <span><i class="far fa-clock"></i> 今天 14:30</span>
+                                        <span><i class="far fa-user"></i> 张经理</span>
+                                    </div>
+                                </div>
+                                <div class="todo-status pending">待处理</div>
+                            </div>
+                            <div class="todo-item">
+                                <div class="todo-priority medium"></div>
+                                <div class="todo-content">
+                                    <div class="todo-title">确认销售发货单 #DO2024010089</div>
+                                    <div class="todo-info">
+                                        <span><i class="far fa-clock"></i> 今天 16:00</span>
+                                        <span><i class="far fa-user"></i> 李主管</span>
+                                    </div>
+                                </div>
+                                <div class="todo-status processing">处理中</div>
+                            </div>
+                            <div class="todo-item">
+                                <div class="todo-priority low"></div>
+                                <div class="todo-content">
+                                    <div class="todo-title">复核本月生产计划</div>
+                                    <div class="todo-info">
+                                        <span><i class="far fa-clock"></i> 明天 10:00</span>
+                                        <span><i class="far fa-user"></i> 王经理</span>
+                                    </div>
+                                </div>
+                                <div class="todo-status pending">待处理</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 系统公告 -->
+                    <div class="dashboard-card announcement-list">
+                        <div class="card-header">
+                            <h3><i class="fas fa-bullhorn"></i> 系统公告</h3>
+                            <button class="refresh-btn"><i class="fas fa-sync-alt"></i></button>
+                        </div>
+                        <div class="card-body">
+                            <div class="announcement-item">
+                                <div class="announcement-content">
+                                    <div class="announcement-title">系统升级通知</div>
+                                    <div class="announcement-text">系统将于本周六凌晨2点进行升级维护，预计耗时2小时。</div>
+                                    <div class="announcement-info">
+                                        <span><i class="far fa-clock"></i> 2024-01-15 10:30</span>
+                                        <span><i class="far fa-user"></i> 系统管理员</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="announcement-item">
+                                <div class="announcement-content">
+                                    <div class="announcement-title">新功能上线公告</div>
+                                    <div class="announcement-text">生产管理模块新增能耗分析功能，欢迎试用并提供反馈。</div>
+                                    <div class="announcement-info">
+                                        <span><i class="far fa-clock"></i> 2024-01-14 15:45</span>
+                                        <span><i class="far fa-user"></i> 产品经理</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 图表区域 -->
+                <div class="chart-grid">
+                    <!-- 销售趋势图 -->
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-chart-line"></i> 销售趋势</h3>
+                            <div class="chart-actions">
+                                <select class="standard-select">
+                                    <option value="week">本周</option>
+                                    <option value="month">本月</option>
+                                    <option value="quarter">本季度</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="salesChart" style="height: 300px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- 生产计划完成情况 -->
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-tasks"></i> 生产计划完成情况</h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="productionChart" style="height: 300px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- 库存分布 -->
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-warehouse"></i> 库存分布</h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="inventoryChart" style="height: 300px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- 订单状态分布 -->
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-shopping-cart"></i> 订单状态分布</h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="orderStatusChart" style="height: 300px;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', () => {
+                        // 初始化销售趋势图
+                        const salesChart = echarts.init(document.getElementById('salesChart'));
+                        salesChart.setOption({
+                            tooltip: {
+                                trigger: 'axis'
+                            },
+                            grid: {
+                                left: '3%',
+                                right: '4%',
+                                bottom: '3%',
+                                containLabel: true
+                            },
+                            xAxis: {
+                                type: 'category',
+                                boundaryGap: false,
+                                data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+                            },
+                            yAxis: {
+                                type: 'value'
+                            },
+                            series: [{
+                                name: '销售额',
+                                type: 'line',
+                                data: [12000, 15000, 14000, 18000, 16000, 20000, 22000],
+                                smooth: true,
+                                lineStyle: {
+                                    color: '#81D8D0'
+                                },
+                                itemStyle: {
+                                    color: '#81D8D0'
+                                },
+                                areaStyle: {
+                                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                                        offset: 0,
+                                        color: 'rgba(129, 216, 208, 0.3)'
+                                    }, {
+                                        offset: 1,
+                                        color: 'rgba(129, 216, 208, 0.1)'
+                                    }])
+                                }
+                            }]
+                        });
+
+                        // 初始化生产计划完成情况图
+                        const productionChart = echarts.init(document.getElementById('productionChart'));
+                        productionChart.setOption({
+                            tooltip: {
+                                trigger: 'item'
+                            },
+                            legend: {
+                                orient: 'horizontal',
+                                bottom: 'bottom'
+                            },
+                            series: [{
+                                name: '生产计划',
+                                type: 'pie',
+                                radius: ['40%', '70%'],
+                                avoidLabelOverlap: false,
+                                itemStyle: {
+                                    borderRadius: 10,
+                                    borderColor: '#fff',
+                                    borderWidth: 2
+                                },
+                                label: {
+                                    show: false,
+                                    position: 'center'
+                                },
+                                emphasis: {
+                                    label: {
+                                        show: true,
+                                        fontSize: '20',
+                                        fontWeight: 'bold'
+                                    }
+                                },
+                                labelLine: {
+                                    show: false
+                                },
+                                data: [
+                                    { value: 735, name: '已完成', itemStyle: { color: '#81D8D0' } },
+                                    { value: 580, name: '进行中', itemStyle: { color: '#A5E6E1' } },
+                                    { value: 484, name: '未开始', itemStyle: { color: '#C9F0EC' } },
+                                    { value: 300, name: '已延期', itemStyle: { color: '#ff6b6b' } }
+                                ]
+                            }]
+                        });
+
+                        // 初始化库存分布图
+                        const inventoryChart = echarts.init(document.getElementById('inventoryChart'));
+                        inventoryChart.setOption({
+                            tooltip: {
+                                trigger: 'item'
+                            },
+                            legend: {
+                                orient: 'horizontal',
+                                bottom: 'bottom'
+                            },
+                            series: [{
+                                name: '库存分布',
+                                type: 'pie',
+                                radius: '50%',
+                                data: [
+                                    { value: 1048, name: '原料库', itemStyle: { color: '#81D8D0' } },
+                                    { value: 735, name: '成品库', itemStyle: { color: '#A5E6E1' } },
+                                    { value: 580, name: '半成品库', itemStyle: { color: '#C9F0EC' } },
+                                    { value: 484, name: '备品库', itemStyle: { color: '#D8F5F2' } }
+                                ],
+                                emphasis: {
+                                    itemStyle: {
+                                        shadowBlur: 10,
+                                        shadowOffsetX: 0,
+                                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                    }
+                                }
+                            }]
+                        });
+
+                        // 初始化订单状态分布图
+                        const orderStatusChart = echarts.init(document.getElementById('orderStatusChart'));
+                        orderStatusChart.setOption({
+                            tooltip: {
+                                trigger: 'axis',
+                                axisPointer: {
+                                    type: 'shadow'
+                                }
+                            },
+                            grid: {
+                                left: '3%',
+                                right: '4%',
+                                bottom: '3%',
+                                containLabel: true
+                            },
+                            xAxis: {
+                                type: 'value'
+                            },
+                            yAxis: {
+                                type: 'category',
+                                data: ['待付款', '待发货', '已发货', '已完成', '已取消']
+                            },
+                            series: [{
+                                name: '订单数量',
+                                type: 'bar',
+                                data: [
+                                    { value: 120, itemStyle: { color: '#81D8D0' } },
+                                    { value: 200, itemStyle: { color: '#A5E6E1' } },
+                                    { value: 150, itemStyle: { color: '#C9F0EC' } },
+                                    { value: 80, itemStyle: { color: '#D8F5F2' } },
+                                    { value: 30, itemStyle: { color: '#ff6b6b' } }
+                                ]
+                            }]
+                        });
+
+                        // 监听窗口大小变化，调整图表大小
+                        window.addEventListener('resize', () => {
+                            salesChart.resize();
+                            productionChart.resize();
+                            inventoryChart.resize();
+                            orderStatusChart.resize();
+                        });
+                    });
+                </script>
+
+                <style>
+                    .stats-cards {
+                        display: grid;
+                        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                        gap: 24px;
+                        margin-bottom: 24px;
+                    }
+                    
+                    .stat-card {
+                        background: #fff;
+                        border-radius: 8px;
+                        padding: 24px;
+                        display: flex;
+                        align-items: flex-start;
+                        gap: 16px;
+                        box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+                        transition: all 0.3s ease;
+                    }
+                    
+                    .stat-card:hover {
+                        transform: translateY(-2px);
+                        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+                    }
+                    
+                    .stat-icon {
+                        width: 48px;
+                        height: 48px;
+                        border-radius: 8px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 24px;
+                    }
+                    
+                    .stat-info {
+                        flex: 1;
+                    }
+                    
+                    .stat-title {
+                        color: #6E6B7B;
+                        font-size: 14px;
+                        margin-bottom: 8px;
+                    }
+                    
+                    .stat-value {
+                        font-size: 24px;
+                        font-weight: 600;
+                        color: #5E5873;
+                        margin-bottom: 8px;
+                        display: flex;
+                        align-items: baseline;
+                    }
+                    
+                    .stat-unit {
+                        font-size: 14px;
+                        color: #6E6B7B;
+                        margin-left: 4px;
+                    }
+                    
+                    .stat-trend {
+                        font-size: 13px;
+                        display: flex;
+                        align-items: center;
+                        gap: 4px;
+                    }
+                    
+                    .stat-trend.positive {
+                        color: #28C76F;
+                    }
+                    
+                    .stat-trend.negative {
+                        color: #EA5455;
+                    }
+                    
+                    .trend-label {
+                        color: #6E6B7B;
+                        margin-left: 4px;
+                    }
+
+                    .dashboard-grid {
+                        display: grid;
+                        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+                        gap: 24px;
+                        margin-bottom: 24px;
+                    }
+
+                    .dashboard-card {
+                        background: #fff;
+                        border-radius: 8px;
+                        box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+                    }
+
+                    .card-header {
+                        padding: 16px 24px;
+                        border-bottom: 1px solid #E9EAEC;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                    }
+
+                    .card-header h3 {
+                        font-size: 16px;
+                        font-weight: 600;
+                        color: #5E5873;
+                        margin: 0;
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                    }
+
+                    .refresh-btn {
+                        background: none;
+                        border: none;
+                        color: #6E6B7B;
+                        cursor: pointer;
+                        padding: 4px;
+                        border-radius: 4px;
+                        transition: all 0.3s ease;
+                    }
+
+                    .refresh-btn:hover {
+                        background: rgba(0,0,0,0.04);
+                        color: #5E5873;
+                    }
+
+                    .card-body {
+                        padding: 24px;
+                    }
+
+                    .todo-item {
+                        display: flex;
+                        align-items: flex-start;
+                        gap: 16px;
+                        padding: 16px;
+                        border-radius: 6px;
+                        transition: all 0.3s ease;
+                    }
+
+                    .todo-item:hover {
+                        background: rgba(0,0,0,0.02);
+                    }
+
+                    .todo-priority {
+                        width: 4px;
+                        height: 36px;
+                        border-radius: 2px;
+                    }
+
+                    .todo-priority.high {
+                        background: #EA5455;
+                    }
+
+                    .todo-priority.medium {
+                        background: #FF9F43;
+                    }
+
+                    .todo-priority.low {
+                        background: #28C76F;
+                    }
+
+                    .todo-content {
+                        flex: 1;
+                    }
+
+                    .todo-title {
+                        font-size: 14px;
+                        color: #5E5873;
+                        margin-bottom: 4px;
+                    }
+
+                    .todo-info {
+                        display: flex;
+                        gap: 16px;
+                        font-size: 12px;
+                        color: #6E6B7B;
+                    }
+
+                    .todo-info span {
+                        display: flex;
+                        align-items: center;
+                        gap: 4px;
+                    }
+
+                    .todo-status {
+                        font-size: 12px;
+                        padding: 4px 8px;
+                        border-radius: 4px;
+                        white-space: nowrap;
+                    }
+
+                    .todo-status.pending {
+                        background: rgba(255, 159, 67, 0.1);
+                        color: #FF9F43;
+                    }
+
+                    .todo-status.processing {
+                        background: rgba(40, 199, 111, 0.1);
+                        color: #28C76F;
+                    }
+
+                    .announcement-item {
+                        padding: 16px;
+                        border-radius: 6px;
+                        transition: all 0.3s ease;
+                    }
+
+                    .announcement-item:hover {
+                        background: rgba(0,0,0,0.02);
+                    }
+
+                    .announcement-title {
+                        font-size: 14px;
+                        font-weight: 600;
+                        color: #5E5873;
+                        margin-bottom: 8px;
+                    }
+
+                    .announcement-text {
+                        font-size: 13px;
+                        color: #6E6B7B;
+                        margin-bottom: 8px;
+                        line-height: 1.5;
+                    }
+
+                    .announcement-info {
+                        display: flex;
+                        gap: 16px;
+                        font-size: 12px;
+                        color: #6E6B7B;
+                    }
+
+                    .announcement-info span {
+                        display: flex;
+                        align-items: center;
+                        gap: 4px;
+                    }
+
+                    .chart-grid {
+                        display: grid;
+                        grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+                        gap: 24px;
+                        margin-bottom: 24px;
+                    }
+
+                    .chart-actions {
+                        display: flex;
+                        gap: 12px;
+                    }
+                </style>
+            </div>
+        </div>
+    </div>
+
+    <!-- 先加载第三方库 -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    
+    <!-- 加载应用脚本 -->
+    <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>工艺路线 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/modules/production.css">
+    <style>
+        /* 内容区域背景 */
+        .content {
+            background: #f5f7fa;
+            padding: 16px;
+            min-height: calc(100vh - 60px);
+        }
+
+        /* 弹窗样式优化 */
+        .modal-content {
+            width: 90%;
+            max-width: 1000px;
+            max-height: 85vh;
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+        }
+
+        .modal-header {
+            background: #8fd4d2;
+            padding: 16px 24px;
+            border-radius: 4px 4px 0 0;
+            color: #fff;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-header .standard-button {
+            background: transparent;
+            border: none;
+            color: #fff;
+            padding: 4px 8px;
+        }
+
+        .modal-header .standard-button:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .form-section {
+            background: #f8f9fa;
+            border-radius: 4px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .form-section-title {
+            font-size: 14px;
+            color: #606266;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .process-steps {
+            background: #fff;
+            border-radius: 4px;
+            padding: 16px;
+            margin-top: 8px;
+        }
+
+        .process-step {
+            background: #f8f9fa;
+            border: 1px solid #eee;
+            margin-bottom: 8px;
+            border-radius: 4px;
+        }
+
+        .modal-footer {
+            background: #f8f9fa;
+            padding: 16px 24px;
+            border-top: 1px solid #eee;
+            border-radius: 0 0 4px 4px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        /* 表单组件样式 */
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #606266;
+            font-size: 14px;
+        }
+
+        .standard-input {
+            width: 100%;
+            height: 32px;
+            padding: 4px 8px;
+            border: 1px solid #dcdfe6;
+            border-radius: 4px;
+            transition: all 0.3s;
+            box-sizing: border-box;
+        }
+
+        .standard-input:focus {
+            border-color: #8fd4d2;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(143,212,210,0.2);
+        }
+
+        textarea.standard-input {
+            height: auto;
+            min-height: 80px;
+        }
+
+        /* 统计卡片样式 */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            padding: 16px;
+        }
+
+        .overview-item {
+            background: #f8f9fa;
+            border-left: 4px solid #909399;
+            border-radius: 4px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .overview-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .overview-item.success {
+            background: #e8f5e9;
+            border-left-color: #4caf50;
+        }
+
+        .overview-item.success i {
+            color: #4caf50;
+        }
+
+        .overview-item.warning {
+            background: #fff8e1;
+            border-left-color: #ff9800;
+        }
+
+        .overview-item.warning i {
+            color: #ff9800;
+        }
+
+        .overview-item.danger {
+            background: #ffebee;
+            border-left-color: #f44336;
+        }
+
+        .overview-item.danger i {
+            color: #f44336;
+        }
+
+        .overview-item i {
+            font-size: 24px;
+            color: #909399;
+            margin-right: 16px;
+        }
+
+        .overview-item .info h4 {
+            margin: 0;
+            color: #909399;
+            font-size: 14px;
+        }
+
+        .overview-item .info .number {
+            font-size: 24px;
+            color: #303133;
+            margin-top: 8px;
+        }
+
+        .overview-item .info .unit {
+            font-size: 14px;
+            color: #909399;
+            margin-left: 4px;
+        }
+
+        /* 工序流程图样式 */
+        .process-flow-container {
+            padding: 24px;
+            min-height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f8f9fa;
+        }
+
+        .process-flow {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .process-node {
+            background: #fff;
+            border: 2px solid #8fd4d2;
+            border-radius: 8px;
+            padding: 12px 24px;
+            min-width: 120px;
+            text-align: center;
+            position: relative;
+        }
+
+        .process-node::after {
+            content: '';
+            position: absolute;
+            right: -32px;
+            top: 50%;
+            width: 32px;
+            height: 2px;
+            background: #8fd4d2;
+        }
+
+        .process-node:last-child::after {
+            display: none;
+        }
+
+        .process-node .step-name {
+            font-weight: bold;
+            color: #303133;
+            margin-bottom: 4px;
+        }
+
+        .process-node .step-time {
+            font-size: 12px;
+            color: #909399;
+        }
+
+        .process-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .process-step {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: #f5f7fa;
+            border-radius: 4px;
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            background: #409eff;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* 状态标签样式 */
+        .status-badge.info {
+            background: #e1f5fe;
+            color: #03a9f4;
+        }
+
+        /* 工序流程图容器 */
+        .process-flow-wrapper {
+            display: none;
+        }
+
+        .process-flow-wrapper.active {
+            display: block;
+        }
+
+        /* 工序步骤选择样式 */
+        .process-step-select {
+            width: calc(100% - 150px);
+            margin-right: 16px;
+        }
+
+        .process-step textarea.standard-input {
+            min-height: 120px;
+            resize: vertical;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-industry"></i>
+                    <span>生产管理</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-sitemap"></i>
+                    <span>BOM管理</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-route"></i>
+                    <span>工艺路线</span>
+                </div>
+
+                <!-- 工艺路线统计 -->
+                <div class="standard-card">
+                    <div class="overview-grid">
+                        <div class="overview-item">
+                            <i class="fas fa-route"></i>
+                            <div class="info">
+                                <h4>工艺路线总数</h4>
+                                <div class="number">25<span class="unit">条</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item success">
+                            <i class="fas fa-check-circle"></i>
+                            <div class="info">
+                                <h4>已启用路线</h4>
+                                <div class="number">18<span class="unit">条</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item warning">
+                            <i class="fas fa-pause-circle"></i>
+                            <div class="info">
+                                <h4>已停用路线</h4>
+                                <div class="number">5<span class="unit">条</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item danger">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <div class="info">
+                                <h4>待审核路线</h4>
+                                <div class="number">2<span class="unit">条</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="standard-card">
+                    <div class="standard-toolbar">
+                        <div class="search-group">
+                            <input type="text" class="standard-input" placeholder="输入产品编码/名称搜索">
+                            <select class="standard-select">
+                                <option value="">工艺版本</option>
+                                <option value="1">V1.0</option>
+                                <option value="2">V2.0</option>
+                            </select>
+                            <select class="standard-select">
+                                <option value="">状态</option>
+                                <option value="1">启用</option>
+                                <option value="0">停用</option>
+                            </select>
+                            <button class="standard-button primary" onclick="searchProcess()">
+                                <i class="fas fa-search"></i> 查询
+                            </button>
+                        </div>
+                        <div class="button-group">
+                            <button class="standard-button primary" onclick="showAddProcessModal()">
+                                <i class="fas fa-plus"></i> 新增工艺路线
+                            </button>
+                            <button class="standard-button" onclick="importProcess()">
+                                <i class="fas fa-file-import"></i> 导入
+                            </button>
+                            <button class="standard-button" onclick="exportProcess()">
+                                <i class="fas fa-file-export"></i> 导出
+                            </button>
+                        </div>
+                    </div>
+
+                    <table class="standard-table">
+                        <thead>
+                            <tr>
+                                <th>产品编码</th>
+                                <th>产品名称</th>
+                                <th>工艺版本</th>
+                                <th>工序数量</th>
+                                <th>标准工时</th>
+                                <th>创建人</th>
+                                <th>创建时间</th>
+                                <th>状态</th>
+                                <th class="operation-column">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>P202403200001</td>
+                                <td>特级铁观音</td>
+                                <td>V1.0</td>
+                                <td>8</td>
+                                <td>4.5小时</td>
+                                <td>张三</td>
+                                <td>2024-03-20</td>
+                                <td><span class="status-badge success">启用</span></td>
+                                <td>
+                                    <button class="standard-button" onclick="viewProcess('P202403200001')">查看</button>
+                                    <button class="standard-button" onclick="editProcess('P202403200001')">编辑</button>
+                                    <button class="standard-button danger" onclick="toggleProcess('P202403200001')">停用</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>P202403200002</td>
+                                <td>特级大红袍</td>
+                                <td>V2.0</td>
+                                <td>10</td>
+                                <td>5.5小时</td>
+                                <td>李四</td>
+                                <td>2024-03-20</td>
+                                <td><span class="status-badge warning">已停用</span></td>
+                                <td>
+                                    <button class="standard-button" onclick="viewProcess('P202403200002')">查看</button>
+                                    <button class="standard-button" onclick="editProcess('P202403200002')">编辑</button>
+                                    <button class="standard-button primary" onclick="toggleProcess('P202403200002')">启用</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>P202403200003</td>
+                                <td>特级金骏眉</td>
+                                <td>V1.0</td>
+                                <td>6</td>
+                                <td>3.5小时</td>
+                                <td>王五</td>
+                                <td>2024-03-21</td>
+                                <td><span class="status-badge info">待审核</span></td>
+                                <td>
+                                    <button class="standard-button" onclick="viewProcess('P202403200003')">查看</button>
+                                    <button class="standard-button primary" onclick="approveProcess('P202403200003')">审核</button>
+                                    <button class="standard-button danger" onclick="rejectProcess('P202403200003')">驳回</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="standard-pagination">
+                        <button><i class="fas fa-chevron-left"></i></button>
+                        <button class="active">1</button>
+                        <button>2</button>
+                        <button>3</button>
+                        <button><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+
+                <!-- 工序流程图示例 -->
+                <div class="process-flow-wrapper" id="processFlowWrapper">
+                    <div class="standard-card">
+                        <div class="standard-card-header">
+                            <h3><i class="fas fa-project-diagram"></i> <span id="processFlowTitle">工艺路线流程图</span></h3>
+                        </div>
+                        <div class="process-flow-container">
+                            <div class="process-flow" id="processFlow"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 工艺路线弹窗 -->
+    <div class="standard-modal" id="processModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-plus-circle"></i> 新增工艺路线</h3>
+                <button class="standard-button" onclick="hideModal('processModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="processForm">
+                    <div class="form-section">
+                        <div class="form-section-title">基本信息</div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>工艺编码</label>
+                                <input type="text" class="standard-input" name="processCode" required>
+                            </div>
+                            <div class="form-group">
+                                <label>工艺名称</label>
+                                <input type="text" class="standard-input" name="processName" required>
+                            </div>
+                            <div class="form-group">
+                                <label>工艺版本</label>
+                                <input type="text" class="standard-input" name="version" required>
+                            </div>
+                            <div class="form-group">
+                                <label>产品编码</label>
+                                <input type="text" class="standard-input" name="productCode" required>
+                            </div>
+                            <div class="form-group">
+                                <label>产品名称</label>
+                                <input type="text" class="standard-input" name="productName" required>
+                            </div>
+                            <div class="form-group">
+                                <label>标准工时(小时)</label>
+                                <input type="number" class="standard-input" name="standardHours" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="form-section-title">工艺说明</div>
+                        <div class="form-group">
+                            <textarea class="standard-input" name="description" rows="5" style="min-height: 120px;"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="form-section-title">工序步骤</div>
+                        <div class="process-steps">
+                            <div class="process-step">
+                                <div class="step-number">1</div>
+                                <select class="standard-input process-step-select" name="processStep">
+                                    <option value="">选择工序</option>
+                                    <option value="窨花">窨花</option>
+                                    <option value="压花">压花</option>
+                                    <option value="提花">提花</option>
+                                    <option value="发酵">发酵</option>
+                                    <option value="分装">分装</option>
+                                </select>
+                                <input type="number" class="standard-input" placeholder="工时(分钟)" style="width: 120px;">
+                                <button type="button" class="standard-button" onclick="addProcessStep()">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="standard-button" onclick="hideModal('processModal')">
+                    <i class="fas fa-times"></i> 取消
+                </button>
+                <button class="standard-button primary" onclick="saveProcess()">
+                    <i class="fas fa-save"></i> 保存
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            Menu.renderMenu();
+            initMenuToggle();
+            initProcessFlow();
+        });
+
+        function showAddProcessModal() {
+            document.getElementById('processModal').style.display = 'flex';
+        }
+
+        function hideModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function addProcessStep() {
+            const stepsContainer = document.querySelector('.process-steps');
+            const stepCount = stepsContainer.children.length + 1;
+            
+            const stepDiv = document.createElement('div');
+            stepDiv.className = 'process-step';
+            stepDiv.innerHTML = `
+                <div class="step-number">${stepCount}</div>
+                <select class="standard-input process-step-select" name="processStep">
+                    <option value="">选择工序</option>
+                    <option value="窨花">窨花</option>
+                    <option value="压花">压花</option>
+                    <option value="提花">提花</option>
+                    <option value="发酵">发酵</option>
+                    <option value="分装">分装</option>
+                </select>
+                <input type="number" class="standard-input" placeholder="工时(分钟)" style="width: 120px;">
+                <button type="button" class="standard-button danger" onclick="removeProcessStep(this)">
+                    <i class="fas fa-minus"></i>
+                </button>
+            `;
+            
+            stepsContainer.appendChild(stepDiv);
+        }
+
+        function removeProcessStep(button) {
+            const step = button.parentElement;
+            step.remove();
+            updateStepNumbers();
+        }
+
+        function updateStepNumbers() {
+            const steps = document.querySelectorAll('.process-step');
+            steps.forEach((step, index) => {
+                step.querySelector('.step-number').textContent = index + 1;
+            });
+        }
+
+        function initProcessFlow() {
+            // TODO: 实现工序流程图的初始化
+            console.log('初始化工序流程图');
+        }
+
+        function viewProcess(processId) {
+            // 显示工序流程图
+            const wrapper = document.getElementById('processFlowWrapper');
+            const title = document.getElementById('processFlowTitle');
+            const flow = document.getElementById('processFlow');
+            
+            // 这里应该根据processId获取实际数据
+            // 示例数据
+            const processData = {
+                name: '特级铁观音工艺流程',
+                steps: [
+                    { name: '窨花', time: 45 },
+                    { name: '压花', time: 60 },
+                    { name: '提花', time: 30 },
+                    { name: '发酵', time: 120 },
+                    { name: '分装', time: 90 }
+                ]
+            };
+
+            // 更新标题
+            title.textContent = processData.name;
+
+            // 生成流程图
+            flow.innerHTML = processData.steps.map(step => `
+                <div class="process-node">
+                    <div class="step-name">${step.name}</div>
+                    <div class="step-time">${step.time}分钟</div>
+                </div>
+            `).join('');
+
+            // 显示流程图
+            wrapper.classList.add('active');
+        }
+    </script>
+</body>
+</html> 

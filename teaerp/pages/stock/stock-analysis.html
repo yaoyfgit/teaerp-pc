@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>库存分析 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/menu.css">
+    <link rel="stylesheet" href="../../css/modules/stock.css">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <span>库存管理</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <span>库存分析</span>
+                </div>
+
+                <!-- 分析概览 -->
+                <div class="standard-card">
+                    <div class="overview-grid">
+                        <div class="overview-item">
+                            <i class="fas fa-chart-line"></i>
+                            <div class="info">
+                                <h4>周转率</h4>
+                                <div class="number">3.5<span class="unit">次</span></div>
+                                <div class="trend success">较上月 +0.2</div>
+                            </div>
+                        </div>
+                        <div class="overview-item">
+                            <i class="fas fa-clock"></i>
+                            <div class="info">
+                                <h4>周转天数</h4>
+                                <div class="number">15<span class="unit">天</span></div>
+                                <div class="trend success">较上月 -2天</div>
+                            </div>
+                        </div>
+                        <div class="overview-item">
+                            <i class="fas fa-percentage"></i>
+                            <div class="info">
+                                <h4>库存利用率</h4>
+                                <div class="number">85.2<span class="unit">%</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item">
+                            <i class="fas fa-balance-scale"></i>
+                            <div class="info">
+                                <h4>库存准确率</h4>
+                                <div class="number">99.8<span class="unit">%</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 分析图表 -->
+                <div class="standard-card">
+                    <div class="standard-card-header">
+                        <h3><i class="fas fa-chart-bar"></i> 库存分析</h3>
+                        <div class="action-bar">
+                            <div class="search-group">
+                                <select class="standard-select">
+                                    <option value="">所有仓库</option>
+                                    <option value="1">主仓库</option>
+                                    <option value="2">次仓库</option>
+                                </select>
+                                <select class="standard-select">
+                                    <option value="">商品分类</option>
+                                    <option value="1">茶叶</option>
+                                    <option value="2">茶具</option>
+                                </select>
+                                <select class="standard-select">
+                                    <option value="7">最近7天</option>
+                                    <option value="30">最近30天</option>
+                                    <option value="90">最近90天</option>
+                                    <option value="365">最近一年</option>
+                                </select>
+                            </div>
+                            <div class="button-group">
+                                <button class="standard-button primary" onclick="refreshAnalysis()">
+                                    <i class="fas fa-sync"></i> 刷新
+                                </button>
+                                <button class="standard-button" onclick="exportAnalysis()">
+                                    <i class="fas fa-file-export"></i> 导出
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chart-grid">
+                        <div class="chart-card">
+                            <h3 class="chart-title">库存周转趋势</h3>
+                            <div class="chart" id="turnoverTrendChart"></div>
+                        </div>
+                        <div class="chart-card">
+                            <h3 class="chart-title">库存结构分析</h3>
+                            <div class="chart" id="stockStructureChart"></div>
+                        </div>
+                        <div class="chart-card">
+                            <h3 class="chart-title">ABC分类分析</h3>
+                            <div class="chart" id="abcAnalysisChart"></div>
+                        </div>
+                        <div class="chart-card">
+                            <h3 class="chart-title">库存异常分析</h3>
+                            <div class="chart" id="stockAbnormalChart"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 分析报表 -->
+                <div class="standard-card">
+                    <div class="standard-card-header">
+                        <h3><i class="fas fa-table"></i> 分析报表</h3>
+                    </div>
+                    <div class="standard-tabs">
+                        <div class="tab-header">
+                            <button class="standard-button active" data-tab="turnover">周转分析</button>
+                            <button class="standard-button" data-tab="structure">结构分析</button>
+                            <button class="standard-button" data-tab="abc">ABC分析</button>
+                            <button class="standard-button" data-tab="abnormal">异常分析</button>
+                        </div>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="turnoverTab">
+                                <table class="standard-table">
+                                    <thead>
+                                        <tr>
+                                            <th>商品分类</th>
+                                            <th>商品数量</th>
+                                            <th>库存金额</th>
+                                            <th>周转率</th>
+                                            <th>周转天数</th>
+                                            <th>环比</th>
+                                            <th>同比</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="turnoverTable"></tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="structureTab">
+                                <table class="standard-table">
+                                    <thead>
+                                        <tr>
+                                            <th>仓库</th>
+                                            <th>商品分类</th>
+                                            <th>商品数量</th>
+                                            <th>库存数量</th>
+                                            <th>库存金额</th>
+                                            <th>占比</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="structureTable"></tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="abcTab">
+                                <table class="standard-table">
+                                    <thead>
+                                        <tr>
+                                            <th>ABC等级</th>
+                                            <th>商品数量</th>
+                                            <th>商品占比</th>
+                                            <th>库存金额</th>
+                                            <th>金额占比</th>
+                                            <th>建议策略</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="abcTable"></tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="abnormalTab">
+                                <table class="standard-table">
+                                    <thead>
+                                        <tr>
+                                            <th>异常类型</th>
+                                            <th>商品数量</th>
+                                            <th>库存金额</th>
+                                            <th>占比</th>
+                                            <th>建议措施</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="abnormalTable"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/app.js"></script>
+    <script src="../../js/modules/stock/stock-analysis.js"></script>
+</body>
+</html> 

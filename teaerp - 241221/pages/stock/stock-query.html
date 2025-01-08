@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>库存查询 - TeaERP</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- 系统样式 -->
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <!-- 模块样式 -->
+    <link rel="stylesheet" href="../../css/modules/inventory.css">
+</head>
+</html> <body>
+    <div class="app-container">
+        <!-- 顶部导航 -->
+        <header class="app-header">
+            <div class="logo">TeaERP</div>
+            <nav class="top-nav">
+                <ul>
+                    <li><a href="../../index.html">首页</a></li>
+                    <li><a href="#">消息</a></li>
+                    <li><a href="#">帮助</a></li>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <span class="username">管理员</span>
+                <a href="#" class="logout">退出</a>
+            </div>
+        </header>
+
+        <!-- 主体内容 -->
+        <div class="app-main">
+            <!-- 左侧菜单 -->
+            <aside class="app-sidebar">
+                <ul class="menu-list">
+                    <li class="menu-item">
+                        <a href="#" class="menu-link">
+                            <span class="menu-icon">�</span>
+                            <span class="menu-text">采购管理</span>
+                            <span class="arrow">›</span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="../purchase/demand.html">采购需求</a></li>
+                            <li><a href="../purchase/order.html">采购订单</a></li>
+                            <li><a href="../purchase/receive.html">通知收货</a></li>
+                            <li><a href="../purchase/inbound.html">采购入库</a></li>
+                            <li><a href="../purchase/return-notify.html">通知退货</a></li>
+                            <li><a href="../purchase/return.html">采购退货</a></li>
+                            <li><a href="../purchase/reconciliation.html">供应商对账</a></li>
+                            <li><a href="../purchase/analysis.html">统计分析</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" class="menu-link">
+                            <span class="menu-icon">🛒</span>
+                            <span class="menu-text">销售管理</span>
+                            <span class="arrow">›</span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="../sales/order.html">销售订单</a></li>
+                            <li><a href="../sales/delivery.html">通知发货</a></li>
+                            <li><a href="../sales/outbound.html">销售出库</a></li>
+                            <li><a href="../sales/return-notify.html">通知退货</a></li>
+                            <li><a href="../sales/return.html">销售退货</a></li>
+                            <li><a href="../sales/reconciliation.html">客户对账</a></li>
+                            <li><a href="../sales/analysis.html">统计分析</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item active">
+                        <a href="#" class="menu-link">
+                            <span class="menu-icon">📦</span>
+                            <span class="menu-text">库存管理</span>
+                            <span class="arrow">›</span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="#" class="active">库存查询</a></li>
+                            <li><a href="stock-transfer.html">库存调拨</a></li>
+                            <li><a href="stock-check.html">库存盘点</a></li>
+                            <li><a href="stock-warning.html">库存预警</a></li>
+                            <li><a href="stock-analysis.html">库存分析</a></li>
+                        </ul>
+                    </li>
+                    <!-- 其他菜单项... -->
+                </ul>
+            </aside>
+
+            <!-- 内容区域 -->
+            <main class="app-content">
+                <!-- 面包屑导航 -->
+                <div class="breadcrumb">
+                    <span>库存管理</span>
+                    <span class="separator">/</span>
+                    <span>库存查询</span>
+                </div>
+
+                <!-- 工具栏 -->
+                <div class="toolbar">
+                    <div class="search-bar">
+                        <input type="text" placeholder="输入商品编码/名称搜索" class="form-control">
+                        <select class="form-control">
+                            <option value="">选择仓库</option>
+                            <option value="1">主仓库</option>
+                            <option value="2">次仓库</option>
+                        </select>
+                        <select class="form-control">
+                            <option value="">商品分类</option>
+                            <option value="1">茶叶</option>
+                            <option value="2">茶具</option>
+                        </select>
+                        <button class="button">搜索</button>
+                    </div>
+                    <div class="action-bar">
+                        <button class="button" onclick="exportStock()">导出</button>
+                    </div>
+                </div>
+
+                <!-- 添加统计卡片 -->
+                <div class="statistics">
+                    <div class="stat-card">
+                        <div class="label">总库存商品</div>
+                        <div class="number">1,234</div>
+                        <div class="trend">较上月 +5.2%</div>
+                        <div class="stat-icon"><i class="fas fa-layer-group"></i></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">库存总金额</div>
+                        <div class="number">￥123,456</div>
+                        <div class="trend">较上月 +3.1%</div>
+                        <div class="stat-icon"><i class="fas fa-yen-sign"></i></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">本月入库</div>
+                        <div class="number">324</div>
+                        <div class="trend">较上月 +12.5%</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">本月出库</div>
+                        <div class="number">298</div>
+                        <div class="trend">较上月 -2.3%</div>
+                    </div>
+                </div>
+
+                <!-- 数据表格 -->
+                <div class="data-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>商品编码</th>
+                                <th>商品名称</th>
+                                <th>规格型号</th>
+                                <th>仓库</th>
+                                <th>库位</th>
+                                <th>批次</th>
+                                <th>可用库存</th>
+                                <th>占用库存</th>
+                                <th>在途库存</th>
+                                <th>单位</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>P001</td>
+                                <td>大红袍</td>
+                                <td>特级</td>
+                                <td>主仓库</td>
+                                <td>A-01-01</td>
+                                <td>20240301</td>
+                                <td>100</td>
+                                <td>20</td>
+                                <td>50</td>
+                                <td>kg</td>
+                                <td>
+                                    <a href="#" class="action-link" onclick="showStockDetail(this)">库存明细</a>
+                                    <a href="#" class="action-link" onclick="showStockFlow(this)">出入库记录</a>
+                                </td>
+                            </tr>
+                            <!-- 更多数据行... -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 分页器 -->
+                <div class="pagination">
+                    <a href="#" class="page-btn">&lt;</a>
+                    <a href="#" class="page-btn active">1</a>
+                    <a href="#" class="page-btn">2</a>
+                    <a href="#" class="page-btn">3</a>
+                    <span class="page-separator">...</span>
+                    <a href="#" class="page-btn">10</a>
+                    <a href="#" class="page-btn">&gt;</a>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- 库存明细弹窗 -->
+    <div class="modal" id="stockDetailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>库存明细</h3>
+                <button class="close-btn" onclick="hideModal('stockDetailModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="stock-info">
+                    <div class="info-item">
+                        <label>商品名称：</label>
+                        <span>大红袍</span>
+                    </div>
+                    <div class="info-item">
+                        <label>规格型号：</label>
+                        <span>特级</span>
+                    </div>
+                </div>
+                <div class="detail-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>仓库</th>
+                                <th>库位</th>
+                                <th>批次</th>
+                                <th>可用库存</th>
+                                <th>占用库存</th>
+                                <th>在途库存</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>主仓库</td>
+                                <td>A-01-01</td>
+                                <td>20240301</td>
+                                <td>50</td>
+                                <td>10</td>
+                                <td>20</td>
+                            </tr>
+                            <tr>
+                                <td>主仓库</td>
+                                <td>A-01-02</td>
+                                <td>20240301</td>
+                                <td>50</td>
+                                <td>10</td>
+                                <td>30</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 出入库记录弹窗 -->
+    <div class="modal" id="stockFlowModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>出入库记录</h3>
+                <button class="close-btn" onclick="hideModal('stockFlowModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="stock-info">
+                    <div class="info-item">
+                        <label>商品名称：</label>
+                        <span>大红袍</span>
+                    </div>
+                    <div class="info-item">
+                        <label>规格型号：</label>
+                        <span>特级</span>
+                    </div>
+                </div>
+                <div class="detail-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>日期</th>
+                                <th>类型</th>
+                                <th>单据号</th>
+                                <th>仓库</th>
+                                <th>库位</th>
+                                <th>批次</th>
+                                <th>数量</th>
+                                <th>备注</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2024-03-01</td>
+                                <td><span class="tag inbound">入库</span></td>
+                                <td>IN202403010001</td>
+                                <td>主仓库</td>
+                                <td>A-01-01</td>
+                                <td>20240301</td>
+                                <td>100</td>
+                                <td>采购入库</td>
+                            </tr>
+                            <tr>
+                                <td>2024-03-02</td>
+                                <td><span class="tag outbound">出库</span></td>
+                                <td>OUT202403020001</td>
+                                <td>主仓库</td>
+                                <td>A-01-01</td>
+                                <td>20240301</td>
+                                <td>-20</td>
+                                <td>销售出库</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/common.js"></script>
+    <script src="../../js/modules/stock.js"></script>
+</body>
+</html> 

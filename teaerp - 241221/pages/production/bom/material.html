@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>物料主数据 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/modules/production.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb">
+                <span>生产管理</span>
+                <span class="separator">/</span>
+                <span>BOM管理</span>
+                <span class="separator">/</span>
+                <span>物料主数据</span>
+            </div>
+
+            <div class="card">
+                <div class="toolbar">
+                    <div class="search-bar">
+                        <input type="text" class="form-control" placeholder="输入物料编码/名称搜索">
+                        <select class="form-control">
+                            <option value="">物料类型</option>
+                            <option value="1">原材料</option>
+                            <option value="2">半成品</option>
+                            <option value="3">成品</option>
+                            <option value="4">包材</option>
+                        </select>
+                        <button class="button" onclick="searchMaterials()">搜索</button>
+                    </div>
+                    <div class="action-bar">
+                        <button class="button" onclick="showAddMaterialModal()">新增物料</button>
+                        <button class="button secondary" onclick="exportMaterials()">导出</button>
+                    </div>
+                </div>
+
+                <div class="data-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>物料编码</th>
+                                <th>物料名称</th>
+                                <th>规格型号</th>
+                                <th>物料类型</th>
+                                <th>计量单位</th>
+                                <th>创建时间</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="materialTable"></tbody>
+                    </table>
+                </div>
+                <div class="pagination" id="pagination"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 新增/编辑物料弹窗 -->
+    <div class="modal" id="materialModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">新增物料</h3>
+                <button class="close-btn" onclick="hideModal('materialModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="materialForm" class="form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>物料编码</label>
+                            <input type="text" class="form-control" name="code" required>
+                        </div>
+                        <div class="form-group">
+                            <label>物料名称</label>
+                            <input type="text" class="form-control" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>规格型号</label>
+                            <input type="text" class="form-control" name="specification">
+                        </div>
+                        <div class="form-group">
+                            <label>物料类型</label>
+                            <select class="form-control" name="type" required>
+                                <option value="1">原材料</option>
+                                <option value="2">半成品</option>
+                                <option value="3">成品</option>
+                                <option value="4">包材</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>计量单位</label>
+                            <select class="form-control" name="unit" required>
+                                <option value="个">个</option>
+                                <option value="件">件</option>
+                                <option value="kg">kg</option>
+                                <option value="g">g</option>
+                                <option value="ml">ml</option>
+                                <option value="l">l</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>描述</label>
+                            <textarea class="form-control" name="description"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideModal('materialModal')">取消</button>
+                <button class="button" onclick="saveMaterial()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/common.js"></script>
+    <script src="../../../js/modules/production/material.js"></script>
+</body>
+</html> 

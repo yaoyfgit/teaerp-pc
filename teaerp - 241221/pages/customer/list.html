@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeaERP</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- 系统样式 -->
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/layout.css">
+</head>
+</html> <body>
+    <div class="app-container">
+        <!-- 顶部导航 -->
+        <header class="app-header">
+            <div class="logo">TeaERP</div>
+            <nav class="top-nav">
+                <ul>
+                    <li><a href="../../index.html">首页</a></li>
+                    <li><a href="#">消息</a></li>
+                    <li><a href="#">帮助</a></li>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <span class="username">管理员</span>
+                <a href="#" class="logout">退出</a>
+            </div>
+        </header>
+
+        <!-- 主体内容 -->
+        <div class="app-main">
+            <!-- 左侧菜单 -->
+            <aside class="app-sidebar">
+                <!-- 复制index.html的菜单结构 -->
+            </aside>
+
+            <!-- 内容区域 -->
+            <main class="app-content">
+                <!-- 面包屑导航 -->
+                <div class="breadcrumb">
+                    <span>客户管理</span>
+                    <span class="separator">/</span>
+                    <span>客户列表</span>
+                </div>
+
+                <!-- 工具栏 -->
+                <div class="toolbar">
+                    <div class="search-bar">
+                        <input type="text" placeholder="输入客户编号/名称搜索" class="form-control">
+                        <select class="form-control">
+                            <option value="">客户等级</option>
+                            <option value="A">A级</option>
+                            <option value="B">B级</option>
+                            <option value="C">C级</option>
+                        </select>
+                        <select class="form-control">
+                            <option value="">所属区域</option>
+                            <option value="1">华东</option>
+                            <option value="2">华南</option>
+                            <option value="3">华北</option>
+                        </select>
+                        <button class="button">搜索</button>
+                    </div>
+                    <div class="action-bar">
+                        <button class="button" onclick="showCreateModal()">新建客户</button>
+                        <button class="button secondary">导出</button>
+                    </div>
+                </div>
+
+                <!-- 数据表格 -->
+                <div class="data-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>客户编号</th>
+                                <th>客户名称</th>
+                                <th>客户等级</th>
+                                <th>所属区域</th>
+                                <th>联系人</th>
+                                <th>联系电话</th>
+                                <th>创建日期</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>C001</td>
+                                <td>茶叶专卖店</td>
+                                <td><span class="tag level-a">A级</span></td>
+                                <td>华东</td>
+                                <td>张三</td>
+                                <td>13800138000</td>
+                                <td>2024-03-01</td>
+                                <td><span class="status active">正常</span></td>
+                                <td>
+                                    <a href="#" class="action-link" onclick="showDetail(this)">查看</a>
+                                    <a href="#" class="action-link" onclick="editCustomer(this)">编辑</a>
+                                    <a href="#" class="action-link" onclick="disableCustomer(this)">禁用</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 分页器 -->
+                <div class="pagination">
+                    <a href="#" class="page-btn">&lt;</a>
+                    <a href="#" class="page-btn active">1</a>
+                    <a href="#" class="page-btn">2</a>
+                    <a href="#" class="page-btn">3</a>
+                    <span class="page-separator">...</span>
+                    <a href="#" class="page-btn">10</a>
+                    <a href="#" class="page-btn">&gt;</a>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- 客户详情弹窗 -->
+    <div class="modal" id="detailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>客户详情</h3>
+                <button class="close-btn" onclick="hideModal('detailModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- 标签页导航 -->
+                <div class="tab-nav">
+                    <button class="tab-btn active" onclick="switchTab('basic')">基本信息</button>
+                    <button class="tab-btn" onclick="switchTab('contact')">联系人</button>
+                    <button class="tab-btn" onclick="switchTab('address')">收货地址</button>
+                    <button class="tab-btn" onclick="switchTab('order')">订单记录</button>
+                </div>
+
+                <!-- 基本信息标签页 -->
+                <div class="tab-content active" id="basic-tab">
+                    <div class="form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>客户编号</label>
+                                <input type="text" class="form-control" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label>客户名称</label>
+                                <input type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>客户等级</label>
+                                <select class="form-control">
+                                    <option value="A">A级</option>
+                                    <option value="B">B级</option>
+                                    <option value="C">C级</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>所属区域</label>
+                                <select class="form-control">
+                                    <option value="1">华东</option>
+                                    <option value="2">华南</option>
+                                    <option value="3">华北</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>备注说明</label>
+                            <textarea class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 联系人标签页 -->
+                <div class="tab-content" id="contact-tab">
+                    <div class="toolbar">
+                        <button class="button" onclick="addContact()">添加联系人</button>
+                    </div>
+                    <div class="detail-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>姓名</th>
+                                    <th>职位</th>
+                                    <th>手机</th>
+                                    <th>电话</th>
+                                    <th>邮箱</th>
+                                    <th>是否主联系人</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>张三</td>
+                                    <td>采购经理</td>
+                                    <td>13800138000</td>
+                                    <td>0571-88888888</td>
+                                    <td>zhangsan@example.com</td>
+                                    <td>是</td>
+                                    <td>
+                                        <a href="#" class="action-link" onclick="editContact(this)">编辑</a>
+                                        <a href="#" class="action-link" onclick="deleteContact(this)">删除</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 收货地址标签页 -->
+                <div class="tab-content" id="address-tab">
+                    <div class="toolbar">
+                        <button class="button" onclick="addAddress()">添加地址</button>
+                    </div>
+                    <div class="detail-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>地址类型</th>
+                                    <th>收货人</th>
+                                    <th>联系电话</th>
+                                    <th>所在地区</th>
+                                    <th>详细地址</th>
+                                    <th>是��默认</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>收货地址</td>
+                                    <td>张三</td>
+                                    <td>13800138000</td>
+                                    <td>浙江省杭州市西湖区</td>
+                                    <td>文三路100号</td>
+                                    <td>是</td>
+                                    <td>
+                                        <a href="#" class="action-link" onclick="editAddress(this)">编辑</a>
+                                        <a href="#" class="action-link" onclick="deleteAddress(this)">删除</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 订单记录标签页 -->
+                <div class="tab-content" id="order-tab">
+                    <div class="detail-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>订单���号</th>
+                                    <th>订单日期</th>
+                                    <th>订单金额</th>
+                                    <th>订单状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>SO202403010001</td>
+                                    <td>2024-03-01</td>
+                                    <td>¥10,000.00</td>
+                                    <td><span class="status completed">已完成</span></td>
+                                    <td>
+                                        <a href="#" class="action-link" onclick="viewOrder(this)">查看</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideModal('detailModal')">关闭</button>
+                <button class="button" onclick="saveCustomer()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/common.js"></script>
+    <script src="../../js/modules/customer.js"></script>
+</body>
+</html> 

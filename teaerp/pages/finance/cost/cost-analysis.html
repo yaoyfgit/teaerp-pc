@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成本分析 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/modules/finance.css">
+    <style>
+        /* 统计卡片样式 */
+        .statistics-container {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .statistics-card {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border-left: 4px solid #8fd4d2;
+        }
+
+        .statistics-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .statistics-card i {
+            font-size: 24px;
+            margin-right: 12px;
+            color: #8fd4d2;
+        }
+
+        .statistics-content {
+            flex: 1;
+        }
+
+        .stat-title {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .statistics-card.info {
+            border-left-color: #2196f3;
+        }
+
+        .statistics-card.info i {
+            color: #2196f3;
+        }
+
+        .statistics-card.success {
+            border-left-color: #4caf50;
+        }
+
+        .statistics-card.success i {
+            color: #4caf50;
+        }
+
+        .statistics-card.warning {
+            border-left-color: #ff9800;
+        }
+
+        .statistics-card.warning i {
+            color: #ff9800;
+        }
+
+        /* Tab样式 */
+        .tab-container {
+            margin-top: 16px;
+        }
+        
+        .tab-header {
+            display: flex;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 16px;
+        }
+        
+        .tab-item {
+            padding: 8px 16px;
+            cursor: pointer;
+            position: relative;
+            color: #666;
+        }
+        
+        .tab-item.active {
+            color: #8fd4d2;
+            font-weight: bold;
+        }
+        
+        .tab-item.active:after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #8fd4d2;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+
+        /* 表格样式 */
+        .standard-table td {
+            vertical-align: middle;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 4px;
+        }
+
+        /* 金额单元格样式 */
+        .amount-cell {
+            text-align: right;
+        }
+
+        /* 图表容器样式 */
+        .chart-container {
+            padding: 16px;
+            background: #fff;
+            border-radius: 4px;
+            margin-bottom: 16px;
+        }
+
+        /* 趋势指标样式 */
+        .trend {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+
+        .trend.success {
+            color: #4caf50;
+            background-color: rgba(76, 175, 80, 0.1);
+        }
+
+        .trend.danger {
+            color: #f44336;
+            background-color: rgba(244, 67, 54, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-money-check-alt"></i>
+                    <span>财务管理</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-chart-line"></i>
+                    <span>成本分析</span>
+                </div>
+
+                <!-- 统计卡片 -->
+                <div class="statistics-container">
+                    <div class="statistics-card">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <div class="statistics-content">
+                            <div class="stat-title">总成本</div>
+                            <div class="stat-value">¥1,235,678.00</div>
+                        </div>
+                    </div>
+                    <div class="statistics-card info">
+                        <i class="fas fa-chart-pie"></i>
+                        <div class="statistics-content">
+                            <div class="stat-title">毛利率</div>
+                            <div class="stat-value">35.6%</div>
+                        </div>
+                    </div>
+                    <div class="statistics-card success">
+                        <i class="fas fa-chart-line"></i>
+                        <div class="statistics-content">
+                            <div class="stat-title">同比降低</div>
+                            <div class="stat-value">5.2%</div>
+                        </div>
+                    </div>
+                    <div class="statistics-card warning">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <div class="statistics-content">
+                            <div class="stat-title">异常项目</div>
+                            <div class="stat-value">3项</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab切换 -->
+                <div class="tab-container">
+                    <div class="tab-header">
+                        <div class="tab-item active" data-tab="structure">成本结构</div>
+                        <div class="tab-item" data-tab="trend">趋势分析</div>
+                        <div class="tab-item" data-tab="product">产品成本</div>
+                    </div>
+
+                    <!-- 成本结构 -->
+                    <div class="tab-content active" id="structure">
+                        <div class="card standard-card">
+                            <div class="standard-toolbar">
+                                <div class="toolbar-left">
+                                    <select class="standard-select">
+                                        <option value="">成本类型</option>
+                                        <option value="material">材料成本</option>
+                                        <option value="labor">人工成本</option>
+                                        <option value="manufacturing">制造成本</option>
+                                    </select>
+                                    <input type="month" class="standard-input" placeholder="分析期间">
+                                    <button class="standard-button primary">
+                                        <i class="fas fa-search"></i>
+                                        查询
+                                    </button>
+                                    <button class="standard-button">
+                                        <i class="fas fa-redo"></i>
+                                        重置
+                                    </button>
+                                    <div class="toolbar-divider"></div>
+                                    <button class="standard-button">
+                                        <i class="fas fa-print"></i>
+                                        打印
+                                    </button>
+                                    <button class="standard-button">
+                                        <i class="fas fa-file-export"></i>
+                                        导出
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- 成本结构图表 -->
+                            <div class="chart-container">
+                                <div id="costStructureChart" style="width: 100%; height: 400px;"></div>
+                            </div>
+
+                            <div class="table-container">
+                                <table class="standard-table">
+                                    <thead>
+                                        <tr>
+                                            <th>成本类型</th>
+                                            <th>金额</th>
+                                            <th>占比</th>
+                                            <th>环比</th>
+                                            <th>同比</th>
+                                            <th width="120">操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>材料成本</td>
+                                            <td class="amount-cell">500,000.00</td>
+                                            <td class="amount-cell">40.5%</td>
+                                            <td><span class="trend success">↓2.3%</span></td>
+                                            <td><span class="trend success">↓5.1%</span></td>
+                                            <td>
+                                                <div class="button-group">
+                                                    <button class="standard-button small" title="查看明细">
+                                                        <i class="fas fa-list"></i>
+                                                    </button>
+                                                    <button class="standard-button small" title="趋势分析">
+                                                        <i class="fas fa-chart-line"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>人工成本</td>
+                                            <td class="amount-cell">400,000.00</td>
+                                            <td class="amount-cell">32.4%</td>
+                                            <td><span class="trend danger">↑3.5%</span></td>
+                                            <td><span class="trend danger">↑7.2%</span></td>
+                                            <td>
+                                                <div class="button-group">
+                                                    <button class="standard-button small" title="查看明细">
+                                                        <i class="fas fa-list"></i>
+                                                    </button>
+                                                    <button class="standard-button small" title="趋势分析">
+                                                        <i class="fas fa-chart-line"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 趋势分析 -->
+                    <div class="tab-content" id="trend">
+                        <div class="card standard-card">
+                            <div class="standard-toolbar">
+                                <div class="toolbar-left">
+                                    <select class="standard-select">
+                                        <option value="">成本类型</option>
+                                        <option value="material">材料成本</option>
+                                        <option value="labor">人工成本</option>
+                                        <option value="manufacturing">制造成本</option>
+                                    </select>
+                                    <select class="standard-select">
+                                        <option value="">时间维度</option>
+                                        <option value="month">月度</option>
+                                        <option value="quarter">季度</option>
+                                        <option value="year">年度</option>
+                                    </select>
+                                    <input type="month" class="standard-input" placeholder="开始月份">
+                                    <input type="month" class="standard-input" placeholder="结束月份">
+                                    <button class="standard-button primary">
+                                        <i class="fas fa-search"></i>
+                                        查询
+                                    </button>
+                                    <button class="standard-button">
+                                        <i class="fas fa-redo"></i>
+                                        重置
+                                    </button>
+                                    <div class="toolbar-divider"></div>
+                                    <button class="standard-button">
+                                        <i class="fas fa-print"></i>
+                                        打印
+                                    </button>
+                                    <button class="standard-button">
+                                        <i class="fas fa-file-export"></i>
+                                        导出
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- 趋势分析图表 -->
+                            <div class="chart-container">
+                                <div id="costTrendChart" style="width: 100%; height: 600px;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 产品成本 -->
+                    <div class="tab-content" id="product">
+                        <div class="card standard-card">
+                            <div class="standard-toolbar">
+                                <div class="toolbar-left">
+                                    <input type="text" class="standard-input" placeholder="产品名称">
+                                    <select class="standard-select">
+                                        <option value="">产品类型</option>
+                                        <option value="green">绿茶</option>
+                                        <option value="black">红茶</option>
+                                        <option value="oolong">乌龙茶</option>
+                                    </select>
+                                    <input type="month" class="standard-input" placeholder="分析期间">
+                                    <button class="standard-button primary">
+                                        <i class="fas fa-search"></i>
+                                        查询
+                                    </button>
+                                    <button class="standard-button">
+                                        <i class="fas fa-redo"></i>
+                                        重置
+                                    </button>
+                                    <div class="toolbar-divider"></div>
+                                    <button class="standard-button">
+                                        <i class="fas fa-print"></i>
+                                        打印
+                                    </button>
+                                    <button class="standard-button">
+                                        <i class="fas fa-file-export"></i>
+                                        导出
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="table-container">
+                                <table class="standard-table">
+                                    <thead>
+                                        <tr>
+                                            <th>产品名称</th>
+                                            <th>产品类型</th>
+                                            <th>材料成本</th>
+                                            <th>人工成本</th>
+                                            <th>制造成本</th>
+                                            <th>单位成本</th>
+                                            <th>销售价格</th>
+                                            <th>毛利率</th>
+                                            <th width="120">操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>特级大红袍</td>
+                                            <td>乌龙茶</td>
+                                            <td class="amount-cell">150.00</td>
+                                            <td class="amount-cell">50.00</td>
+                                            <td class="amount-cell">30.00</td>
+                                            <td class="amount-cell">230.00</td>
+                                            <td class="amount-cell">398.00</td>
+                                            <td><span class="trend success">42.2%</span></td>
+                                            <td>
+                                                <div class="button-group">
+                                                    <button class="standard-button small" title="成本构成">
+                                                        <i class="fas fa-chart-pie"></i>
+                                                    </button>
+                                                    <button class="standard-button small" title="趋势分析">
+                                                        <i class="fas fa-chart-line"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 初始化菜单
+            Menu.renderMenu();
+            // 初始化菜单切换功能
+            initMenuToggle();
+            // 初始化标签页切换
+            initTabs();
+            // 初始化图表
+            initCostStructureChart();
+            initCostTrendChart();
+        });
+
+        function initTabs() {
+            const tabHeaders = document.querySelectorAll('.tab-item');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    // 移除所有active类
+                    tabHeaders.forEach(h => h.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+
+                    // 添加active类到当前选中的标签
+                    header.classList.add('active');
+                    const tabId = header.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+        }
+
+        function initCostStructureChart() {
+            const chart = echarts.init(document.getElementById('costStructureChart'));
+            
+            const option = {
+                title: {
+                    text: '成本结构分析',
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{a} <br/>{b}: {c} ({d}%)'
+                },
+                legend: {
+                    orient: 'horizontal',
+                    bottom: 'bottom'
+                },
+                series: [
+                    {
+                        name: '成本构成',
+                        type: 'pie',
+                        radius: ['40%', '70%'],
+                        avoidLabelOverlap: false,
+                        itemStyle: {
+                            borderRadius: 10,
+                            borderColor: '#fff',
+                            borderWidth: 2
+                        },
+                        label: {
+                            show: false,
+                            position: 'center'
+                        },
+                        emphasis: {
+                            label: {
+                                show: true,
+                                fontSize: '20',
+                                fontWeight: 'bold'
+                            }
+                        },
+                        labelLine: {
+                            show: false
+                        },
+                        data: [
+                            { value: 500000, name: '材料成本', itemStyle: { color: '#81D8D0' } },
+                            { value: 400000, name: '人工成本', itemStyle: { color: '#A5E6E1' } },
+                            { value: 300000, name: '制造成本', itemStyle: { color: '#C9F0EC' } }
+                        ]
+                    }
+                ]
+            };
+            
+            chart.setOption(option);
+            
+            window.addEventListener('resize', () => {
+                chart.resize();
+            });
+        }
+
+        function initCostTrendChart() {
+            const chart = echarts.init(document.getElementById('costTrendChart'));
+            
+            const option = {
+                title: {
+                    text: '成本趋势分析',
+                    left: 'center',
+                    top: 20,
+                    textStyle: {
+                        fontSize: 16,
+                        fontWeight: 'bold'
+                    }
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross',
+                        label: {
+                            backgroundColor: '#6a7985'
+                        }
+                    }
+                },
+                legend: {
+                    data: ['材料成本', '人工成本', '制造成本'],
+                    bottom: 10
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '15%',
+                    top: '15%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: true,
+                    data: ['1月', '2月', '3月', '4月', '5月', '6月'],
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 0
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: '金额（元）',
+                    axisLabel: {
+                        formatter: '{value}'
+                    }
+                },
+                series: [
+                    {
+                        name: '材料成本',
+                        type: 'line',
+                        smooth: true,
+                        symbolSize: 8,
+                        lineStyle: {
+                            width: 3
+                        },
+                        data: [480000, 490000, 500000, 510000, 505000, 500000],
+                        itemStyle: { color: '#81D8D0' }
+                    },
+                    {
+                        name: '人工成本',
+                        type: 'line',
+                        smooth: true,
+                        symbolSize: 8,
+                        lineStyle: {
+                            width: 3
+                        },
+                        data: [380000, 385000, 390000, 395000, 400000, 400000],
+                        itemStyle: { color: '#A5E6E1' }
+                    },
+                    {
+                        name: '制造成本',
+                        type: 'line',
+                        smooth: true,
+                        symbolSize: 8,
+                        lineStyle: {
+                            width: 3
+                        },
+                        data: [280000, 285000, 290000, 295000, 300000, 300000],
+                        itemStyle: { color: '#C9F0EC' }
+                    }
+                ]
+            };
+            
+            chart.setOption(option);
+            
+            // 监听窗口大小变化，调整图表大小
+            window.addEventListener('resize', () => {
+                chart.resize();
+            });
+
+            // 监听标签页切换，重新渲染图表
+            document.querySelectorAll('.tab-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    if (item.getAttribute('data-tab') === 'trend') {
+                        setTimeout(() => {
+                            chart.resize();
+                        }, 0);
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+</html> 

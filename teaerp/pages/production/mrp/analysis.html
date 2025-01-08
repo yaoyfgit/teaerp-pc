@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>运算分析 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/modules/production.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-industry"></i>
+                    <span>生产管理</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-calculator"></i>
+                    <span>MRP运算</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-chart-line"></i>
+                    <span>运算分析</span>
+                </div>
+
+                <!-- 分析概览 -->
+                <div class="standard-card">
+                    <div class="standard-card-header">
+                        <h3><i class="fas fa-chart-pie"></i> 分析概览</h3>
+                        <div class="card-tools">
+                            <select class="standard-select" onchange="updateAnalysis()">
+                                <option value="week">本周</option>
+                                <option value="month">本月</option>
+                                <option value="quarter">本季度</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="standard-card-body">
+                        <div class="analysis-overview">
+                            <div class="overview-item">
+                                <i class="fas fa-cogs"></i>
+                                <h4>运算次数</h4>
+                                <div class="number">32</div>
+                                <div class="trend up">+15%</div>
+                            </div>
+                            <div class="overview-item">
+                                <i class="fas fa-check-circle"></i>
+                                <h4>计划执行率</h4>
+                                <div class="number">85%</div>
+                                <div class="trend up">+5%</div>
+                            </div>
+                            <div class="overview-item">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <h4>异常率</h4>
+                                <div class="number">8%</div>
+                                <div class="trend down">-2%</div>
+                            </div>
+                            <div class="overview-item">
+                                <i class="fas fa-clock"></i>
+                                <h4>平均运算时间</h4>
+                                <div class="number">45s</div>
+                                <div class="trend down">-10%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 趋势图表 -->
+                <div class="standard-card">
+                    <div class="standard-card-header">
+                        <h3><i class="fas fa-chart-line"></i> 趋势分析</h3>
+                        <div class="card-tools">
+                            <button class="standard-button" onclick="exportChart()">
+                                <i class="fas fa-download"></i> 导出
+                            </button>
+                        </div>
+                    </div>
+                    <div class="standard-card-body">
+                        <div id="trendChart" style="height: 400px;"></div>
+                    </div>
+                </div>
+
+                <!-- 异常分析 -->
+                <div class="standard-card">
+                    <div class="standard-card-header">
+                        <h3><i class="fas fa-exclamation-circle"></i> 异常分析</h3>
+                    </div>
+                    <div class="standard-card-body">
+                        <div class="analysis-table">
+                            <table class="standard-table">
+                                <thead>
+                                    <tr>
+                                        <th>异常类型</th>
+                                        <th>发生次数</th>
+                                        <th>影响范围</th>
+                                        <th>主要原因</th>
+                                        <th>解决方案</th>
+                                        <th>状态</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="exceptionTable"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 优化建议 -->
+                <div class="standard-card">
+                    <div class="standard-card-header">
+                        <h3><i class="fas fa-lightbulb"></i> 优化建议</h3>
+                    </div>
+                    <div class="standard-card-body">
+                        <div class="suggestion-list">
+                            <div class="suggestion-item">
+                                <div class="suggestion-icon">
+                                    <i class="fas fa-warehouse"></i>
+                                </div>
+                                <div class="suggestion-content">
+                                    <h4>库存优化建议</h4>
+                                    <p>建议调整5种常用原材料的安全库存量，可减少约15%的库存积压</p>
+                                    <button class="standard-button" onclick="showStockDetail()">查看详情</button>
+                                </div>
+                            </div>
+                            <div class="suggestion-item">
+                                <div class="suggestion-icon">
+                                    <i class="fas fa-industry"></i>
+                                </div>
+                                <div class="suggestion-content">
+                                    <h4>产能优化建议</h4>
+                                    <p>注塑车间在工作日14:00-16:00时段产能利用率较低，建议调整生产计划</p>
+                                    <button class="standard-button" onclick="showCapacityDetail()">查看详情</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript 引用 -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="../../../js/app.js"></script>
+    <script>
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', () => {
+            // 初始化菜单
+            Menu.renderMenu();
+            // 初始化菜单切换功能
+            initMenuToggle();
+        });
+    </script>
+</body>
+</html> 

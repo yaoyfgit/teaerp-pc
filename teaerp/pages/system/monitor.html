@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系统监控 - TeaERP</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- 系统样式 -->
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/menu.css">
+    <!-- 模块样式 -->
+    <link rel="stylesheet" href="../../css/modules/system.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 侧边栏 -->
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <!-- 主内容区 -->
+        <div class="main-content">
+            <!-- 顶部导航栏 -->
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <!-- 内容区域 -->
+            <div class="content">
+                <!-- 面包屑导航 -->
+                <div class="breadcrumb">
+                    <span>系统管理</span>
+                    <span class="separator">/</span>
+                    <span>系统监控</span>
+                </div>
+
+                <!-- 监控概览 -->
+                <div class="monitor-overview">
+                    <div class="monitor-card">
+                        <div class="card-header">
+                            <i class="fas fa-server"></i>
+                            <span>服务器状态</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="status-item">
+                                <label>CPU使用率</label>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 45%;">45%</div>
+                                </div>
+                            </div>
+                            <div class="status-item">
+                                <label>内存使用率</label>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 60%;">60%</div>
+                                </div>
+                            </div>
+                            <div class="status-item">
+                                <label>磁盘使用率</label>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 75%;">75%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="monitor-card">
+                        <div class="card-header">
+                            <i class="fas fa-database"></i>
+                            <span>数据库状态</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="status-item">
+                                <label>连接数</label>
+                                <span>128/200</span>
+                            </div>
+                            <div class="status-item">
+                                <label>活跃连接</label>
+                                <span>45</span>
+                            </div>
+                            <div class="status-item">
+                                <label>慢查询数</label>
+                                <span>5</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="monitor-card">
+                        <div class="card-header">
+                            <i class="fas fa-users"></i>
+                            <span>在线用户</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="status-item">
+                                <label>当前在线</label>
+                                <span>56</span>
+                            </div>
+                            <div class="status-item">
+                                <label>今日访问</label>
+                                <span>1,234</span>
+                            </div>
+                            <div class="status-item">
+                                <label>本月访问</label>
+                                <span>45,678</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 在线用户列表 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>在线用户</h3>
+                        <div class="header-actions">
+                            <button class="btn btn-danger">强制下线</button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <input type="checkbox" class="checkbox-all">
+                                    </th>
+                                    <th>会话ID</th>
+                                    <th>用户名</th>
+                                    <th>主机</th>
+                                    <th>登录时间</th>
+                                    <th>最后访问</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" class="checkbox-item">
+                                    </td>
+                                    <td>abc123def456</td>
+                                    <td>admin</td>
+                                    <td>192.168.1.100</td>
+                                    <td>2024-03-01 10:30:00</td>
+                                    <td>2024-03-01 11:45:00</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-danger">强制下线</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 系统性能监控 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>性能监控</h3>
+                        <div class="header-actions">
+                            <select class="form-control">
+                                <option value="1h">最近1小时</option>
+                                <option value="6h">最近6小时</option>
+                                <option value="24h">最近24小时</option>
+                                <option value="7d">最近7天</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <div id="cpuChart" class="chart"></div>
+                        <div id="memoryChart" class="chart"></div>
+                        <div id="diskChart" class="chart"></div>
+                        <div id="networkChart" class="chart"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 加载应用脚本 -->
+    <script src="../../js/app.js"></script>
+    <script src="../../js/modules/system/monitor.js"></script>
+    <!-- 图表库 -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+</body>
+</html> 

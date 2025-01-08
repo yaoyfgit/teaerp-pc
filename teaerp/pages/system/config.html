@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系统配置 - TeaERP</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- 系统样式 -->
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/menu.css">
+    <!-- 模块样式 -->
+    <link rel="stylesheet" href="../../css/modules/system.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 侧边栏 -->
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <!-- 主内容区 -->
+        <div class="main-content">
+            <!-- 顶部导航栏 -->
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <!-- 内容区域 -->
+            <div class="content">
+                <!-- 面包屑导航 -->
+                <div class="breadcrumb">
+                    <span>系统管理</span>
+                    <span class="separator">/</span>
+                    <span>系统配置</span>
+                </div>
+
+                <!-- 配置选项卡 -->
+                <div class="card">
+                    <div class="tabs">
+                        <div class="tab-header">
+                            <div class="tab-item active" data-tab="basic">基本设置</div>
+                            <div class="tab-item" data-tab="security">安全配置</div>
+                            <div class="tab-item" data-tab="email">邮件配置</div>
+                            <div class="tab-item" data-tab="storage">存储配置</div>
+                            <div class="tab-item" data-tab="notify">通知配置</div>
+                        </div>
+                        <div class="tab-content">
+                            <!-- 基本设置 -->
+                            <div class="tab-pane active" id="basic">
+                                <form class="config-form">
+                                    <div class="form-group">
+                                        <label class="form-label">系统名称</label>
+                                        <input type="text" class="form-control" value="TeaERP">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">系统Logo</label>
+                                        <div class="upload-container">
+                                            <img src="../../assets/images/logo.png" class="preview-image">
+                                            <button class="btn btn-secondary">上传Logo</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">版权信息</label>
+                                        <input type="text" class="form-control" value="© 2024 TeaERP">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">系统公告</label>
+                                        <textarea class="form-control" rows="3"></textarea>
+                                    </div>
+                                    <div class="form-actions">
+                                        <button type="submit" class="btn btn-primary">保存设置</button>
+                                        <button type="reset" class="btn btn-secondary">重置</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- 安全配置 -->
+                            <div class="tab-pane" id="security">
+                                <form class="config-form">
+                                    <div class="form-group">
+                                        <label class="form-label">密码策略</label>
+                                        <div class="checkbox-group">
+                                            <label class="checkbox-label">
+                                                <input type="checkbox" checked> 必须包含大小写字母
+                                            </label>
+                                            <label class="checkbox-label">
+                                                <input type="checkbox" checked> 必须包含数字
+                                            </label>
+                                            <label class="checkbox-label">
+                                                <input type="checkbox" checked> 必须包含特殊字符
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">密码长度</label>
+                                        <input type="number" class="form-control" value="8" min="6" max="20">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">密码有效期（天）</label>
+                                        <input type="number" class="form-control" value="90">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">登录失败锁定</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" value="5">
+                                            <span class="input-group-text">次后锁定</span>
+                                            <input type="number" class="form-control" value="30">
+                                            <span class="input-group-text">分钟</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-actions">
+                                        <button type="submit" class="btn btn-primary">保存设置</button>
+                                        <button type="reset" class="btn btn-secondary">重置</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- 邮件配置 -->
+                            <div class="tab-pane" id="email">
+                                <form class="config-form">
+                                    <div class="form-group">
+                                        <label class="form-label">SMTP服务器</label>
+                                        <input type="text" class="form-control" placeholder="smtp.example.com">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">SMTP端口</label>
+                                        <input type="number" class="form-control" value="465">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">发件人邮箱</label>
+                                        <input type="email" class="form-control" placeholder="noreply@example.com">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">发件人密码</label>
+                                        <input type="password" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">SSL加密</label>
+                                        <div class="switch">
+                                            <input type="checkbox" id="sslSwitch" checked>
+                                            <label for="sslSwitch"></label>
+                                        </div>
+                                    </div>
+                                    <div class="form-actions">
+                                        <button type="submit" class="btn btn-primary">保存设置</button>
+                                        <button type="button" class="btn btn-secondary">测试连接</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- 存储配置 -->
+                            <div class="tab-pane" id="storage">
+                                <form class="config-form">
+                                    <div class="form-group">
+                                        <label class="form-label">存储方式</label>
+                                        <select class="form-control" onchange="handleStorageChange(this)">
+                                            <option value="local">本地存储</option>
+                                            <option value="oss">阿里云OSS</option>
+                                            <option value="cos">腾讯云COS</option>
+                                            <option value="s3">亚马逊S3</option>
+                                        </select>
+                                    </div>
+                                    <div class="storage-config local">
+                                        <div class="form-group">
+                                            <label class="form-label">存储路径</label>
+                                            <input type="text" class="form-control" value="/data/upload">
+                                        </div>
+                                    </div>
+                                    <div class="storage-config oss" style="display: none;">
+                                        <div class="form-group">
+                                            <label class="form-label">AccessKey ID</label>
+                                            <input type="text" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">AccessKey Secret</label>
+                                            <input type="password" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Endpoint</label>
+                                            <input type="text" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Bucket</label>
+                                            <input type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="form-actions">
+                                        <button type="submit" class="btn btn-primary">保存设置</button>
+                                        <button type="reset" class="btn btn-secondary">重置</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- 通知配置 -->
+                            <div class="tab-pane" id="notify">
+                                <form class="config-form">
+                                    <div class="form-group">
+                                        <label class="form-label">通知方式</label>
+                                        <div class="checkbox-group">
+                                            <label class="checkbox-label">
+                                                <input type="checkbox" checked> 站内信
+                                            </label>
+                                            <label class="checkbox-label">
+                                                <input type="checkbox" checked> 邮件
+                                            </label>
+                                            <label class="checkbox-label">
+                                                <input type="checkbox"> 短信
+                                            </label>
+                                            <label class="checkbox-label">
+                                                <input type="checkbox"> 钉钉
+                                            </label>
+                                            <label class="checkbox-label">
+                                                <input type="checkbox"> 企业微信
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">通知场景</label>
+                                        <div class="notify-scene">
+                                            <div class="scene-item">
+                                                <div class="scene-header">
+                                                    <span>用户注册</span>
+                                                    <div class="switch">
+                                                        <input type="checkbox" id="registerNotify" checked>
+                                                        <label for="registerNotify"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="scene-body">
+                                                    <div class="checkbox-group">
+                                                        <label class="checkbox-label">
+                                                            <input type="checkbox" checked> 管理员
+                                                        </label>
+                                                        <label class="checkbox-label">
+                                                            <input type="checkbox"> 部门主管
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="scene-item">
+                                                <div class="scene-header">
+                                                    <span>密码修改</span>
+                                                    <div class="switch">
+                                                        <input type="checkbox" id="passwordNotify" checked>
+                                                        <label for="passwordNotify"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="scene-body">
+                                                    <div class="checkbox-group">
+                                                        <label class="checkbox-label">
+                                                            <input type="checkbox" checked> 用户本人
+                                                        </label>
+                                                        <label class="checkbox-label">
+                                                            <input type="checkbox" checked> 管理员
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-actions">
+                                        <button type="submit" class="btn btn-primary">保存设置</button>
+                                        <button type="reset" class="btn btn-secondary">重置</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 加载应用脚本 -->
+    <script src="../../js/app.js"></script>
+    <script src="../../js/modules/system/config.js"></script>
+</body>
+</html> 

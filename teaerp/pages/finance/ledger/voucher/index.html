@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>凭证管理 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../../../css/common.css">
+    <link rel="stylesheet" href="../../../../../css/layout.css">
+    <link rel="stylesheet" href="../../../../../css/menu.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../../../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-money-bill-wave"></i>
+                    <span>财务管理</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-book"></i>
+                    <span>总账管理</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-file-invoice"></i>
+                    <span>凭证管理</span>
+                </div>
+
+                <div class="dashboard">
+                    <div class="dashboard-item">
+                        <div class="title">
+                            <i class="fas fa-edit"></i>
+                            <h3>凭证录入</h3>
+                        </div>
+                        <p>录入会计凭证信息，包括凭证日期、摘要、科目、金额等。</p>
+                        <a href="entry.html" class="btn btn-primary">
+                            <i class="fas fa-arrow-right"></i>
+                            开始录入
+                        </a>
+                    </div>
+
+                    <div class="dashboard-item">
+                        <div class="title">
+                            <i class="fas fa-check-circle"></i>
+                            <h3>凭证审核</h3>
+                        </div>
+                        <p>审核会计凭证，确保凭证内容的准确性和合规性。</p>
+                        <a href="audit.html" class="btn btn-primary">
+                            <i class="fas fa-arrow-right"></i>
+                            进行审核
+                        </a>
+                    </div>
+
+                    <div class="dashboard-item">
+                        <div class="title">
+                            <i class="fas fa-search"></i>
+                            <h3>凭证查询</h3>
+                        </div>
+                        <p>查询历史凭证记录，支持多种条件筛选和导出。</p>
+                        <a href="query.html" class="btn btn-primary">
+                            <i class="fas fa-arrow-right"></i>
+                            查看凭证
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../../../js/common.js"></script>
+    <script type="module" src="../../../../../js/app.js"></script>
+    <script>
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', () => {
+            // 初始化菜单
+            Menu.renderMenu();
+            // 初始化菜单切换功能
+            initMenuToggle();
+        });
+    </script>
+</body>
+</html> 

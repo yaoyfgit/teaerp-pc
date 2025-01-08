@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>通知退货 - TeaERP</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- 系统样式 -->
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <!-- 模块样式 -->
+    <link rel="stylesheet" href="../../css/modules/purchase.css">
+</head>
+</html> <body>
+    <div class="app-container">
+        <!-- 顶部导航 -->
+        <header class="app-header">
+            <div class="logo">TeaERP</div>
+            <nav class="top-nav">
+                <ul>
+                    <li><a href="../../index.html">首页</a></li>
+                    <li><a href="#">消息</a></li>
+                    <li><a href="#">帮助</a></li>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <span class="username">管理员</span>
+                <a href="#" class="logout">退出</a>
+            </div>
+        </header>
+
+        <!-- 主体内容 -->
+        <div class="app-main">
+            <!-- 左侧菜单 -->
+            <aside class="app-sidebar">
+                <ul class="menu-list">
+                    <li class="menu-item active">
+                        <a href="#" class="menu-link">
+                            <span class="menu-icon">📊</span>
+                            <span class="menu-text">采购管理</span>
+                            <span class="arrow">›</span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="demand.html">采购需求</a></li>
+                            <li><a href="order.html">采购订单</a></li>
+                            <li><a href="receive.html">通知收货</a></li>
+                            <li><a href="inbound.html">采购入库</a></li>
+                            <li><a href="#" class="active">通知退货</a></li>
+                            <li><a href="return.html">采购退货</a></li>
+                            <li><a href="reconciliation.html">供应商对账</a></li>
+                            <li><a href="analysis.html">统计分析</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" class="menu-link">
+                            <span class="menu-icon">🛒</span>
+                            <span class="menu-text">销售管理</span>
+                            <span class="arrow">›</span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="../sales/order.html">销售订单</a></li>
+                            <li><a href="../sales/delivery.html">通知发货</a></li>
+                            <li><a href="../sales/outbound.html">销售出库</a></li>
+                            <li><a href="../sales/return-notify.html">通知退货</a></li>
+                            <li><a href="../sales/return.html">销售退货</a></li>
+                            <li><a href="../sales/reconciliation.html">客户对账</a></li>
+                            <li><a href="../sales/analysis.html">统计分析</a></li>
+                        </ul>
+                    </li>
+                    <!-- 其他菜单项... -->
+                </ul>
+            </aside>
+
+            <!-- 内容区域 -->
+            <main class="app-content">
+                <!-- 面包屑导航 -->
+                <div class="breadcrumb">
+                    <span>采购管理</span>
+                    <span class="separator">/</span>
+                    <span>通知退货</span>
+                </div>
+
+                <!-- 工具栏 -->
+                <div class="toolbar">
+                    <div class="search-bar">
+                        <input type="text" placeholder="输入通知单号/供应商搜索">
+                        <select class="form-control">
+                            <option value="">通知状态</option>
+                            <option value="pending">待退货</option>
+                            <option value="partial">部分退货</option>
+                            <option value="completed">已完成</option>
+                        </select>
+                        <button class="button">搜索</button>
+                    </div>
+                    <div class="action-bar">
+                        <button class="button" onclick="showCreateModal()">新建通知</button>
+                        <button class="button secondary">导出</button>
+                    </div>
+                </div>
+
+                <!-- 数据表格 -->
+                <div class="data-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>通知单号</th>
+                                <th>关联入库单号</th>
+                                <th>供应商</th>
+                                <th>通知日期</th>
+                                <th>退货原因</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>RR202403010001</td>
+                                <td>IN202403010001</td>
+                                <td>供应商A</td>
+                                <td>2024-03-01</td>
+                                <td>质量问题</td>
+                                <td><span class="status pending">待退货</span></td>
+                                <td>
+                                    <a href="#" class="action-link">查看</a>
+                                    <a href="#" class="action-link">编辑</a>
+                                    <a href="#" class="action-link">退货</a>
+                                    <a href="#" class="action-link">删除</a>
+                                </td>
+                            </tr>
+                            <!-- 更多数据行... -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 分页器 -->
+                <div class="pagination">
+                    <a href="#" class="page-btn">&lt;</a>
+                    <a href="#" class="page-btn active">1</a>
+                    <a href="#" class="page-btn">2</a>
+                    <a href="#" class="page-btn">3</a>
+                    <span class="page-separator">...</span>
+                    <a href="#" class="page-btn">10</a>
+                    <a href="#" class="page-btn">&gt;</a>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- 新建通知弹窗 -->
+    <div class="modal" id="createModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>新建通知退货</h3>
+                <button class="close-btn" onclick="hideCreateModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form class="form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>入库单</label>
+                            <select class="form-control" onchange="loadInboundDetails(this.value)">
+                                <option value="">请选择入库单</option>
+                                <option value="IN202403010001">IN202403010001 - 供应商A</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>退货原因</label>
+                            <select class="form-control">
+                                <option value="">请选择退货原因</option>
+                                <option value="quality">质量问题</option>
+                                <option value="quantity">数量问题</option>
+                                <option value="specification">规格问题</option>
+                                <option value="other">其他原因</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>备注说明</label>
+                        <textarea class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>退货明细</label>
+                        <div class="detail-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>商品</th>
+                                        <th>入库数量</th>
+                                        <th>已退货数量</th>
+                                        <th>本次退货数量</th>
+                                        <th>批次号</th>
+                                        <th>库位</th>
+                                        <th>备注</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>商品A</td>
+                                        <td>100</td>
+                                        <td>0</td>
+                                        <td><input type="number" class="form-control" max="100"></td>
+                                        <td>BATCH001</td>
+                                        <td>A-01-01</td>
+                                        <td><input type="text" class="form-control"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideCreateModal()">取消</button>
+                <button class="button">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/common.js"></script>
+    <script src="../../js/modules/purchase.js"></script>
+</body>
+</html> 

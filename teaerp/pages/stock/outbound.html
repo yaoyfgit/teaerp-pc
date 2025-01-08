@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>出库管理 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/menu.css">
+    <link rel="stylesheet" href="../../css/modules/stock.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-warehouse"></i>
+                    <span>库存管理</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>出库管理</span>
+                </div>
+
+                <!-- 出库统计 -->
+                <div class="standard-card">
+                    <div class="overview-grid">
+                        <div class="overview-item">
+                            <i class="fas fa-clipboard-list"></i>
+                            <div class="info">
+                                <h4>待审核出库</h4>
+                                <div class="number">8<span class="unit">单</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item">
+                            <i class="fas fa-box"></i>
+                            <div class="info">
+                                <h4>今日出库</h4>
+                                <div class="number">42<span class="unit">单</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item">
+                            <i class="fas fa-boxes"></i>
+                            <div class="info">
+                                <h4>本月出库</h4>
+                                <div class="number">960<span class="unit">单</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item">
+                            <i class="fas fa-cubes"></i>
+                            <div class="info">
+                                <h4>出库总量</h4>
+                                <div class="number">12,456<span class="unit">件</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 待出库列表 -->
+                <div class="standard-card">
+                    <div class="standard-card-header">
+                        <h3><i class="fas fa-clock"></i> 待出库</h3>
+                        <div class="action-bar">
+                            <div class="search-group">
+                                <input type="text" class="standard-input" placeholder="单据编号/商品">
+                                <select class="standard-select">
+                                    <option value="">所有仓库</option>
+                                    <option value="1">主仓库</option>
+                                    <option value="2">次仓库</option>
+                                </select>
+                                <select class="standard-select">
+                                    <option value="">出库类型</option>
+                                    <option value="sale">销售出库</option>
+                                    <option value="return">退货出库</option>
+                                    <option value="transfer">调拨出库</option>
+                                    <option value="other">其他出库</option>
+                                </select>
+                                <button class="standard-button primary" onclick="searchPendingOutbound()">
+                                    <i class="fas fa-search"></i> 查询
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="standard-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>单据编号</th>
+                                    <th>出库类型</th>
+                                    <th>出库仓库</th>
+                                    <th>商品数</th>
+                                    <th>出库数量</th>
+                                    <th>关联单号</th>
+                                    <th>创建人</th>
+                                    <th>创建时间</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pendingOutboundTable">
+                                <!-- 示例数据 -->
+                                <tr>
+                                    <td>OUT202403200002</td>
+                                    <td>销售出库</td>
+                                    <td>主仓库</td>
+                                    <td>4</td>
+                                    <td>80</td>
+                                    <td>SO202403200002</td>
+                                    <td>李四</td>
+                                    <td>2024-03-20 15:30:00</td>
+                                    <td>
+                                        <button class="button-link" onclick="viewPendingOutbound('OUT202403200002')">查看</button>
+                                        <button class="button-link" onclick="handleOutbound('OUT202403200002')">出库</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="standard-pagination" id="pendingPagination"></div>
+                    </div>
+                </div>
+
+                <!-- 出库列表 -->
+                <div class="standard-card">
+                    <div class="standard-card-header">
+                        <h3><i class="fas fa-list"></i> 出库单据</h3>
+                        <div class="action-bar">
+                            <div class="search-group">
+                                <input type="text" class="standard-input" placeholder="单据编号/商品">
+                                <select class="standard-select">
+                                    <option value="">所有仓库</option>
+                                    <option value="1">主仓库</option>
+                                    <option value="2">次仓库</option>
+                                </select>
+                                <select class="standard-select">
+                                    <option value="">出库类型</option>
+                                    <option value="sale">销售出库</option>
+                                    <option value="return">退货出库</option>
+                                    <option value="transfer">调拨出库</option>
+                                    <option value="other">其他出库</option>
+                                </select>
+                                <select class="standard-select">
+                                    <option value="">出库状态</option>
+                                    <option value="pending">待审核</option>
+                                    <option value="completed">已完成</option>
+                                    <option value="cancelled">已取消</option>
+                                </select>
+                                <div class="date-range-group">
+                                    <input type="date" class="standard-input" placeholder="开始日期">
+                                    <span class="separator">至</span>
+                                    <input type="date" class="standard-input" placeholder="结束日期">
+                                </div>
+                                <button class="standard-button primary" onclick="searchOutbound()">
+                                    <i class="fas fa-search"></i> 查询
+                                </button>
+                                <button class="standard-button primary" onclick="createOutbound()">
+                                    <i class="fas fa-plus"></i> 新建出库
+                                </button>
+                                <button class="standard-button" onclick="exportOutbound()">
+                                    <i class="fas fa-file-export"></i> 导出
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="standard-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>单据编号</th>
+                                    <th>出库类型</th>
+                                    <th>出库仓库</th>
+                                    <th>商品数</th>
+                                    <th>出库数量</th>
+                                    <th>出库状态</th>
+                                    <th>关联单号</th>
+                                    <th>创建人</th>
+                                    <th>创建时间</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="outboundTable">
+                                <!-- 示例数据 -->
+                                <tr>
+                                    <td>OUT202403200001</td>
+                                    <td>销售出库</td>
+                                    <td>主仓库</td>
+                                    <td>3</td>
+                                    <td>50</td>
+                                    <td><span class="status pending">待审核</span></td>
+                                    <td>SO202403200001</td>
+                                    <td>李四</td>
+                                    <td>2024-03-20 11:30:00</td>
+                                    <td>
+                                        <button class="button-link" onclick="viewOutbound('OUT202403200001')">查看</button>
+                                        <button class="button-link" onclick="reviewOutbound('OUT202403200001')">审核</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="standard-pagination" id="pagination"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/app.js"></script>
+    <script src="../../js/modules/stock/outbound.js"></script>
+</body>
+</html> 

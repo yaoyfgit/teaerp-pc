@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成本汇总表 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../../css/common.css">
+    <link rel="stylesheet" href="../../../../css/layout.css">
+    <link rel="stylesheet" href="../../../../css/modules/finance.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb">
+                <span>财务管理</span>
+                <span class="separator">/</span>
+                <span>成本管理</span>
+                <span class="separator">/</span>
+                <span>成本报表</span>
+                <span class="separator">/</span>
+                <span>成本汇总表</span>
+            </div>
+
+            <!-- 报表条件 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>查询条件</h3>
+                </div>
+                <div class="card-body">
+                    <form id="reportForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>报表类型</label>
+                                <select class="form-control" name="reportType" required>
+                                    <option value="product">产品成本汇总</option>
+                                    <option value="department">部门成本汇总</option>
+                                    <option value="project">项目成本汇总</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>统计期间</label>
+                                <input type="month" class="form-control" name="period" required>
+                            </div>
+                            <div class="form-group">
+                                <label>成本类型</label>
+                                <select class="form-control" name="costType">
+                                    <option value="">全部</option>
+                                    <option value="material">材料成本</option>
+                                    <option value="labor">人工成本</option>
+                                    <option value="manufacturing">制造费用</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="button">
+                                <i class="fas fa-search"></i> 查询
+                            </button>
+                            <button type="button" class="button" onclick="exportReport()">
+                                <i class="fas fa-download"></i> 导出
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- 报表内容 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>报表内容</h3>
+                </div>
+                <div class="card-body">
+                    <div class="result-summary">
+                        <div class="summary-item">
+                            <label>总成本</label>
+                            <span id="totalCost">0.00</span>
+                        </div>
+                        <div class="summary-item">
+                            <label>材料成本</label>
+                            <span id="materialCost">0.00</span>
+                        </div>
+                        <div class="summary-item">
+                            <label>人工成本</label>
+                            <span id="laborCost">0.00</span>
+                        </div>
+                        <div class="summary-item">
+                            <label>制造费用</label>
+                            <span id="manufacturingCost">0.00</span>
+                        </div>
+                    </div>
+
+                    <div class="tabs">
+                        <div class="tab-header">
+                            <button class="tab-btn active" data-tab="table">数据表格</button>
+                            <button class="tab-btn" data-tab="chart">图形分析</button>
+                        </div>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tableTab">
+                                <div id="reportTable"></div>
+                            </div>
+                            <div class="tab-pane" id="chartTab">
+                                <div id="costChart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../../../js/common.js"></script>
+    <script src="../../../../js/modules/finance/cost/report/summary.js"></script>
+</body>
+</html> 

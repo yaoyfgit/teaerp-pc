@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>科目关系 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/modules/finance.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar">
+            <div class="sidebar-header">
+                <img src="../../../images/logo.png" alt="TeaERP">
+            </div>
+            <div class="sidebar-content">
+                <!-- Menu content will be dynamically loaded -->
+            </div>
+        </div>
+        <main class="app-content">
+            <div class="app-header">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>财务管理</span>
+                    <i class="fas fa-angle-right"></i>
+                    <span>总账管理</span>
+                    <i class="fas fa-angle-right"></i>
+                    <span>科目关系</span>
+                </div>
+            </div>
+
+            <!-- 科目树 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>科目树</h3>
+                    <div class="card-tools">
+                        <button class="button" onclick="expandAll()">全部展开</button>
+                        <button class="button" onclick="collapseAll()">全部收起</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="tree-view" id="subjectTree"></div>
+                </div>
+            </div>
+
+            <!-- 科目映射 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>科目映射</h3>
+                    <div class="card-tools">
+                        <button class="button" onclick="showAddMappingModal()">新增映射</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="data-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>源科目</th>
+                                    <th>目标科目</th>
+                                    <th>映射类型</th>
+                                    <th>映射规则</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="mappingTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 新增映射弹窗 -->
+    <div class="modal" id="mappingModal">
+        <div class="modal-content standard-modal">
+            <div class="modal-header">
+                <h3>新增科目映射</h3>
+                <button class="close-btn" onclick="hideModal('mappingModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="mappingForm" class="form">
+                    <div class="form-group">
+                        <label>源科目</label>
+                        <select class="form-control" name="sourceSubject" required>
+                            <option value="">请选择源科目</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>目标科目</label>
+                        <select class="form-control" name="targetSubject" required>
+                            <option value="">请选择目标科目</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>映射类型</label>
+                        <select class="form-control" name="mappingType" required>
+                            <option value="direct">直接映射</option>
+                            <option value="split">拆分映射</option>
+                            <option value="merge">合并映射</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>映射规则</label>
+                        <textarea class="form-control" name="mappingRule" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="hideModal('mappingModal')">取消</button>
+                <button class="btn btn-primary" onclick="saveMapping()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/common.js"></script>
+    <script src="../../../js/menu.js"></script>
+    <script src="../../../js/modules/finance/subject-relation.js"></script>
+</body>
+</html> 

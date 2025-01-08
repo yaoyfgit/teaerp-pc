@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>目标完成情况 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../../../css/common.css">
+    <link rel="stylesheet" href="../../../../../css/layout.css">
+    <link rel="stylesheet" href="../../../../../css/modules/operation.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb">
+                <span>经营管理</span>
+                <span class="separator">/</span>
+                <span>计划管理</span>
+                <span class="separator">/</span>
+                <span>目标跟进</span>
+                <span class="separator">/</span>
+                <span>完成情况</span>
+            </div>
+
+            <!-- 目标完成情况 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>目标完成情况</h3>
+                </div>
+                <div class="card-body">
+                    <div class="search-bar">
+                        <div class="form-group">
+                            <label>目标类型</label>
+                            <select class="form-control" id="searchType">
+                                <option value="">全部</option>
+                                <option value="company">公司目标</option>
+                                <option value="department">部门目标</option>
+                                <option value="employee">员工目标</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>年度</label>
+                            <select class="form-control" id="searchYear">
+                                <option value="2024">2024年</option>
+                                <option value="2023">2023年</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>完成状态</label>
+                            <select class="form-control" id="searchStatus">
+                                <option value="">全部</option>
+                                <option value="ahead">提前完成</option>
+                                <option value="ontime">按时完成</option>
+                                <option value="delayed">延期完成</option>
+                                <option value="unfinished">未完成</option>
+                            </select>
+                        </div>
+                        <button class="button" onclick="searchProgress()">
+                            <i class="fas fa-search"></i> 搜索
+                        </button>
+                    </div>
+
+                    <!-- 统计概览 -->
+                    <div class="stats-overview">
+                        <div class="stats-item">
+                            <div class="stats-label">总目标数</div>
+                            <div class="stats-value" id="totalTargets">0</div>
+                        </div>
+                        <div class="stats-item">
+                            <div class="stats-label">已完成</div>
+                            <div class="stats-value" id="completedTargets">0</div>
+                        </div>
+                        <div class="stats-item">
+                            <div class="stats-label">进行中</div>
+                            <div class="stats-value" id="inProgressTargets">0</div>
+                        </div>
+                        <div class="stats-item">
+                            <div class="stats-label">未开始</div>
+                            <div class="stats-value" id="notStartedTargets">0</div>
+                        </div>
+                        <div class="stats-item">
+                            <div class="stats-label">平均完成率</div>
+                            <div class="stats-value" id="avgCompletion">0%</div>
+                        </div>
+                    </div>
+
+                    <!-- 图表展示 -->
+                    <div class="chart-container">
+                        <div class="chart-wrapper">
+                            <h4>完成率趋势</h4>
+                            <div id="trendChart"></div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <h4>目标分布</h4>
+                            <div id="distributionChart"></div>
+                        </div>
+                    </div>
+
+                    <!-- 目标列表 -->
+                    <div id="progressTable"></div>
+                    <div id="pagination"></div>
+                </div>
+            </div>
+
+            <!-- 进度更新弹窗 -->
+            <div class="modal" id="progressModal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>进度更新</h3>
+                        <button class="close" onclick="hideModal('progressModal')">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="progressForm">
+                            <div class="form-group">
+                                <label>当前进度</label>
+                                <div class="progress-input">
+                                    <input type="number" class="form-control" name="progress" min="0" max="100" required>
+                                    <span class="unit">%</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>更新说明</label>
+                                <textarea class="form-control" name="description" rows="3" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>相关文件</label>
+                                <input type="file" class="form-control" name="files" multiple>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="button secondary" onclick="hideModal('progressModal')">取消</button>
+                        <button class="button" onclick="saveProgress()">保存</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../../../../js/common.js"></script>
+    <script src="../../../../../js/modules/operation/plan/follow/progress/index.js"></script>
+</body>
+</html> 

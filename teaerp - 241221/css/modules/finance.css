@@ -1,0 +1,102 @@
+/* 标准制定表单样式 */
+.form-section {
+    margin-bottom: 24px;
+    padding: 16px;
+    background: #fafafa;
+    border-radius: 4px;
+}
+
+.form-section h4 {
+    margin: 0 0 16px 0;
+    color: #333;
+}
+
+.form-row {
+    display: flex;
+    gap: 16px;
+    align-items: flex-end;
+}
+
+.cost-item {
+    margin-bottom: 16px;
+    padding: 16px;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.cost-item:last-child {
+    margin-bottom: 0;
+}
+
+.form-actions {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid #eee;
+    text-align: right;
+}
+
+.form-actions .button {
+    margin-left: 8px;
+} 
+
+/* 计算结果样式 */
+.result-summary {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 24px;
+    padding: 16px;
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+
+.summary-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.summary-item label {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.summary-item span {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* 标签页样式 */
+.tabs {
+    margin-top: 24px;
+}
+
+.tab-header {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid #eee;
+}
+
+.tab-btn {
+    padding: 8px 16px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: #666;
+}
+
+.tab-btn.active {
+    color: #1890ff;
+    border-bottom: 2px solid #1890ff;
+}
+
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.active {
+    display: block;
+} 

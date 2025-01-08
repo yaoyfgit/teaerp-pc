@@ -1,0 +1,1858 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>库存盘点 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/menu.css">
+    <link rel="stylesheet" href="../../css/modules/stock.css">
+    <style>
+        .standard-modal .modal-content {
+            width: 600px;
+            max-height: 80vh;
+            overflow: auto;
+        }
+        .standard-modal .modal-header {
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e4e7ed;
+        }
+        .standard-modal .modal-body {
+            padding: 20px;
+        }
+        .standard-modal .modal-footer {
+            position: sticky;
+            bottom: 0;
+            background: white;
+            z-index: 10;
+            padding: 15px 20px;
+            border-top: 1px solid #e4e7ed;
+        }
+        .standard-form .form-group {
+            margin-bottom: 20px;
+        }
+        .standard-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #606266;
+        }
+        .standard-form .standard-select,
+        .standard-form .standard-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #dcdfe6;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        .standard-form .standard-select:hover,
+        .standard-form .standard-input:hover {
+            border-color: #c0c4cc;
+        }
+        .standard-form .standard-select:focus,
+        .standard-form .standard-input:focus {
+            border-color: #409eff;
+            outline: none;
+        }
+        .standard-table .operation-button {
+            padding: 4px 8px;
+            margin: 0 4px;
+            color: #409eff;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        .standard-table .operation-button:hover {
+            color: #66b1ff;
+        }
+        .standard-table .operation-button.danger {
+            color: #f56c6c;
+        }
+        .standard-table .operation-button.danger:hover {
+            color: #f78989;
+        }
+        .check-modal .modal-content {
+            width: 800px;
+        }
+        .check-modal .check-info {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f5f7fa;
+            border-radius: 4px;
+        }
+        .check-modal .check-info p {
+            margin: 8px 0;
+            color: #606266;
+        }
+        .check-modal .check-table {
+            margin-top: 20px;
+        }
+        .check-modal .check-table th,
+        .check-modal .check-table td {
+            padding: 12px 8px;
+        }
+        .check-modal .input-with-unit {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .check-modal .input-with-unit .unit {
+            color: #909399;
+            white-space: nowrap;
+        }
+        .status-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        .status-tag.draft {
+            background: #e6a23c;
+            color: #fff;
+        }
+        .status-tag.ongoing {
+            background: #409eff;
+            color: #fff;
+        }
+        .status-tag.pending {
+            background: #909399;
+            color: #fff;
+        }
+        .status-tag.completed {
+            background: #67c23a;
+            color: #fff;
+        }
+        .difference-count {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .difference-count.normal {
+            color: #67c23a;
+        }
+        .difference-count.warning {
+            color: #e6a23c;
+        }
+        .difference-count.danger {
+            color: #f56c6c;
+        }
+        .check-modal .check-table input {
+            width: 80px;
+            padding: 4px 8px;
+            border: 1px solid #dcdfe6;
+            border-radius: 4px;
+        }
+        .check-modal .check-table input:focus {
+            border-color: #409eff;
+            outline: none;
+        }
+        .check-modal .difference {
+            font-weight: bold;
+        }
+        .check-modal .difference.normal {
+            color: #67c23a;
+        }
+        .check-modal .difference.warning {
+            color: #e6a23c;
+        }
+        .check-modal .difference.danger {
+            color: #f56c6c;
+        }
+        .scan-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f5f7fa;
+            border-radius: 4px;
+        }
+        .scan-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .scan-input-group input {
+            flex: 1;
+        }
+        .scan-result {
+            background: #fff;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .scan-item-info {
+            margin-bottom: 15px;
+        }
+        .scan-item-info p {
+            margin: 5px 0;
+        }
+        .scan-item-input {
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+        }
+        .input-group {
+            flex: 1;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #606266;
+        }
+        .delete-btn {
+            color: #f56c6c;
+            cursor: pointer;
+        }
+        .delete-btn:hover {
+            color: #f78989;
+        }
+        .check-summary {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f5f7fa;
+            border-radius: 4px;
+        }
+        .summary-item {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            background: #fff;
+            border-radius: 4px;
+        }
+        .summary-item .label {
+            font-weight: bold;
+            color: #606266;
+        }
+        .summary-item .value {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .summary-item .value.profit {
+            color: #67c23a;
+        }
+        .summary-item .value.loss {
+            color: #f56c6c;
+        }
+        .check-table .profit {
+            color: #67c23a;
+        }
+        .check-table .loss {
+            color: #f56c6c;
+        }
+        .standard-button.warning {
+            background-color: #e6a23c;
+            border-color: #e6a23c;
+            color: #fff;
+        }
+        .standard-button.warning:hover {
+            background-color: #ebb563;
+            border-color: #ebb563;
+        }
+        .standard-button.danger {
+            background-color: #f56c6c;
+            border-color: #f56c6c;
+            color: #fff;
+        }
+        .standard-button.danger:hover {
+            background-color: #f78989;
+            border-color: #f78989;
+        }
+        .overview-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #409eff;
+        }
+        .overview-item i {
+            font-size: 24px;
+            color: #409eff;
+        }
+        .overview-item .number {
+            color: #409eff;
+            font-weight: bold;
+        }
+        .overview-item.warning {
+            border-left-color: #e6a23c;
+        }
+        .overview-item.warning i,
+        .overview-item.warning .number {
+            color: #e6a23c;
+        }
+        .overview-item.danger {
+            border-left-color: #f56c6c;
+        }
+        .overview-item.danger i,
+        .overview-item.danger .number {
+            color: #f56c6c;
+        }
+        .overview-item.success {
+            border-left-color: #67c23a;
+            background-color: #f0f9eb;
+        }
+        .overview-item.success i,
+        .overview-item.success .number {
+            color: #67c23a;
+        }
+        #createModal .modal-content {
+            width: 800px;
+        }
+        #createModal .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        #createModal .form-col {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-warehouse"></i>
+                    <span>库存管理</span>
+                    <i class="fas fa-angle-right separator"></i>
+                    <i class="fas fa-clipboard-check"></i>
+                    <span>库存盘点</span>
+                </div>
+
+                <!-- 盘点统计 -->
+                <div class="standard-card">
+                    <div class="overview-grid">
+                        <div class="overview-item">
+                            <i class="fas fa-clipboard-list"></i>
+                            <div class="info">
+                                <h4>待盘点</h4>
+                                <div class="number">15<span class="unit">单</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item warning">
+                            <i class="fas fa-sync"></i>
+                            <div class="info">
+                                <h4>盘点中</h4>
+                                <div class="number">8<span class="unit">单</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item danger">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <div class="info">
+                                <h4>待处理差异</h4>
+                                <div class="number">5<span class="unit">单</span></div>
+                            </div>
+                        </div>
+                        <div class="overview-item success">
+                            <i class="fas fa-check-circle"></i>
+                            <div class="info">
+                                <h4>已完成</h4>
+                                <div class="number">45<span class="unit">单</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 盘点列表 -->
+                <div class="standard-card">
+                    <div class="standard-card-header">
+                        <h3><i class="fas fa-list"></i> 盘点单据</h3>
+                        <div class="action-bar">
+                            <div class="search-group">
+                                <input type="text" class="standard-input" placeholder="单据编号/商品">
+                                <select class="standard-select">
+                                    <option value="">所有仓库</option>
+                                    <option value="1">主仓库</option>
+                                    <option value="2">次仓库</option>
+                                </select>
+                                <select class="standard-select">
+                                    <option value="">盘点状态</option>
+                                    <option value="draft">待盘点</option>
+                                    <option value="ongoing">盘点中</option>
+                                    <option value="completed">已完成</option>
+                                </select>
+                                <div class="date-range-group">
+                                    <input type="date" class="standard-input" placeholder="开始日期">
+                                    <span class="separator">至</span>
+                                    <input type="date" class="standard-input" placeholder="结束日期">
+                                </div>
+                            </div>
+                            <div class="button-group">
+                                <button class="standard-button" onclick="searchCheck()">
+                                    <i class="fas fa-search"></i> 查询
+                                </button>
+                                <button class="standard-button primary" onclick="createCheck()">
+                                    <i class="fas fa-plus"></i> 新建盘点
+                                </button>
+                                <button class="standard-button" onclick="exportCheck()">
+                                    <i class="fas fa-file-export"></i> 导出
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="standard-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>单据编号</th>
+                                    <th>盘点仓库</th>
+                                    <th>盘点范围</th>
+                                    <th>商品数</th>
+                                    <th>差异数</th>
+                                    <th>盘点状态</th>
+                                    <th>创建人</th>
+                                    <th>创建时间</th>
+                                    <th>完成时间</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="checkTable">
+                                <tr>
+                                    <td>PD202401001</td>
+                                    <td>主仓库</td>
+                                    <td>全部商品</td>
+                                    <td>100</td>
+                                    <td><span class="difference-count warning">5</span></td>
+                                    <td><span class="status-tag draft">待盘点</span></td>
+                                    <td>管理员</td>
+                                    <td>2024-01-10 10:00</td>
+                                    <td>-</td>
+                                    <td>
+                                        <button class="operation-button" onclick="startCheck('PD202401001')">
+                                            <i class="fas fa-play"></i> 开始盘点
+                                        </button>
+                                        <button class="operation-button" onclick="viewCheck('PD202401001')">
+                                            <i class="fas fa-eye"></i> 查看
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>PD202401002</td>
+                                    <td>次仓库</td>
+                                    <td>A区</td>
+                                    <td>50</td>
+                                    <td><span class="difference-count danger">8</span></td>
+                                    <td><span class="status-tag ongoing">盘点中</span></td>
+                                    <td>管理员</td>
+                                    <td>2024-01-11 14:30</td>
+                                    <td>-</td>
+                                    <td>
+                                        <button class="operation-button" onclick="continueCheck('PD202401002')">
+                                            <i class="fas fa-redo"></i> 继续盘点
+                                        </button>
+                                        <button class="operation-button" onclick="viewCheck('PD202401002')">
+                                            <i class="fas fa-eye"></i> 查看
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>PD202401004</td>
+                                    <td>次仓库</td>
+                                    <td>B区</td>
+                                    <td>120</td>
+                                    <td><span class="difference-count warning">3</span></td>
+                                    <td><span class="status-tag completed">已完成</span></td>
+                                    <td>管理员</td>
+                                    <td>2024-01-13 16:45</td>
+                                    <td>2024-01-13 17:30</td>
+                                    <td>
+                                        <button class="operation-button" onclick="viewCheck('PD202401004')">
+                                            <i class="fas fa-eye"></i> 查看
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="standard-pagination" id="pagination"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新建盘点弹窗 -->
+    <div class="standard-modal" id="createModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-plus-circle"></i> 新建盘点</h3>
+                <button class="standard-close-btn" onclick="hideModal('createModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="createForm" class="standard-form">
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label>盘点仓库 <span class="required">*</span></label>
+                                <select class="standard-select" name="warehouse" required onchange="handleWarehouseChange(this)">
+                                    <option value="">请选择仓库</option>
+                                    <option value="1">主仓库</option>
+                                    <option value="2">次仓库</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label>盘点范围 <span class="required">*</span></label>
+                                <select class="standard-select" name="scope" required onchange="handleScopeChange(this)">
+                                    <option value="">请选择范围</option>
+                                    <option value="all">全部商品</option>
+                                    <option value="category">按分类</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group" id="categoryGroup" style="display: none;">
+                                <label>商品分类 <span class="required">*</span></label>
+                                <select class="standard-select" name="category">
+                                    <option value="">请选择分类</option>
+                                    <option value="raw">原材料</option>
+                                    <option value="semi">半成品</option>
+                                    <option value="tea">茶叶成品</option>
+                                    <option value="finished">产成品</option>
+                                    <option value="package">包材</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label>备注说明</label>
+                                <textarea class="standard-input" name="remark" rows="3" placeholder="请输入备注说明"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="button-group">
+                    <button class="standard-button" onclick="hideModal('createModal')">
+                        <i class="fas fa-times"></i> 取消
+                    </button>
+                    <button class="standard-button primary" onclick="submitCreate()">
+                        <i class="fas fa-check"></i> 确认
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 开始盘点弹窗 -->
+    <div class="standard-modal check-modal" id="startCheckModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-play-circle"></i> 开始盘点</h3>
+                <button class="standard-close-btn" onclick="hideModal('startCheckModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="check-info">
+                    <p><strong>单据编号：</strong><span id="startCheckId"></span></p>
+                    <p><strong>盘点仓库：</strong><span id="startCheckWarehouse"></span></p>
+                    <p><strong>盘点范围：</strong><span id="startCheckScope"></span></p>
+                </div>
+                <div class="scan-section">
+                    <div class="scan-input-group">
+                        <input type="text" class="standard-input" id="scanInput" placeholder="扫描商品条码或输入商品编码" onkeypress="handleScanKeyPress(event)">
+                        <button class="standard-button primary" onclick="handleScan()">
+                            <i class="fas fa-barcode"></i> 扫码
+                        </button>
+                    </div>
+                    <div class="scan-result" id="scanResult" style="display: none;">
+                        <div class="scan-item-info">
+                            <p><strong>商品编码：</strong><span id="scannedCode"></span></p>
+                            <p><strong>商品名称：</strong><span id="scannedName"></span></p>
+                            <p><strong>规格型号：</strong><span id="scannedSpec"></span></p>
+                            <p><strong>系统库存：</strong><span id="scannedStock"></span></p>
+                        </div>
+                        <div class="scan-item-input">
+                            <div class="input-group">
+                                <label>实际数量：</label>
+                                <input type="number" id="actualQuantity" class="standard-input" min="0">
+                            </div>
+                            <div class="input-group">
+                                <label>单位：</label>
+                                <select id="unit" class="standard-select">
+                                    <option value="盒">盒</option>
+                                    <option value="罐">罐</option>
+                                    <option value="饼">饼</option>
+                                    <option value="包">包</option>
+                                </select>
+                            </div>
+                            <button class="standard-button primary" onclick="addScannedItem()">
+                                <i class="fas fa-plus"></i> 添加
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="check-table">
+                    <table class="standard-table">
+                        <thead>
+                            <tr>
+                                <th>商品编码</th>
+                                <th>商品名称</th>
+                                <th>规格型号</th>
+                                <th>系统库存</th>
+                                <th>实际库存</th>
+                                <th>单位</th>
+                                <th>差异</th>
+                                <th>备注</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="startCheckItems">
+                            <!-- 商品列表将通过JavaScript动态添加 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="button-group">
+                    <button class="standard-button" onclick="hideModal('startCheckModal')">
+                        <i class="fas fa-times"></i> 取消
+                    </button>
+                    <button class="standard-button warning" onclick="handleDifference()">
+                        <i class="fas fa-exclamation-triangle"></i> 处理差异
+                    </button>
+                    <button class="standard-button danger" onclick="finishCheck()">
+                        <i class="fas fa-check-circle"></i> 结束盘点
+                    </button>
+                    <button class="standard-button primary" onclick="submitStartCheck()">
+                        <i class="fas fa-save"></i> 保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 继续盘点弹窗 -->
+    <div class="standard-modal check-modal" id="continueCheckModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-redo-alt"></i> 继续盘点</h3>
+                <button class="standard-close-btn" onclick="hideModal('continueCheckModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="check-info">
+                    <p><strong>单据编号：</strong><span id="continueCheckId"></span></p>
+                    <p><strong>盘点仓库：</strong><span id="continueCheckWarehouse"></span></p>
+                    <p><strong>盘点范围：</strong><span id="continueCheckScope"></span></p>
+                    <p><strong>已盘点：</strong><span id="continueCheckProgress"></span></p>
+                </div>
+                <div class="scan-section">
+                    <div class="scan-input-group">
+                        <input type="text" class="standard-input" id="continueScanInput" placeholder="扫描商品条码或输入商品编码" onkeypress="handleContinueScanKeyPress(event)">
+                        <button class="standard-button primary" onclick="handleContinueScan()">
+                            <i class="fas fa-barcode"></i> 扫码
+                        </button>
+                    </div>
+                    <div class="scan-result" id="continueScanResult" style="display: none;">
+                        <div class="scan-item-info">
+                            <p><strong>商品编码：</strong><span id="continuedScannedCode"></span></p>
+                            <p><strong>商品名称：</strong><span id="continuedScannedName"></span></p>
+                            <p><strong>规格型号：</strong><span id="continuedScannedSpec"></span></p>
+                            <p><strong>系统库存：</strong><span id="continuedScannedStock"></span></p>
+                        </div>
+                        <div class="scan-item-input">
+                            <div class="input-group">
+                                <label>实际数量：</label>
+                                <input type="number" id="continueActualQuantity" class="standard-input" min="0">
+                            </div>
+                            <div class="input-group">
+                                <label>单位：</label>
+                                <select id="continueUnit" class="standard-select">
+                                    <option value="盒">盒</option>
+                                    <option value="罐">罐</option>
+                                    <option value="饼">饼</option>
+                                    <option value="包">包</option>
+                                </select>
+                            </div>
+                            <button class="standard-button primary" onclick="addContinueScannedItem()">
+                                <i class="fas fa-plus"></i> 添加
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="check-table">
+                    <table class="standard-table">
+                        <thead>
+                            <tr>
+                                <th>商品编码</th>
+                                <th>商品名称</th>
+                                <th>规格型号</th>
+                                <th>系统库存</th>
+                                <th>实际库存</th>
+                                <th>单位</th>
+                                <th>差异</th>
+                                <th>备注</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="continueCheckItems">
+                            <!-- 商品列表将通过JavaScript动态添加 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="button-group">
+                    <button class="standard-button" onclick="hideModal('continueCheckModal')">
+                        <i class="fas fa-times"></i> 取消
+                    </button>
+                    <button class="standard-button warning" onclick="handleDifference()">
+                        <i class="fas fa-exclamation-triangle"></i> 处理差异
+                    </button>
+                    <button class="standard-button danger" onclick="finishCheck()">
+                        <i class="fas fa-check-circle"></i> 结束盘点
+                    </button>
+                    <button class="standard-button primary" onclick="submitContinueCheck()">
+                        <i class="fas fa-save"></i> 保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 查看盘点弹窗 -->
+    <div class="standard-modal check-modal" id="viewCheckModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-eye"></i> 查看盘点单</h3>
+                <button class="standard-close-btn" onclick="hideModal('viewCheckModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="check-info">
+                    <p><strong>单据编号：</strong><span id="viewCheckId"></span></p>
+                    <p><strong>盘点仓库：</strong><span id="viewCheckWarehouse"></span></p>
+                    <p><strong>盘点范围：</strong><span id="viewCheckScope"></span></p>
+                    <p><strong>盘点状态：</strong><span id="viewCheckStatus"></span></p>
+                    <p><strong>创建时间：</strong><span id="viewCheckCreateTime"></span></p>
+                    <p><strong>完成时间：</strong><span id="viewCheckFinishTime"></span></p>
+                </div>
+                <div class="check-summary">
+                    <div class="summary-item">
+                        <span class="label">盘盈数量：</span>
+                        <span class="value profit" id="viewCheckProfit">0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="label">盘亏数量：</span>
+                        <span class="value loss" id="viewCheckLoss">0</span>
+                    </div>
+                </div>
+                <div class="check-table">
+                    <table class="standard-table">
+                        <thead>
+                            <tr>
+                                <th>商品编码</th>
+                                <th>商品名称</th>
+                                <th>规格型号</th>
+                                <th>系统库存</th>
+                                <th>实际库存</th>
+                                <th>单位</th>
+                                <th>差异</th>
+                                <th>盘盈/盘亏</th>
+                                <th>备注</th>
+                            </tr>
+                        </thead>
+                        <tbody id="viewCheckItems"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="button-group">
+                    <button class="standard-button" onclick="hideModal('viewCheckModal')">
+                        <i class="fas fa-times"></i> 关闭
+                    </button>
+                    <button class="standard-button warning" onclick="handleDifference()">
+                        <i class="fas fa-exclamation-triangle"></i> 处理差异
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 盘亏处理选择弹窗 -->
+    <div class="standard-modal" id="lossHandleModal">
+        <div class="modal-content" style="width: 800px;">
+            <div class="modal-header">
+                <h3><i class="fas fa-exclamation-triangle"></i> 盘亏商品处理</h3>
+                <button class="standard-close-btn" onclick="hideModal('lossHandleModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="check-table">
+                    <table class="standard-table">
+                        <thead>
+                            <tr>
+                                <th>商品编码</th>
+                                <th>商品名称</th>
+                                <th>规格型号</th>
+                                <th>差异数量</th>
+                                <th>单位</th>
+                                <th>处理方式</th>
+                                <th>备注</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 盘亏商品处理选项将通过JavaScript动态添加 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="button-group">
+                    <button class="standard-button" onclick="hideModal('lossHandleModal')">
+                        <i class="fas fa-times"></i> 取消
+                    </button>
+                    <button class="standard-button primary" onclick="handleLossItems()">
+                        <i class="fas fa-check"></i> 确认处理
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 盘盈处理选择弹窗 -->
+    <div class="standard-modal" id="profitHandleModal">
+        <div class="modal-content" style="width: 800px;">
+            <div class="modal-header">
+                <h3><i class="fas fa-plus-circle"></i> 盘盈商品处理</h3>
+                <button class="standard-close-btn" onclick="hideModal('profitHandleModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="check-table">
+                    <table class="standard-table">
+                        <thead>
+                            <tr>
+                                <th>商品编码</th>
+                                <th>商品名称</th>
+                                <th>规格型号</th>
+                                <th>差异数量</th>
+                                <th>单位</th>
+                                <th>处理方式</th>
+                                <th>备注</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 盘盈商品处理选项将通过JavaScript动态添加 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="button-group">
+                    <button class="standard-button" onclick="hideModal('profitHandleModal')">
+                        <i class="fas fa-times"></i> 取消
+                    </button>
+                    <button class="standard-button primary" onclick="handleProfitItems()">
+                        <i class="fas fa-check"></i> 确认处理
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/app.js"></script>
+    <script>
+        // 显示弹窗
+        function showModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        // 隐藏弹窗
+        function hideModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // 处理仓库选择变化
+        function handleWarehouseChange(select) {
+            // 可以添加仓库选择后的逻辑
+        }
+
+        // 处理盘点范围变化
+        function handleScopeChange(select) {
+            const categoryGroup = document.getElementById('categoryGroup');
+            
+            categoryGroup.style.display = 'none';
+            
+            if (select.value === 'category') {
+                categoryGroup.style.display = 'block';
+            }
+        }
+
+        // 创建盘点
+        function createCheck() {
+            showModal('createModal');
+        }
+
+        // 提交创建
+        function submitCreate() {
+            const form = document.getElementById('createForm');
+            // 表单验证
+            if (!form.warehouse.value) {
+                alert('请选择盘点仓库');
+                return;
+            }
+            if (!form.scope.value) {
+                alert('请选择盘点范围');
+                return;
+            }
+            if (form.scope.value === 'category' && !form.category.value) {
+                alert('请选择商品分类');
+                return;
+            }
+
+            // TODO: 发送创建请求
+            alert('创建成功');
+            hideModal('createModal');
+        }
+
+        // 开始盘点
+        function startCheck(checkId) {
+            // 显示开始盘点弹窗
+            document.getElementById('startCheckId').textContent = checkId;
+            document.getElementById('startCheckWarehouse').textContent = '主仓库';
+            document.getElementById('startCheckScope').textContent = '全部商品';
+            
+            // 添加示例数据
+            const items = [
+                { code: 'P001', name: '特级铁观音', spec: '250g/盒', systemStock: 100, actualStock: '105', unit: '盒', remark: '' },
+                { code: 'P002', name: '明前龙井', spec: '200g/罐', systemStock: 80, actualStock: '78', unit: '罐', remark: '' },
+                { code: 'P003', name: '大红袍', spec: '100g/盒', systemStock: 50, actualStock: '52', unit: '盒', remark: '' }
+            ];
+            
+            const tbody = document.getElementById('startCheckItems');
+            tbody.innerHTML = items.map(item => {
+                const actualStock = parseInt(item.actualStock);
+                const difference = actualStock - item.systemStock;
+                return `
+                    <tr>
+                        <td>${item.code}</td>
+                        <td>${item.name}</td>
+                        <td>${item.spec}</td>
+                        <td>${item.systemStock}</td>
+                        <td>
+                            <input type="number" class="actual-stock" value="${item.actualStock}" 
+                                   onchange="calculateDifference(this)" min="0">
+                        </td>
+                        <td>${item.unit}</td>
+                        <td class="difference ${getDifferenceClass(difference)}">${difference}</td>
+                        <td><input type="text" class="remark" value="${item.remark}"></td>
+                        <td>
+                            <i class="fas fa-trash delete-btn" onclick="deleteCheckItem(this)"></i>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            
+            showModal('startCheckModal');
+        }
+
+        // 继续盘点
+        function continueCheck(checkId) {
+            // 显示继续盘点弹窗
+            document.getElementById('continueCheckId').textContent = checkId;
+            document.getElementById('continueCheckWarehouse').textContent = '次仓库';
+            document.getElementById('continueCheckScope').textContent = 'A区';
+            document.getElementById('continueCheckProgress').textContent = '20/50 (40%)';
+            
+            // 添加示例数据
+            const items = [
+                { code: 'P004', name: '正山小种', spec: '150g/盒', systemStock: 60, actualStock: '65', unit: '盒', remark: '' },
+                { code: 'P005', name: '碧螺春', spec: '100g/罐', systemStock: 40, actualStock: '37', unit: '罐', remark: '' },
+                { code: 'P006', name: '普洱茶', spec: '357g/饼', systemStock: 30, actualStock: '33', unit: '饼', remark: '' }
+            ];
+            
+            const tbody = document.getElementById('continueCheckItems');
+            tbody.innerHTML = items.map(item => `
+                <tr>
+                    <td>${item.code}</td>
+                    <td>${item.name}</td>
+                    <td>${item.spec}</td>
+                    <td>${item.systemStock}</td>
+                    <td>
+                        <input type="number" class="actual-stock" value="${item.actualStock}" 
+                               onchange="calculateDifference(this)" min="0">
+                    </td>
+                    <td>${item.unit}</td>
+                    <td class="difference ${item.actualStock ? getDifferenceClass(parseInt(item.actualStock) - item.systemStock) : ''}">${item.actualStock ? (parseInt(item.actualStock) - item.systemStock) : '-'}</td>
+                    <td><input type="text" class="remark" value="${item.remark}"></td>
+                    <td>
+                        <i class="fas fa-trash delete-btn" onclick="deleteCheckItem(this)"></i>
+                    </td>
+                </tr>
+            `).join('');
+            
+            showModal('continueCheckModal');
+        }
+
+        // 计算差异
+        function calculateDifference(input) {
+            const row = input.closest('tr');
+            const systemStock = parseInt(row.cells[3].textContent);
+            const actualStock = parseInt(input.value) || 0;
+            const difference = actualStock - systemStock;
+            const differenceCell = row.cells[6];
+            
+            differenceCell.textContent = actualStock ? difference : '-';
+            differenceCell.className = `difference ${actualStock ? getDifferenceClass(difference) : ''}`;
+        }
+
+        // 获取差异样式类
+        function getDifferenceClass(difference) {
+            if (difference === 0) return 'normal';
+            if (Math.abs(difference) <= 5) return 'warning';
+            return 'danger';
+        }
+
+        // 提交开始盘点
+        function submitStartCheck() {
+            const items = [];
+            const rows = document.getElementById('startCheckItems').getElementsByTagName('tr');
+            
+            for (let row of rows) {
+                const systemStock = parseInt(row.cells[3].textContent);
+                const actualStock = parseInt(row.cells[4].querySelector('input').value) || 0;
+                const difference = actualStock - systemStock;
+                
+                items.push({
+                    code: row.cells[0].textContent,
+                    name: row.cells[1].textContent,
+                    spec: row.cells[2].textContent,
+                    systemStock: systemStock,
+                    actualStock: actualStock,
+                    unit: row.cells[5].textContent,
+                    difference: difference,
+                    remark: row.cells[7].querySelector('input').value
+                });
+            }
+            
+            // 处理盘盈盘亏
+            handleStockDifference(items);
+            
+            hideModal('startCheckModal');
+        }
+
+        // 提交继续盘点
+        function submitContinueCheck() {
+            const items = [];
+            const rows = document.getElementById('continueCheckItems').getElementsByTagName('tr');
+            
+            for (let row of rows) {
+                const systemStock = parseInt(row.cells[3].textContent);
+                const actualStock = parseInt(row.cells[4].querySelector('input').value) || 0;
+                const difference = actualStock - systemStock;
+                
+                items.push({
+                    code: row.cells[0].textContent,
+                    name: row.cells[1].textContent,
+                    spec: row.cells[2].textContent,
+                    systemStock: systemStock,
+                    actualStock: actualStock,
+                    unit: row.cells[5].textContent,
+                    difference: difference,
+                    remark: row.cells[7].querySelector('input').value
+                });
+            }
+            
+            // 处理盘盈盘亏
+            handleStockDifference(items);
+            
+            hideModal('continueCheckModal');
+        }
+
+        // 处理盘盈盘亏
+        function handleStockDifference(items) {
+            const profitItems = items.filter(item => item.difference > 0);
+            const lossItems = items.filter(item => item.difference < 0);
+            
+            if (profitItems.length > 0) {
+                showProfitHandleModal(profitItems);
+            }
+            
+            if (lossItems.length > 0) {
+                showLossHandleModal(lossItems);
+            }
+        }
+
+        // 显示盘盈处理选择弹窗
+        function showProfitHandleModal(profitItems) {
+            const modal = document.getElementById('profitHandleModal');
+            const tbody = modal.querySelector('tbody');
+            tbody.innerHTML = profitItems.map(item => `
+                <tr>
+                    <td>${item.code}</td>
+                    <td>${item.name}</td>
+                    <td>${item.spec}</td>
+                    <td class="profit">+${item.difference}</td>
+                    <td>${item.unit}</td>
+                    <td>
+                        <select class="standard-select handle-type" onchange="updateProfitRemark(this)">
+                            <option value="normal">正常入库</option>
+                            <option value="gift">赠品入库</option>
+                            <option value="purchase">采购入库</option>
+                            <option value="return">退货入库</option>
+                            <option value="other">其他入库</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text" class="standard-input remark" value="${item.remark || ''}" 
+                               placeholder="请输入处理说明">
+                    </td>
+                </tr>
+            `).join('');
+            showModal('profitHandleModal');
+        }
+
+        // 更新盘盈备注提示
+        function updateProfitRemark(select) {
+            const row = select.closest('tr');
+            const remarkInput = row.querySelector('.remark');
+            const type = select.value;
+            
+            switch(type) {
+                case 'normal':
+                    remarkInput.placeholder = '请输入入库说明';
+                    break;
+                case 'gift':
+                    remarkInput.placeholder = '请输入赠品来源及说明';
+                    break;
+                case 'purchase':
+                    remarkInput.placeholder = '请输入采购单号及说明';
+                    break;
+                case 'return':
+                    remarkInput.placeholder = '请输入退货单号及说明';
+                    break;
+                case 'other':
+                    remarkInput.placeholder = '请输入具体入库原因';
+                    break;
+            }
+        }
+
+        // 处理盘盈商品
+        function handleProfitItems() {
+            const modal = document.getElementById('profitHandleModal');
+            const rows = modal.getElementsByTagName('tr');
+            const normalItems = [];
+            const giftItems = [];
+            const purchaseItems = [];
+            const returnItems = [];
+            const otherItems = [];
+            
+            // 收集处理方式
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i];
+                const item = {
+                    code: row.cells[0].textContent,
+                    name: row.cells[1].textContent,
+                    spec: row.cells[2].textContent,
+                    quantity: Math.abs(parseInt(row.cells[3].textContent.replace('+', ''))),
+                    unit: row.cells[4].textContent,
+                    handleType: row.querySelector('.handle-type').value,
+                    remark: row.querySelector('.remark').value
+                };
+                
+                switch(item.handleType) {
+                    case 'normal':
+                        normalItems.push(item);
+                        break;
+                    case 'gift':
+                        giftItems.push(item);
+                        break;
+                    case 'purchase':
+                        purchaseItems.push(item);
+                        break;
+                    case 'return':
+                        returnItems.push(item);
+                        break;
+                    case 'other':
+                        otherItems.push(item);
+                        break;
+                }
+            }
+            
+            // 生成相应单据
+            if (normalItems.length > 0) {
+                createStockInOrder({
+                    type: '正常入库',
+                    items: normalItems
+                });
+            }
+            
+            if (giftItems.length > 0) {
+                createGiftInOrder({
+                    type: '赠品入库',
+                    items: giftItems
+                });
+            }
+            
+            if (purchaseItems.length > 0) {
+                createPurchaseInOrder({
+                    type: '采购入库',
+                    items: purchaseItems
+                });
+            }
+            
+            if (returnItems.length > 0) {
+                createReturnInOrder({
+                    type: '退货入库',
+                    items: returnItems
+                });
+            }
+            
+            if (otherItems.length > 0) {
+                createOtherInOrder({
+                    type: '其他入库',
+                    items: otherItems
+                });
+            }
+            
+            // 显示处理结果
+            let message = '盘盈商品处理完成！\n';
+            if (normalItems.length > 0) message += `正常入库：${normalItems.length} 个商品\n`;
+            if (giftItems.length > 0) message += `赠品入库：${giftItems.length} 个商品\n`;
+            if (purchaseItems.length > 0) message += `采购入库：${purchaseItems.length} 个商品\n`;
+            if (returnItems.length > 0) message += `退货入库：${returnItems.length} 个商品\n`;
+            if (otherItems.length > 0) message += `其他入库：${otherItems.length} 个商品\n`;
+            
+            alert(message);
+            hideModal('profitHandleModal');
+        }
+
+        // 生成赠品入库单
+        function createGiftInOrder(data) {
+            console.log('生成赠品入库单：', data);
+            // TODO: 调用后端API创建赠品入库单
+        }
+
+        // 生成采购入库单
+        function createPurchaseInOrder(data) {
+            console.log('生成采购入库单：', data);
+            // TODO: 调用后端API创建采购入库单
+        }
+
+        // 生成退货入库单
+        function createReturnInOrder(data) {
+            console.log('生成退货入库单：', data);
+            // TODO: 调用后端API创建退货入库单
+        }
+
+        // 生成其他入库单
+        function createOtherInOrder(data) {
+            console.log('生成其他入库单：', data);
+            // TODO: 调用后端API创建其他入库单
+        }
+
+        // 生成入库单
+        function createStockInOrder(data) {
+            console.log('生成入库单：', data);
+            // TODO: 调用后端API创建入库单
+        }
+
+        // 查看盘点
+        function viewCheck(checkId) {
+            showModal('viewCheckModal');  // 先显示弹窗，再填充数据
+            
+            // 模拟获取盘点单数据
+            const checkData = getMockCheckData(checkId);
+            
+            // 填充基本信息
+            document.getElementById('viewCheckId').textContent = checkData.id;
+            document.getElementById('viewCheckWarehouse').textContent = checkData.warehouse;
+            document.getElementById('viewCheckScope').textContent = checkData.scope;
+            document.getElementById('viewCheckStatus').textContent = checkData.status;
+            document.getElementById('viewCheckCreateTime').textContent = checkData.createTime;
+            document.getElementById('viewCheckFinishTime').textContent = checkData.finishTime || '-';
+            
+            // 计算并显示盘盈盘亏汇总
+            let profitCount = 0;
+            let lossCount = 0;
+            checkData.items.forEach(item => {
+                const difference = item.actualStock - item.systemStock;
+                if (difference > 0) profitCount++;
+                if (difference < 0) lossCount++;
+            });
+            document.getElementById('viewCheckProfit').textContent = profitCount;
+            document.getElementById('viewCheckLoss').textContent = lossCount;
+            
+            // 填充商品列表
+            const tbody = document.getElementById('viewCheckItems');
+            tbody.innerHTML = checkData.items.map(item => {
+                const difference = item.actualStock - item.systemStock;
+                const status = difference > 0 ? '盘盈' : difference < 0 ? '盘亏' : '正常';
+                const statusClass = difference > 0 ? 'profit' : difference < 0 ? 'loss' : '';
+                const differenceText = difference > 0 ? `+${difference}` : difference;
+                
+                return `
+                    <tr>
+                        <td>${item.code}</td>
+                        <td>${item.name}</td>
+                        <td>${item.spec}</td>
+                        <td>${item.systemStock}</td>
+                        <td>${item.actualStock}</td>
+                        <td>${item.unit}</td>
+                        <td class="${statusClass}">${differenceText}</td>
+                        <td class="${statusClass}">${status}</td>
+                        <td>${item.remark || '-'}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // 模拟获取盘点单数据
+        function getMockCheckData(checkId) {
+            const mockData = {
+                'PD202401001': {
+                    id: 'PD202401001',
+                    warehouse: '主仓库',
+                    scope: '全部商品',
+                    status: '待盘点',
+                    createTime: '2024-01-10 10:00',
+                    finishTime: null,
+                    items: [
+                        { code: 'P001', name: '特级铁观音', spec: '250g/盒', systemStock: 100, actualStock: 98, unit: '盒', remark: '' },
+                        { code: 'P002', name: '明前龙井', spec: '200g/罐', systemStock: 80, actualStock: 82, unit: '罐', remark: '库位A1' },
+                        { code: 'P003', name: '大红袍', spec: '100g/盒', systemStock: 50, actualStock: 48, unit: '盒', remark: '' }
+                    ]
+                },
+                'PD202401002': {
+                    id: 'PD202401002',
+                    warehouse: '次仓库',
+                    scope: 'A区',
+                    status: '盘点中',
+                    createTime: '2024-01-11 14:30',
+                    finishTime: null,
+                    items: [
+                        { code: 'P004', name: '正山小种', spec: '150g/盒', systemStock: 60, actualStock: 55, unit: '盒', remark: '' },
+                        { code: 'P005', name: '碧螺春', spec: '100g/罐', systemStock: 40, actualStock: 42, unit: '罐', remark: '新到货' },
+                        { code: 'P006', name: '普洱茶', spec: '357g/饼', systemStock: 30, actualStock: 30, unit: '饼', remark: '' }
+                    ]
+                },
+                'PD202401003': {
+                    id: 'PD202401003',
+                    warehouse: '主仓库',
+                    scope: '绿茶',
+                    status: '待审核',
+                    createTime: '2024-01-12 09:15',
+                    finishTime: '2024-01-12 11:30',
+                    items: [
+                        { code: 'P007', name: '西湖龙井', spec: '250g/罐', systemStock: 70, actualStock: 73, unit: '罐', remark: '' },
+                        { code: 'P008', name: '黄山毛峰', spec: '100g/盒', systemStock: 45, actualStock: 42, unit: '盒', remark: '包装破损' },
+                        { code: 'P009', name: '安吉白茶', spec: '200g/罐', systemStock: 35, actualStock: 35, unit: '罐', remark: '' }
+                    ]
+                },
+                'PD202401004': {
+                    id: 'PD202401004',
+                    warehouse: '次仓库',
+                    scope: 'B区',
+                    status: '已完成',
+                    createTime: '2024-01-13 16:45',
+                    finishTime: '2024-01-13 17:30',
+                    items: [
+                        { code: 'P010', name: '武夷岩茶', spec: '150g/盒', systemStock: 55, actualStock: 52, unit: '盒', remark: '' },
+                        { code: 'P011', name: '祁门红茶', spec: '100g/盒', systemStock: 40, actualStock: 43, unit: '盒', remark: '新增库存' },
+                        { code: 'P012', name: '普洱生茶', spec: '357g/饼', systemStock: 25, actualStock: 25, unit: '饼', remark: '' }
+                    ]
+                }
+            };
+            
+            return mockData[checkId];
+        }
+
+        // 审核通过
+        function approveCheck() {
+            const checkId = document.getElementById('viewCheckId').textContent;
+            // TODO: 实现审核逻辑
+            alert('审核通过：' + checkId);
+            hideModal('viewCheckModal');
+        }
+
+        // 处理扫码输入框按键事件
+        function handleScanKeyPress(event) {
+            if (event.key === 'Enter') {
+                handleScan();
+            }
+        }
+
+        // 处理扫码
+        function handleScan() {
+            const scanInput = document.getElementById('scanInput');
+            const code = scanInput.value.trim();
+            
+            if (!code) {
+                alert('请输入商品条码或编码');
+                return;
+            }
+            
+            // 模拟获取商品信息
+            const mockProduct = getMockProduct(code);
+            if (mockProduct) {
+                displayScanResult(mockProduct);
+            } else {
+                alert('未找到商品信息');
+            }
+            
+            scanInput.value = '';
+        }
+
+        // 模拟获取商品信息
+        function getMockProduct(code) {
+            const products = {
+                'P001': { code: 'P001', name: '特级铁观音', spec: '250g/盒', stock: 100 },
+                'P002': { code: 'P002', name: '明前龙井', spec: '200g/罐', stock: 80 },
+                'P003': { code: 'P003', name: '大红袍', spec: '100g/盒', stock: 50 },
+                'P004': { code: 'P004', name: '正山小种', spec: '150g/盒', stock: 60 },
+                'P005': { code: 'P005', name: '碧螺春', spec: '100g/罐', stock: 40 },
+                'P006': { code: 'P006', name: '普洱茶', spec: '357g/饼', stock: 30 }
+            };
+            return products[code];
+        }
+
+        // 显示扫码结果
+        function displayScanResult(product) {
+            const scanResult = document.getElementById('scanResult');
+            document.getElementById('scannedCode').textContent = product.code;
+            document.getElementById('scannedName').textContent = product.name;
+            document.getElementById('scannedSpec').textContent = product.spec;
+            document.getElementById('scannedStock').textContent = product.stock;
+            scanResult.style.display = 'block';
+        }
+
+        // 添加扫码商品到列表
+        function addScannedItem() {
+            const code = document.getElementById('scannedCode').textContent;
+            const name = document.getElementById('scannedName').textContent;
+            const spec = document.getElementById('scannedSpec').textContent;
+            const systemStock = parseInt(document.getElementById('scannedStock').textContent);
+            const actualStock = parseInt(document.getElementById('actualQuantity').value);
+            const unit = document.getElementById('unit').value;
+            
+            if (!actualStock) {
+                alert('请输入实际数量');
+                return;
+            }
+            
+            const difference = actualStock - systemStock;
+            const tbody = document.getElementById('startCheckItems');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>${code}</td>
+                <td>${name}</td>
+                <td>${spec}</td>
+                <td>${systemStock}</td>
+                <td>
+                    <input type="number" class="actual-stock" value="${actualStock}" 
+                           onchange="calculateDifference(this)" min="0">
+                </td>
+                <td>${unit}</td>
+                <td class="difference ${getDifferenceClass(difference)}">${difference}</td>
+                <td><input type="text" class="remark"></td>
+                <td>
+                    <i class="fas fa-trash delete-btn" onclick="deleteCheckItem(this)"></i>
+                </td>
+            `;
+            
+            tbody.appendChild(newRow);
+            
+            // 重置扫码结果
+            document.getElementById('scanResult').style.display = 'none';
+            document.getElementById('actualQuantity').value = '';
+        }
+
+        // 删除盘点项
+        function deleteCheckItem(btn) {
+            const row = btn.closest('tr');
+            row.remove();
+        }
+
+        // 处理继续盘点扫码输入框按键事件
+        function handleContinueScanKeyPress(event) {
+            if (event.key === 'Enter') {
+                handleContinueScan();
+            }
+        }
+
+        // 处理继续盘点扫码
+        function handleContinueScan() {
+            const scanInput = document.getElementById('continueScanInput');
+            const code = scanInput.value.trim();
+            
+            if (!code) {
+                alert('请输入商品条码或编码');
+                return;
+            }
+            
+            // 模拟获取商品信息
+            const mockProduct = getMockProduct(code);
+            if (mockProduct) {
+                displayContinueScanResult(mockProduct);
+            } else {
+                alert('未找到商品信息');
+            }
+            
+            scanInput.value = '';
+        }
+
+        // 显示继续盘点扫码结果
+        function displayContinueScanResult(product) {
+            const scanResult = document.getElementById('continueScanResult');
+            document.getElementById('continuedScannedCode').textContent = product.code;
+            document.getElementById('continuedScannedName').textContent = product.name;
+            document.getElementById('continuedScannedSpec').textContent = product.spec;
+            document.getElementById('continuedScannedStock').textContent = product.stock;
+            scanResult.style.display = 'block';
+        }
+
+        // 添加继续盘点扫码商品到列表
+        function addContinueScannedItem() {
+            const code = document.getElementById('continuedScannedCode').textContent;
+            const name = document.getElementById('continuedScannedName').textContent;
+            const spec = document.getElementById('continuedScannedSpec').textContent;
+            const systemStock = parseInt(document.getElementById('continuedScannedStock').textContent);
+            const actualStock = parseInt(document.getElementById('continueActualQuantity').value);
+            const unit = document.getElementById('continueUnit').value;
+            
+            if (!actualStock) {
+                alert('请输入实际数量');
+                return;
+            }
+            
+            const difference = actualStock - systemStock;
+            const tbody = document.getElementById('continueCheckItems');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>${code}</td>
+                <td>${name}</td>
+                <td>${spec}</td>
+                <td>${systemStock}</td>
+                <td>
+                    <input type="number" class="actual-stock" value="${actualStock}" 
+                           onchange="calculateDifference(this)" min="0">
+                </td>
+                <td>${unit}</td>
+                <td class="difference ${getDifferenceClass(difference)}">${difference}</td>
+                <td><input type="text" class="remark"></td>
+                <td>
+                    <i class="fas fa-trash delete-btn" onclick="deleteCheckItem(this)"></i>
+                </td>
+            `;
+            
+            tbody.appendChild(newRow);
+            
+            // 重置扫码结果
+            document.getElementById('continueScanResult').style.display = 'none';
+            document.getElementById('continueActualQuantity').value = '';
+        }
+
+        // 处理差异
+        function handleDifference() {
+            const items = [];
+            let currentModal = null;
+            
+            // 判断当前是哪个弹窗
+            if (document.getElementById('startCheckModal').style.display === 'flex') {
+                currentModal = 'startCheckModal';
+            } else if (document.getElementById('continueCheckModal').style.display === 'flex') {
+                currentModal = 'continueCheckModal';
+            } else if (document.getElementById('viewCheckModal').style.display === 'flex') {
+                currentModal = 'viewCheckModal';
+            }
+            
+            if (!currentModal) {
+                console.error('未找到当前弹窗');
+                return;
+            }
+            
+            const tableId = currentModal === 'viewCheckModal' ? 'viewCheckItems' : 
+                          currentModal === 'startCheckModal' ? 'startCheckItems' : 'continueCheckItems';
+            
+            const rows = document.getElementById(tableId).getElementsByTagName('tr');
+            
+            for (let row of rows) {
+                const systemStock = parseInt(row.cells[3].textContent);
+                const actualStock = currentModal === 'viewCheckModal' ? 
+                                  parseInt(row.cells[4].textContent) :
+                                  parseInt(row.cells[4].querySelector('input').value) || 0;
+                const difference = actualStock - systemStock;
+                
+                if (difference !== 0) {
+                    items.push({
+                        code: row.cells[0].textContent,
+                        name: row.cells[1].textContent,
+                        spec: row.cells[2].textContent,
+                        systemStock: systemStock,
+                        actualStock: actualStock,
+                        unit: row.cells[5].textContent,
+                        difference: difference,
+                        remark: currentModal === 'viewCheckModal' ? 
+                               row.cells[8].textContent :
+                               row.cells[7].querySelector('input').value
+                    });
+                }
+            }
+            
+            if (items.length === 0) {
+                alert('没有需要处理的差异数据');
+                return;
+            }
+            
+            // 处理盘盈盘亏
+            handleStockDifference(items);
+        }
+
+        // 处理盘盈盘亏
+        function handleStockDifference(items) {
+            const profitItems = items.filter(item => item.difference > 0);
+            const lossItems = items.filter(item => item.difference < 0);
+            
+            if (profitItems.length > 0) {
+                showProfitHandleModal(profitItems);
+            }
+            
+            if (lossItems.length > 0) {
+                showLossHandleModal(lossItems);
+            }
+        }
+
+        // 显示盘盈处理选择弹窗
+        function showProfitHandleModal(profitItems) {
+            const modal = document.getElementById('profitHandleModal');
+            const tbody = modal.querySelector('tbody');
+            tbody.innerHTML = profitItems.map(item => `
+                <tr>
+                    <td>${item.code}</td>
+                    <td>${item.name}</td>
+                    <td>${item.spec}</td>
+                    <td class="profit">+${item.difference}</td>
+                    <td>${item.unit}</td>
+                    <td>
+                        <select class="standard-select handle-type" onchange="updateProfitRemark(this)">
+                            <option value="normal">正常入库</option>
+                            <option value="gift">赠品入库</option>
+                            <option value="purchase">采购入库</option>
+                            <option value="return">退货入库</option>
+                            <option value="other">其他入库</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text" class="standard-input remark" value="${item.remark || ''}" 
+                               placeholder="请输入处理说明">
+                    </td>
+                </tr>
+            `).join('');
+            showModal('profitHandleModal');
+        }
+
+        // 显示盘亏处理选择弹窗
+        function showLossHandleModal(lossItems) {
+            const modal = document.getElementById('lossHandleModal');
+            const tbody = modal.querySelector('tbody');
+            tbody.innerHTML = lossItems.map(item => `
+                <tr>
+                    <td>${item.code}</td>
+                    <td>${item.name}</td>
+                    <td>${item.spec}</td>
+                    <td class="loss">${item.difference}</td>
+                    <td>${item.unit}</td>
+                    <td>
+                        <select class="standard-select handle-type" onchange="updateLossRemark(this)">
+                            <option value="loss">报损处理</option>
+                            <option value="compensate">供应商赔付</option>
+                            <option value="employee">员工赔付</option>
+                            <option value="other">其他处理</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text" class="standard-input remark" value="${item.remark || ''}" 
+                               placeholder="请输入处理说明">
+                    </td>
+                </tr>
+            `).join('');
+            showModal('lossHandleModal');
+        }
+
+        // 结束盘点
+        function finishCheck() {
+            const tableId = document.getElementById('startCheckModal').style.display === 'flex' ? 
+                          'startCheckItems' : 'continueCheckItems';
+            const rows = document.getElementById(tableId).getElementsByTagName('tr');
+            let hasUnhandledDifference = false;
+            
+            for (let row of rows) {
+                const systemStock = parseInt(row.cells[3].textContent);
+                const actualStock = parseInt(row.cells[4].querySelector('input').value) || 0;
+                const difference = actualStock - systemStock;
+                
+                if (difference !== 0) {
+                    hasUnhandledDifference = true;
+                    break;
+                }
+            }
+            
+            if (hasUnhandledDifference) {
+                if (confirm('还有未处理的差异数据，是否先处理差异？')) {
+                    handleDifference();
+                    return;
+                }
+            }
+            
+            if (confirm('确认结束本次盘点？')) {
+                // TODO: 调用后端API结束盘点
+                alert('盘点已结束');
+                hideModal('startCheckModal');
+                hideModal('continueCheckModal');
+                // 刷新列表
+                location.reload();
+            }
+        }
+
+        // 处理盘亏商品
+        function handleLossItems() {
+            const modal = document.getElementById('lossHandleModal');
+            const rows = modal.getElementsByTagName('tr');
+            const lossItems = [];
+            const compensateItems = [];
+            const employeeItems = [];
+            const otherItems = [];
+            
+            // 收集处理方式
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i];
+                const item = {
+                    code: row.cells[0].textContent,
+                    name: row.cells[1].textContent,
+                    spec: row.cells[2].textContent,
+                    quantity: parseInt(row.cells[3].textContent),
+                    unit: row.cells[4].textContent,
+                    handleType: row.querySelector('.handle-type').value,
+                    remark: row.querySelector('.remark').value
+                };
+                
+                switch(item.handleType) {
+                    case 'loss':
+                        lossItems.push(item);
+                        break;
+                    case 'compensate':
+                        compensateItems.push(item);
+                        break;
+                    case 'employee':
+                        employeeItems.push(item);
+                        break;
+                    case 'other':
+                        otherItems.push(item);
+                        break;
+                }
+            }
+            
+            // 生成相应单据
+            if (lossItems.length > 0) {
+                createStockLossOrder({
+                    type: '盘亏报损',
+                    items: lossItems
+                });
+            }
+            
+            if (compensateItems.length > 0) {
+                createSupplierCompensateOrder({
+                    type: '供应商赔付',
+                    items: compensateItems
+                });
+            }
+            
+            if (employeeItems.length > 0) {
+                createEmployeeCompensateOrder({
+                    type: '员工赔付',
+                    items: employeeItems
+                });
+            }
+            
+            if (otherItems.length > 0) {
+                createOtherHandleOrder({
+                    type: '其他处理',
+                    items: otherItems
+                });
+            }
+            
+            // 显示处理结果
+            let message = '盘亏商品处理完成！\n';
+            if (lossItems.length > 0) message += `报损处理：${lossItems.length} 个商品\n`;
+            if (compensateItems.length > 0) message += `供应商赔付：${compensateItems.length} 个商品\n`;
+            if (employeeItems.length > 0) message += `员工赔付：${employeeItems.length} 个商品\n`;
+            if (otherItems.length > 0) message += `其他处理：${otherItems.length} 个商品\n`;
+            
+            alert(message);
+            hideModal('lossHandleModal');
+        }
+
+        // 生成供应商赔付单
+        function createSupplierCompensateOrder(data) {
+            console.log('生成供应商赔付单：', data);
+            // TODO: 调用后端API创建供应商赔付单
+        }
+
+        // 生成员工赔付单
+        function createEmployeeCompensateOrder(data) {
+            console.log('生成员工赔付单：', data);
+            // TODO: 调用后端API创建员工赔付单
+        }
+
+        // 生成其他处理单
+        function createOtherHandleOrder(data) {
+            console.log('生成其他处理单：', data);
+            // TODO: 调用后端API创建其他处理单
+        }
+
+        // 生成报损单
+        function createStockLossOrder(data) {
+            console.log('生成报损单：', data);
+            // TODO: 调用后端API创建报损单
+        }
+    </script>
+</body>
+</html> 

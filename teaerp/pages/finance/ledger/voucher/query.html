@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>凭证查询 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/modules/finance.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="app-sidebar">
+            <nav class="sidebar-nav">
+                <!-- Menu content will be dynamically loaded -->
+            </nav>
+        </aside>
+        <main class="app-content">
+            <div class="breadcrumb">
+                <i class="fas fa-home"></i>
+                <span>财务管理</span>
+                <i class="fas fa-angle-right separator"></i>
+                <span>总账管理</span>
+                <i class="fas fa-angle-right separator"></i>
+                <span>凭证查询</span>
+            </div>
+
+            <!-- 查询条件 -->
+            <div class="card search-card">
+                <div class="card-header">
+                    <h3>查询条件</h3>
+                    <div class="card-tools">
+                        <button class="button" onclick="saveQuery()">保存查询</button>
+                        <button class="button" onclick="manageQueries()">管理常用查询</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form id="queryForm" class="form">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>凭证号</label>
+                                <input type="text" class="form-control" name="voucherNo">
+                            </div>
+                            <div class="form-group">
+                                <label>凭证类型</label>
+                                <select class="form-control" name="type">
+                                    <option value="">全部</option>
+                                    <option value="receipt">收款凭证</option>
+                                    <option value="payment">付款凭证</option>
+                                    <option value="transfer">转账凭证</option>
+                                    <option value="other">其他凭证</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>日期范围</label>
+                                <div class="date-range">
+                                    <input type="date" class="form-control" name="startDate">
+                                    <span>至</span>
+                                    <input type="date" class="form-control" name="endDate">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>金额范围</label>
+                                <div class="amount-range">
+                                    <input type="number" class="form-control" name="minAmount">
+                                    <span>至</span>
+                                    <input type="number" class="form-control" name="maxAmount">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>科目</label>
+                                <select class="form-control" name="subject">
+                                    <option value="">全部</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>制单人</label>
+                                <input type="text" class="form-control" name="creator">
+                            </div>
+                            <div class="form-group">
+                                <label>状态</label>
+                                <select class="form-control" name="status">
+                                    <option value="">全部</option>
+                                    <option value="draft">草稿</option>
+                                    <option value="pending">待审核</option>
+                                    <option value="approved">已审核</option>
+                                    <option value="rejected">已驳回</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="button" onclick="searchVouchers()">查询</button>
+                            <button type="button" class="button secondary" onclick="resetForm()">重置</button>
+                            <button type="button" class="button" onclick="exportResults()">导出</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- 查询结果 -->
+            <div class="card data-card">
+                <div class="card-header">
+                    <h3>查询结果</h3>
+                </div>
+                <div class="card-body">
+                    <div class="data-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>凭证号</th>
+                                    <th>凭证类型</th>
+                                    <th>凭证日期</th>
+                                    <th>借方金额</th>
+                                    <th>贷方金额</th>
+                                    <th>制单人</th>
+                                    <th>审核人</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="voucherTable"></tbody>
+                        </table>
+                    </div>
+                    <div class="pagination" id="pagination"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 保存查询弹窗 -->
+    <div class="modal standard-modal" id="saveQueryModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>保存查询</h3>
+                <button class="close-btn" onclick="hideModal('saveQueryModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="saveQueryForm" class="form">
+                    <div class="form-group">
+                        <label>查询名称</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>查询描述</label>
+                        <textarea class="form-control" name="description" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="button secondary" onclick="hideModal('saveQueryModal')">取消</button>
+                <button class="button" onclick="doSaveQuery()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/common.js"></script>
+    <script src="../../../js/menu.js"></script>
+    <script src="../../../js/modules/finance/voucher-query.js"></script>
+</body>
+</html> 

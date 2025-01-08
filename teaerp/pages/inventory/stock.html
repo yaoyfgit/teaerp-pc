@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>库存查询 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/menu.css">
+    <link rel="stylesheet" href="../../css/modules/inventory.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-sidebar"></div>
+        <main class="app-content">
+            <div class="breadcrumb standard-breadcrumb">
+                <i class="fas fa-warehouse"></i>
+                <span>库存管理</span>
+                <i class="fas fa-angle-right separator"></i>
+                <span>库存查询</span>
+            </div>
+
+            <!-- 库存概览 -->
+            <div class="standard-card">
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <i class="stat-icon fas fa-boxes"></i>
+                        <div class="stat-title">总库存数</div>
+                        <div class="stat-value">12,345</div>
+                        <div class="stat-unit">件</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="stat-icon fas fa-exclamation-triangle"></i>
+                        <div class="stat-title">预警商品</div>
+                        <div class="stat-value">23</div>
+                        <div class="stat-unit">种</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="stat-icon fas fa-warehouse"></i>
+                        <div class="stat-title">仓库数量</div>
+                        <div class="stat-value">5</div>
+                        <div class="stat-unit">个</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="stat-icon fas fa-yen-sign"></i>
+                        <div class="stat-title">库存金额</div>
+                        <div class="stat-value">1,234,567</div>
+                        <div class="stat-unit">元</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 库存查询 -->
+            <div class="standard-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-search"></i> 库存查询</h3>
+                </div>
+                <div class="card-body">
+                    <div class="standard-toolbar">
+                        <div class="search-bar">
+                            <input type="text" class="standard-input" placeholder="输入商品编码/名称">
+                            <select class="standard-select">
+                                <option value="">所有仓库</option>
+                                <option value="1">原料仓</option>
+                                <option value="2">成品仓</option>
+                                <option value="3">半成品仓</option>
+                            </select>
+                            <select class="standard-select">
+                                <option value="">商品类型</option>
+                                <option value="1">原材料</option>
+                                <option value="2">成品</option>
+                                <option value="3">半成品</option>
+                                <option value="4">包装材料</option>
+                            </select>
+                            <button class="standard-button primary" onclick="searchStock()">
+                                <i class="fas fa-search"></i> 查询
+                            </button>
+                        </div>
+                        <div class="action-bar">
+                            <button class="standard-button" onclick="exportStock()">
+                                <i class="fas fa-file-export"></i> 导出
+                            </button>
+                            <button class="standard-button" onclick="printStock()">
+                                <i class="fas fa-print"></i> 打印
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="standard-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>商品编码</th>
+                                    <th>商品名称</th>
+                                    <th>规格型号</th>
+                                    <th>所在仓库</th>
+                                    <th>库存数量</th>
+                                    <th>单位</th>
+                                    <th>库存金额</th>
+                                    <th>预警上限</th>
+                                    <th>预警下限</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="stockTable"></tbody>
+                        </table>
+                    </div>
+                    <div class="standard-pagination" id="pagination"></div>
+                </div>
+            </div>
+
+            <!-- 库存明细 -->
+            <div class="standard-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-list"></i> 库存明细</h3>
+                </div>
+                <div class="card-body">
+                    <div class="standard-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>时间</th>
+                                    <th>类型</th>
+                                    <th>单据号</th>
+                                    <th>商品</th>
+                                    <th>变动数量</th>
+                                    <th>变动后库存</th>
+                                    <th>操作人</th>
+                                    <th>备注</th>
+                                </tr>
+                            </thead>
+                            <tbody id="detailTable"></tbody>
+                        </table>
+                    </div>
+                    <div class="standard-pagination" id="detailPagination"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 库存详情弹窗 -->
+    <div class="standard-modal" id="stockDetailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-info-circle"></i> 库存详情</h3>
+                <button class="standard-close-btn" onclick="hideModal('stockDetailModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="detail-info" id="stockDetailInfo"></div>
+                <div class="detail-chart">
+                    <div id="stockTrendChart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="../../js/common.js"></script>
+    <script src="../../js/modules/inventory/stock.js"></script>
+</body>
+</html> 

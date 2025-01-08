@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MRP运算 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/modules/production.css">
+    <link rel="stylesheet" href="../../../css/modules/production/mrp.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="main-menu"></div>
+        </div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">TeaERP</div>
+                <nav class="top-nav">
+                    <ul>
+                        <li><a href="../../../index.html">首页</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="username">管理员</span>
+                    <a href="#" class="logout">退出</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-industry"></i>
+                    <span>生产管理</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-calculator"></i>
+                    <span>MRP运算</span>
+                    <i class="fas fa-angle-right"></i>
+                    <i class="fas fa-play"></i>
+                    <span>运算执行</span>
+                </div>
+
+                <div class="page-header">
+                    <h2>MRP运算执行</h2>
+                    <div class="page-actions">
+                        <button class="config-button" onclick="showConfigModal()">
+                            <i class="fas fa-cog"></i>
+                            运算配置
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 配置弹窗 -->
+                <div class="modal-overlay" id="configModal">
+                    <div class="modal-container">
+                        <div class="modal-header">
+                            <h3>MRP运算配置</h3>
+                            <button class="modal-close" onclick="hideConfigModal()">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="standard-form" id="configForm">
+                                <!-- 基本配置 -->
+                                <div class="standard-card">
+                                    <div class="standard-card-header">
+                                        <h3><i class="fas fa-sliders-h"></i> 基本配置</h3>
+                                    </div>
+                                    <div class="standard-card-body">
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label>运算周期<span class="required-mark">*</span></label>
+                                                <input type="number" class="form-control" name="period" required>
+                                                <span class="form-help">单位：天</span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>提前期<span class="required-mark">*</span></label>
+                                                <input type="number" class="form-control" name="leadTime" required>
+                                                <span class="form-help">单位：天</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label>安全库存系数<span class="required-mark">*</span></label>
+                                                <input type="number" class="form-control" name="safetyFactor" step="0.1" required>
+                                                <span class="form-help">范围：0.1-1.0</span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>批量策略</label>
+                                                <div class="radio-group">
+                                                    <label>
+                                                        <input type="radio" name="batchStrategy" value="fixed" checked>
+                                                        固定批量
+                                                    </label>
+                                                    <label>
+                                                        <input type="radio" name="batchStrategy" value="dynamic">
+                                                        动态批量
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label>需求优先级<span class="required-mark">*</span></label>
+                                                <select class="form-control" name="demandPriority" required>
+                                                    <option value="order">订单优先</option>
+                                                    <option value="forecast">预测优先</option>
+                                                    <option value="mixed">混合优先</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>库存策略</label>
+                                                <select class="form-control" name="stockStrategy">
+                                                    <option value="fifo">先进先出</option>
+                                                    <option value="lifo">后进先出</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 定时配置 -->
+                                <div class="standard-card">
+                                    <div class="standard-card-header">
+                                        <h3><i class="fas fa-clock"></i> 定时配置</h3>
+                                    </div>
+                                    <div class="standard-card-body">
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label>定时运算</label>
+                                                <div class="radio-group">
+                                                    <label>
+                                                        <input type="radio" name="scheduleEnabled" value="true">
+                                                        启用
+                                                    </label>
+                                                    <label>
+                                                        <input type="radio" name="scheduleEnabled" value="false" checked>
+                                                        禁用
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>运算时间<span class="required-mark">*</span></label>
+                                                <input type="time" class="form-control" name="scheduleTime" required>
+                                                <span class="form-help">每天定时运算的时间点</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label>运算频率</label>
+                                                <select class="form-control" name="scheduleFrequency">
+                                                    <option value="daily">每天</option>
+                                                    <option value="weekly">每周</option>
+                                                    <option value="monthly">每月</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group schedule-days" id="scheduleDaysGroup" style="display: none;">
+                                                <label>指定日期</label>
+                                                <div class="checkbox-group">
+                                                    <label><input type="checkbox" name="scheduleDays" value="1"> 周一</label>
+                                                    <label><input type="checkbox" name="scheduleDays" value="2"> 周二</label>
+                                                    <label><input type="checkbox" name="scheduleDays" value="3"> 周三</label>
+                                                    <label><input type="checkbox" name="scheduleDays" value="4"> 周四</label>
+                                                    <label><input type="checkbox" name="scheduleDays" value="5"> 周五</label>
+                                                    <label><input type="checkbox" name="scheduleDays" value="6"> 周六</label>
+                                                    <label><input type="checkbox" name="scheduleDays" value="0"> 周日</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" onclick="hideConfigModal()">取消</button>
+                            <button class="btn btn-primary" onclick="saveConfig()">保存</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 需求收集 -->
+                <div class="standard-card">
+                    <div class="standard-card-header">
+                        <h3><i class="fas fa-clipboard-list"></i> 需求收集</h3>
+                    </div>
+                    <div class="standard-card-body">
+                        <div class="demand-section">
+                            <h4>销售订单需求</h4>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>订单编号</th>
+                                        <th>产品</th>
+                                        <th>数量</th>
+                                        <th>交期</th>
+                                        <th>优先级</th>
+                                        <th>客户等级</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="orderDemandTable"></tbody>
+                            </table>
+                        </div>
+
+                        <div class="demand-section">
+                            <h4>预测需求</h4>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>产品</th>
+                                        <th>预测数量</th>
+                                        <th>预测类型</th>
+                                        <th>预测周期</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="forecastDemandTable"></tbody>
+                            </table>
+                        </div>
+
+                        <div class="demand-section">
+                            <h4>安全库存需求</h4>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>产品</th>
+                                        <th>当前库存</th>
+                                        <th>最小库存</th>
+                                        <th>最大库存</th>
+                                        <th>补货点</th>
+                                        <th>补货量</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="safetyStockTable"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 需求分解 -->
+                <div class="standard-card">
+                    <div class="standard-card-header">
+                        <h3><i class="fas fa-sitemap"></i> 需求分解</h3>
+                    </div>
+                    <div class="standard-card-body">
+                        <div class="bom-tree" id="bomTree"></div>
+                    </div>
+                </div>
+
+                <!-- 库存核查 -->
+                <div class="standard-card">
+                    <div class="standard-card-header">
+                        <h3><i class="fas fa-warehouse"></i> 库存核查</h3>
+                    </div>
+                    <div class="standard-card-body">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>物料编码</th>
+                                    <th>物料名称</th>
+                                    <th>现有库存</th>
+                                    <th>在途库存</th>
+                                    <th>安全库存</th>
+                                    <th>预留库存</th>
+                                    <th>可用库存</th>
+                                </tr>
+                            </thead>
+                            <tbody id="stockCheckTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 计划生成 -->
+                <div class="standard-card">
+                    <div class="standard-card-header">
+                        <h3><i class="fas fa-tasks"></i> 计划生成</h3>
+                    </div>
+                    <div class="standard-card-body">
+                        <div class="plan-section">
+                            <h4>生产计划</h4>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>产品</th>
+                                        <th>计划数量</th>
+                                        <th>开始时间</th>
+                                        <th>结束时间</th>
+                                        <th>生产车间</th>
+                                        <th>工位</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="productionPlanTable"></tbody>
+                            </table>
+                        </div>
+
+                        <div class="plan-section">
+                            <h4>采购计划</h4>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>物料</th>
+                                        <th>采购数量</th>
+                                        <th>建议供应商</th>
+                                        <th>采购周期</th>
+                                        <th>预计到货</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="purchasePlanTable"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="standard-form-actions">
+                    <button class="standard-button" onclick="saveDraft()">
+                        <i class="fas fa-save"></i> 保存草稿
+                    </button>
+                    <button class="standard-button primary" onclick="executeMRP()">
+                        <i class="fas fa-play"></i> 执行运算
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/common.js"></script>
+    <script src="../../../js/menu.js"></script>
+    <script src="../../../js/modules/production/mrp/mock-data.js"></script>
+    <script src="../../../js/modules/production/mrp/execute.js"></script>
+    <script src="../../../js/app.js"></script>
+    <script>
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', () => {
+            initMenu(); // 初始化菜单
+            initMenuToggle();
+            initOrderDemand();
+            initForecastDemand();
+            initStockCheck();
+            initSafetyStockTable();
+            initBomTree();
+            initProductionPlan();
+            initPurchasePlan();
+            loadConfig(); // 加载配置
+        });
+
+        // 显示配置弹窗
+        function showConfigModal() {
+            document.getElementById('configModal').classList.add('active');
+        }
+
+        // 隐藏配置弹窗
+        function hideConfigModal() {
+            document.getElementById('configModal').classList.remove('active');
+        }
+
+        // 加载配置
+        function loadConfig() {
+            // 这里可以从后端API加载配置
+            const config = {
+                // 基本配置
+                period: 7,
+                leadTime: 3,
+                safetyFactor: 0.5,
+                batchStrategy: 'fixed',
+                demandPriority: 'order',
+                stockStrategy: 'fifo',
+                // 定时配置
+                scheduleEnabled: false,
+                scheduleTime: '03:00',
+                scheduleFrequency: 'daily',
+                scheduleDays: ['1', '2', '3', '4', '5']
+            };
+            
+            const form = document.getElementById('configForm');
+            Object.keys(config).forEach(key => {
+                const element = form.elements[key];
+                if (!element) return;
+                
+                if (element.type === 'radio') {
+                    form.querySelector(`input[name="${key}"][value="${config[key]}"]`).checked = true;
+                } else if (element.type === 'checkbox') {
+                    const checkboxes = form.querySelectorAll(`input[name="${key}"]`);
+                    checkboxes.forEach(checkbox => {
+                        checkbox.checked = config[key].includes(checkbox.value);
+                    });
+                } else {
+                    element.value = config[key];
+                }
+            });
+
+            // 根据运算频率显示/隐藏日期选择
+            updateScheduleDays();
+        }
+
+        // 保存配置
+        function saveConfig() {
+            const form = document.getElementById('configForm');
+            const config = {
+                // 基本配置
+                period: form.elements.period.value,
+                leadTime: form.elements.leadTime.value,
+                safetyFactor: form.elements.safetyFactor.value,
+                batchStrategy: form.querySelector('input[name="batchStrategy"]:checked').value,
+                demandPriority: form.elements.demandPriority.value,
+                stockStrategy: form.elements.stockStrategy.value,
+                // 定时配置
+                scheduleEnabled: form.querySelector('input[name="scheduleEnabled"]:checked').value === 'true',
+                scheduleTime: form.elements.scheduleTime.value,
+                scheduleFrequency: form.elements.scheduleFrequency.value,
+                scheduleDays: Array.from(form.querySelectorAll('input[name="scheduleDays"]:checked')).map(cb => cb.value)
+            };
+            
+            // 这里可以调用后端API保存配置
+            console.log('保存配置:', config);
+            hideConfigModal();
+        }
+
+        // 根据运算频率显示/隐藏日期选择
+        function updateScheduleDays() {
+            const frequency = document.getElementById('configForm').elements.scheduleFrequency.value;
+            const daysGroup = document.getElementById('scheduleDaysGroup');
+            daysGroup.style.display = frequency === 'weekly' ? 'block' : 'none';
+        }
+
+        // 监听运算频率变化
+        document.getElementById('configForm').elements.scheduleFrequency.addEventListener('change', updateScheduleDays);
+    </script>
+</body>
+</html> 

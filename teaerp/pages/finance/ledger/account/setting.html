@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>科目设置 - TeaERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/menu.css">
+    <link rel="stylesheet" href="../../../css/components/card.css">
+    <link rel="stylesheet" href="../../../css/components/form.css">
+    <link rel="stylesheet" href="../../../css/components/modal.css">
+    <link rel="stylesheet" href="../../../css/modules/finance.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="app-sidebar">
+            <div class="sidebar-menu"></div>
+        </aside>
+        <main class="app-content">
+            <nav class="breadcrumb">
+                <i class="fas fa-home"></i>
+                <span>财务管理</span>
+                <i class="fas fa-angle-right separator"></i>
+                <span>总账管理</span>
+                <i class="fas fa-angle-right separator"></i>
+                <span>科目设置</span>
+            </nav>
+
+            <!-- 科目列表 -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>科目列表</h3>
+                    <div class="card-tools">
+                        <button class="btn btn-primary" onclick="showAddSubjectModal()">
+                            <i class="fas fa-plus"></i> 新增科目
+                        </button>
+                        <button class="btn btn-default" onclick="importSubjects()">
+                            <i class="fas fa-upload"></i> 导入
+                        </button>
+                        <button class="btn btn-default" onclick="exportSubjects()">
+                            <i class="fas fa-download"></i> 导出
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="search-bar">
+                        <div class="form-group">
+                            <label>科目编码</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>科目名称</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>科目级别</label>
+                            <select class="form-control">
+                                <option value="">全部</option>
+                                <option value="1">一级科目</option>
+                                <option value="2">二级科目</option>
+                                <option value="3">三级科目</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>科目类别</label>
+                            <select class="form-control">
+                                <option value="">全部</option>
+                                <option value="assets">资产类</option>
+                                <option value="liabilities">负债类</option>
+                                <option value="equity">权益类</option>
+                                <option value="cost">成本类</option>
+                                <option value="profit">损益类</option>
+                            </select>
+                        </div>
+                        <button class="button" onclick="searchSubjects()">搜索</button>
+                    </div>
+
+                    <div class="data-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>科目编码</th>
+                                    <th>科目名称</th>
+                                    <th>科目级别</th>
+                                    <th>科目类别</th>
+                                    <th>计量单位</th>
+                                    <th>外币核算</th>
+                                    <th>辅助核算</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="subjectTable"></tbody>
+                        </table>
+                    </div>
+                    <div class="pagination" id="pagination"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 新增科目弹窗 -->
+    <div class="modal fade" id="subjectModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">新增科目</h3>
+                    <button type="button" class="close" onclick="hideModal('subjectModal')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="subjectForm" class="form">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>科目编码</label>
+                                <input type="text" class="form-control" name="code" required>
+                            </div>
+                            <div class="form-group">
+                                <label>科目名称</label>
+                                <input type="text" class="form-control" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label>科目级别</label>
+                                <select class="form-control" name="level" required>
+                                    <option value="1">一级科目</option>
+                                    <option value="2">二级科目</option>
+                                    <option value="3">三级科目</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>科目类别</label>
+                                <select class="form-control" name="category" required>
+                                    <option value="assets">资产类</option>
+                                    <option value="liabilities">负债类</option>
+                                    <option value="equity">权益类</option>
+                                    <option value="cost">成本类</option>
+                                    <option value="profit">损益类</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>计量单位</label>
+                                <input type="text" class="form-control" name="unit">
+                            </div>
+                            <div class="form-group">
+                                <label>外币核算</label>
+                                <div class="checkbox-group">
+                                    <label>
+                                        <input type="checkbox" name="currencies" value="USD">
+                                        美元
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" name="currencies" value="EUR">
+                                        欧元
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" name="currencies" value="JPY">
+                                        日元
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>辅助核算</label>
+                                <div class="checkbox-group">
+                                    <label>
+                                        <input type="checkbox" name="auxiliaryAccounting" value="customer">
+                                        客户
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" name="auxiliaryAccounting" value="supplier">
+                                        供应商
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" name="auxiliaryAccounting" value="department">
+                                        部门
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" name="auxiliaryAccounting" value="project">
+                                        项目
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="button secondary" onclick="hideModal('subjectModal')">取消</button>
+                    <button class="button" onclick="saveSubject()">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/common.js"></script>
+    <script src="../../../js/menu.js"></script>
+    <script src="../../../js/components/modal.js"></script>
+    <script src="../../../js/modules/finance/subject-setting.js"></script>
+</body>
+</html> 

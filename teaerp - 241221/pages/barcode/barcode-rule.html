@@ -1,0 +1,117 @@
+<!-- 所有条码管理页面的head部分统一修改为: -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XXX - TeaERP</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- ECharts图表库 -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <!-- 系统样式 -->
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/modules/inventory.css">
+</head>
+</html> <body>
+    <div class="app-container">
+        <!-- 顶部导航 -->
+        <header class="app-header">
+            <!-- ... 顶部导航内容 ... -->
+        </header>
+
+        <div class="app-main">
+            <!-- 左侧菜单 -->
+            <aside class="app-sidebar">
+                <nav class="side-nav">
+                    <div class="menu-group">
+                        <div class="menu-title">库存管理</div>
+                        <ul class="menu-list">
+                            <!-- 其他菜单项 -->
+                            <li>
+                                <a href="barcode-rule.html" class="active">
+                                    <i class="fa-solid fa-barcode"></i>条码规则
+                                </a>
+                            </li>
+                            <li>
+                                <a href="barcode-generate.html">
+                                    <i class="fa-solid fa-qrcode"></i>条码生成
+                                </a>
+                            </li>
+                            <li>
+                                <a href="barcode-template.html">
+                                    <i class="fa-solid fa-print"></i>打印模板
+                                </a>
+                            </li>
+                            <li>
+                                <a href="barcode-print-log.html">
+                                    <i class="fa-solid fa-list"></i>打印记录
+                                </a>
+                            </li>
+                            <li>
+                                <a href="report.html">
+                                    <i class="fa-solid fa-chart-line"></i>库存报表
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </aside>
+
+            <!-- 内容区域 -->
+            <main class="app-content">
+                <div class="breadcrumb">
+                    <span>库存管理</span>
+                    <span class="separator">/</span>
+                    <span>条码管理</span>
+                    <span class="separator">/</span>
+                    <span>条码规则</span>
+                </div>
+
+                <div class="toolbar">
+                    <div class="search-bar">
+                        <select class="form-control" name="barcodeType">
+                            <option value="">条码类型</option>
+                            <option value="product">商品条码</option>
+                            <option value="location">库位条码</option>
+                            <option value="box">箱码</option>
+                            <option value="batch">批次条码</option>
+                            <option value="serial">流水号条码</option>
+                        </select>
+                        <button class="button primary">搜索</button>
+                    </div>
+                    <div class="action-bar">
+                        <button class="button primary" onclick="showCreateRuleModal()">新建规则</button>
+                    </div>
+                </div>
+
+                <div class="data-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>规则名称</th>
+                                <th>条码类型</th>
+                                <th>编码长度</th>
+                                <th>前缀规则</th>
+                                <th>校验规则</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 规则列表 -->
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- 新建规则弹窗 -->
+    <div class="modal" id="createRuleModal">
+        <!-- ... 弹窗内容 ... -->
+    </div>
+
+    <script src="../../js/common.js"></script>
+    <script src="../../js/modules/stock/barcode-rule.js"></script>
+</body>
+</html> 

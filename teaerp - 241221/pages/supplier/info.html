@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>供应商管理 - TeaERP</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- 系统样式 -->
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <!-- 模块样式 -->
+    <link rel="stylesheet" href="../../css/modules/supplier.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 顶部导航 -->
+        <header class="app-header">
+            <div class="logo">TeaERP</div>
+            <nav class="top-nav">
+                <ul>
+                    <li><a href="../../index.html">首页</a></li>
+                    <li><a href="#">消息</a></li>
+                    <li><a href="#">帮助</a></li>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <span class="username">管理员</span>
+                <a href="#" class="logout">退出</a>
+            </div>
+        </header>
+
+        <div class="app-main">
+            <!-- 左侧菜单 -->
+            <aside class="app-sidebar">
+                <!-- 菜单内容由common.js动态加载 -->
+            </aside>
+
+            <!-- 内容区域 -->
+            <main class="app-content">
+                <!-- 面包屑导航 -->
+                <div class="breadcrumb">
+                    <span>供应商管理</span>
+                    <span class="separator">/</span>
+                    <span>供应商信息</span>
+                </div>
+
+                <!-- 工具栏 -->
+                <div class="toolbar">
+                    <div class="search-bar">
+                        <div class="form-group">
+                            <input type="text" placeholder="输入供应商名称/编号搜索" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control">
+                                <option value="">企业类型</option>
+                                <option value="manufacturer">生产商</option>
+                                <option value="distributor">经销商</option>
+                                <option value="agent">代理商</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control">
+                                <option value="">合作状态</option>
+                                <option value="active">合作中</option>
+                                <option value="suspended">已暂停</option>
+                                <option value="terminated">已终止</option>
+                            </select>
+                        </div>
+                        <button class="button primary">搜索</button>
+                        <button class="button">重置</button>
+                    </div>
+                    <div class="action-bar">
+                        <button class="button primary" onclick="showCreateModal()">
+                            <i class="icon-plus"></i>新建供应商
+                        </button>
+                        <button class="button secondary">
+                            <i class="icon-import"></i>导入
+                        </button>
+                        <button class="button secondary">
+                            <i class="icon-export"></i>导出
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 数据表格卡片 -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="data-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>供应商编号</th>
+                                        <th>企业名称</th>
+                                        <th>企业类型</th>
+                                        <th>联系人</th>
+                                        <th>联系电话</th>
+                                        <th>信用额度</th>
+                                        <th>合作状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- 供应商数据行 -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- 新建供应商弹窗 -->
+    <div class="modal" id="createSupplierModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>新建供应商</h3>
+                <button class="close-btn" onclick="hideModal('createSupplierModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form">
+                    <!-- 企业信息 -->
+                    <div class="form-section">
+                        <h4>企业信息</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>企业名称</label>
+                                <input type="text" class="form-control" name="companyName" required>
+                            </div>
+                            <div class="form-group">
+                                <label>企业类型</label>
+                                <select class="form-control" name="companyType" required>
+                                    <option value="manufacturer">生产商</option>
+                                    <option value="distributor">经销商</option>
+                                    <option value="agent">代理商</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>营业执照号</label>
+                                <input type="text" class="form-control" name="businessLicense">
+                            </div>
+                            <div class="form-group">
+                                <label>税务登记号</label>
+                                <input type="text" class="form-control" name="taxNumber">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 联系信息 -->
+                    <div class="form-section">
+                        <h4>联系信息</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>联系人</label>
+                                <input type="text" class="form-control" name="contactPerson">
+                            </div>
+                            <div class="form-group">
+                                <label>联系电话</label>
+                                <input type="tel" class="form-control" name="contactPhone">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>职务</label>
+                            <input type="text" class="form-control" name="position">
+                        </div>
+                    </div>
+
+                    <!-- 地址信息 -->
+                    <div class="form-section">
+                        <h4>地址信息</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>所在地区</label>
+                                <div class="region-select form-row">
+                                    <select class="form-control" name="province" style="flex: 1;">
+                                        <option value="">省份</option>
+                                    </select>
+                                    <select class="form-control" name="city" style="flex: 1;">
+                                        <option value="">城市</option>
+                                    </select>
+                                    <select class="form-control" name="district" style="flex: 1;">
+                                        <option value="">区县</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>详细地址</label>
+                            <input type="text" class="form-control" name="address">
+                        </div>
+                    </div>
+
+                    <!-- 商务信息 -->
+                    <div class="form-section">
+                        <h4>商务信息</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>开户银行</label>
+                                <input type="text" class="form-control" name="bankName">
+                            </div>
+                            <div class="form-group">
+                                <label>银行账号</label>
+                                <input type="text" class="form-control" name="bankAccount">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>结算方式</label>
+                                <select class="form-control" name="settlementMethod">
+                                    <option value="monthly">月结</option>
+                                    <option value="prepaid">预付</option>
+                                    <option value="cod">货到付款</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>付款方式</label>
+                                <select class="form-control" name="paymentMethod">
+                                    <option value="transfer">银行转账</option>
+                                    <option value="cash">现金</option>
+                                    <option value="check">支票</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>结算周期(天)</label>
+                                <input type="number" class="form-control" name="settlementPeriod">
+                            </div>
+                            <div class="form-group">
+                                <label>信用额度</label>
+                                <input type="number" class="form-control" name="creditLimit">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>合作状态</label>
+                            <select class="form-control" name="cooperationStatus">
+                                <option value="active">合作中</option>
+                                <option value="suspended">已暂停</option>
+                                <option value="terminated">已终止</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="button" onclick="hideModal('createSupplierModal')">取消</button>
+                <button class="button primary" onclick="submitCreateSupplier()">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/common.js"></script>
+    <script src="../../js/modules/supplier/info.js"></script>
+</body>
+</html> 

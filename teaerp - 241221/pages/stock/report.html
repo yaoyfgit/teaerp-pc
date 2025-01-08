@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeaERP</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- 系统样式 -->
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/layout.css">
+</head>
+</html> <body>
+    <div class="app-container">
+        <!-- 顶部导航 -->
+        <header class="app-header">
+            <!-- ... 顶部导航内容 ... -->
+        </header>
+
+        <div class="app-main">
+            <!-- 左侧菜单 -->
+            <aside class="app-sidebar">
+                <nav class="side-nav">
+                    <div class="menu-group">
+                        <div class="menu-title">库存管理</div>
+                        <ul class="menu-list">
+                            <!-- ... 其他菜单项 ... -->
+                            <li>
+                                <a href="barcode-rule.html">
+                                    <i class="fa-solid fa-barcode"></i>条码规则
+                                </a>
+                            </li>
+                            <li>
+                                <a href="barcode-generate.html">
+                                    <i class="fa-solid fa-qrcode"></i>条码生成
+                                </a>
+                            </li>
+                            <li>
+                                <a href="barcode-template.html">
+                                    <i class="fa-solid fa-print"></i>打印模板
+                                </a>
+                            </li>
+                            <li>
+                                <a href="barcode-print-log.html">
+                                    <i class="fa-solid fa-list"></i>打印记录
+                                </a>
+                            </li>
+                            <li>
+                                <a href="report.html" class="active">
+                                    <i class="fa-solid fa-chart-line"></i>库存报表
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </aside>
+
+            <!-- 内容区域 -->
+            <main class="app-content">
+                <!-- 面包屑导航 -->
+                <div class="breadcrumb">
+                    <span>库存管理</span>
+                    <span class="separator">/</span>
+                    <span>库存报表</span>
+                </div>
+
+                <!-- 报表类型选择 -->
+                <div class="report-tabs">
+                    <button class="report-tab" data-target="dailyReport" data-type="daily">库存日报</button>
+                    <button class="report-tab" data-target="monthlyReport" data-type="monthly">库存月报</button>
+                    <button class="report-tab" data-target="yearlyReport" data-type="yearly">库存年报</button>
+                    <button class="report-tab" data-target="warningReport" data-type="warning">预警报表</button>
+                    <button class="report-tab" data-target="analysisReport" data-type="analysis">分析报表</button>
+                </div>
+
+                <!-- 报表筛选条件 -->
+                <div class="report-filter">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>统计日期</label>
+                            <input type="date" class="form-control" name="reportDate">
+                        </div>
+                        <div class="form-group">
+                            <label>仓库</label>
+                            <select class="form-control" name="warehouseId">
+                                <option value="">全部仓库</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>商品分类</label>
+                            <select class="form-control" name="categoryId">
+                                <option value="">全部分类</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <button class="button primary" onclick="generateReport()">生成报表</button>
+                            <button class="button" onclick="exportReport()">导出报表</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 报表内容区 -->
+                <div class="report-content" id="dailyReport">
+                    <!-- 库存日报内容 -->
+                    <div class="report-chart">
+                        <canvas id="stockTrendChart"></canvas>
+                    </div>
+                    <div class="report-table">
+                        <table class="stock-table">
+                            <thead>
+                                <tr>
+                                    <th>商品编码</th>
+                                    <th>商品名称</th>
+                                    <th>规格型号</th>
+                                    <th>单位</th>
+                                    <th>期初库存</th>
+                                    <th>入库数量</th>
+                                    <th>出库数量</th>
+                                    <th>期末库存</th>
+                                    <th>库存金额</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="report-content" id="monthlyReport">
+                    <!-- 库存月报内容 -->
+                    <div class="report-chart">
+                        <canvas id="monthlyStockChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="report-content" id="yearlyReport">
+                    <!-- 库存年报内容 -->
+                    <div class="report-chart">
+                        <canvas id="yearlyStockChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="report-content" id="warningReport">
+                    <!-- 预警统计 -->
+                    <div class="warning-stats">
+                        <div class="warning-stat-card high">
+                            <div class="stat-title">高危预警</div>
+                            <div class="stat-value">5</div>
+                        </div>
+                        <div class="warning-stat-card medium">
+                            <div class="stat-title">中度预警</div>
+                            <div class="stat-value">12</div>
+                        </div>
+                        <div class="warning-stat-card low">
+                            <div class="stat-title">低危预警</div>
+                            <div class="stat-value">8</div>
+                        </div>
+                    </div>
+
+                    <!-- 预警列表 -->
+                    <div class="warning-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>商品编码</th>
+                                    <th>商品名称</th>
+                                    <th>预警类型</th>
+                                    <th>当前库存</th>
+                                    <th>最小库存</th>
+                                    <th>最大库存</th>
+                                    <th>建议操作</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="report-content" id="analysisReport">
+                    <!-- 分析报表内容 -->
+                    <div class="analysis-charts">
+                        <div class="chart-item">
+                            <canvas id="abcAnalysisChart"></canvas>
+                        </div>
+                        <div class="chart-item">
+                            <canvas id="turnoverAnalysisChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="../../js/common.js"></script>
+    <script src="../../js/modules/stock/report.js"></script>
+</body>
+</html> 
